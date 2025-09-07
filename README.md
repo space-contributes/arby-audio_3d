@@ -50,18 +50,15 @@ Arby Audio is perfect for:
 
 ## ⚙️ Setup & Usage
 
-1. When on this page, click the `audio.py` button and copy the contents in the box.
-   OR download `audio.ipynb` and import into Colab.
-2. Place your audio file URL in the script, replacing the test URL.
-3. Run the script by pressing the run button that looks like a YouTube play button on the top left of the page.
-4. Wait for the engine to process the audio. Output will **auto-download**.
-5. Enjoy immersive 3D sound! 🔊
-
+After downloading the file [PYTHONSCRIPT.py](./PYTHONSCRIPT.py) or Git Cloning the repo:
+1. Run: python "PYTHONSCRIPT.PY" --music_url https://your-music-url.com/file.wav
+Replace your-music-url.com/file.wav with your URL.
 ---
 
 ## 🔮 Future Roadmap
 
 * Integration with GDrive.
+* Double-click on the .bat version of the script for Windows
 
 ---
 
