@@ -16,9 +16,36 @@ Arby Audio delivers **cinematic-grade 3D sound experiences** with immersive **7.
 
 ---
 
-## ❓ Why Arby Audio?
+## ❓ Arby Audio vs. Dolby Atmos
+### Dolby:
+
+Dolby Atmos is an advanced audio technology that:
+
+* Maps virtual objects as sound waves to bounce, reflect, delay for reflection, delay to reach the virtual object, and bounce back. These delays are for enhanced * realism.
+* 360 surround sound
+* 42KHZ, 24BIT by default*
+* Spatial realism by adapting to various spaces
+* Widely used*
+
+*depends
+# Arby Audio: 🎮 **Living sound that bounces, adapts, and reacts. Not just heard, but felt. Smart room scaling brings audio to life.**
 
 Arby Audio goes beyond standard audio engines by simulating **real-world acoustics** in virtual spaces:
+* Room geometry & reflections  
+* Distance-based time delays  
+* Frequency-dependent low-pass filtering  
+* Speaker mapping to 7.1.4 layout (7 speakers down, 4 speakers up, 1 subwoofer right there\!)  
+* Binaural downmix  
+* Trajectory simulation  
+* Furniture/environment scanning for realistic reflections  
+* Automatic normalization  
+* Nearly 4x the industry standard for movies (in terms of quality): 96KHZ, 32BIT Audio  
+* Open Source
+
+* 🎮 **Living sound that bounces, adapts, and reacts. Not just heard, but felt. Smart room scaling brings audio to life.**
+
+# More complex breakdown:
+
 
 * **Room Geometry & Reflections** – Sound bounces naturally off virtual walls, ceilings, and objects.
 * **Detects Virtual Objects** - Sound bounces off naturally over virtual objects detected in the scene
@@ -33,7 +60,10 @@ Arby Audio goes beyond standard audio engines by simulating **real-world acousti
 * **High-Fidelity Audio** – 96kHz, 32-bit audio quality—nearly 4× industry standard for movies.
 * **Open Source** – Fully transparent and customizable.
 
+  
+
 🎮 **Living sound that bounces, adapts, and reacts. Not just heard, but felt. Smart room scaling brings audio to life.**
+
 
 ---
 
@@ -69,5 +99,6 @@ Replace your-music-url.com/file.wav with your URL.
 By downloading, installing, or using Arby Audio 3D, you agree to the terms in **[LICENSE.md](./LICENSE.md)**.
 This project is for **educational and ethical testing only**.
 
+All trademarks, service marks, and logos associated with Dolby Atmos and IMAX Audio are the property of their respective owners. This project/material is not affiliated with, endorsed by, or sponsored by Dolby Laboratories or IMAX Corporation. All rights reserved by their respective trademark holders. Any use of these names or technologies is for educational, research, or demonstration purposes only and does not imply any official association.
 
 💡 Contributions welcome! Use the **main branch** or create a branch with your name and submit a pull request.
