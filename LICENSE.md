@@ -59,7 +59,7 @@ The author, provider, and distributor are not liable for any damages, losses, or
 
 You acknowledge that the Tool may contain vulnerabilities; all risks associated with its use are borne solely by the user.
 
-The Service and the author disclaim any liability for security breaches, vulnerabilities, or weaknesses, as well as for any data loss, unauthorized access, or operational disruption. The author is also not responsible for any consequences arising from user-generated content or analytics results. Users agree to defend, indemnify, and hold harmless the author from any claims, damages, or liabilities arising from the use or misuse of the Tool, violation of this Agreement, or infringement of third-party rights.
+The Service and the author disclaim any liability for security breaches, vulnerabilities, or weaknesses/bad code/bad features/more quality/more features in terms of need or even if in public interest of the same, as well as for any data loss, unauthorized access, or operational disruption. The author is also not responsible for any consequences arising from user-generated content or analytics results. Users agree to defend, indemnify, and hold harmless the author from any claims, damages, or liabilities arising from the use or misuse of the Tool, violation of this Agreement, or infringement of third-party rights. 
 
 Any analytics, insights, or recommendations derived from the Tool or from contributed data are provided strictly “as-is.” The author makes no guarantees regarding their accuracy, completeness, timeliness, or suitability for decision-making. Users assume all risk associated with relying on such data and are solely responsible for any decisions or actions taken based on it.
 
