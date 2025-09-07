@@ -66,20 +66,17 @@ Any analytics, insights, or recommendations derived from the Tool or from contri
 
 Users who contribute content or code affirm that they either own the rights to the contributed materials or have obtained appropriate licenses and permissions. By contributing, users grant the author the rights to use, modify, and distribute their contributions. Contributors are solely responsible for the content they submit and any consequences that may arise from it.
 
-
+This service is provided on an "as-is" basis with no obligations or warranties given towards the same.
 The use of this Tool is governed by this LICENSE.md file. Unauthorized reproduction, distribution, or modification of the Tool may result in takedown requests, cease-and-desist orders, or other legal actions. This Tool is intended for security professionals who understand the technical implications of its results and are responsible for interpreting them appropriately. It must only be used on systems owned by the user or systems for which the user has explicit written permission to test. The Tool is provided “as-is,” without warranties or guarantees, and all responsibility for outcomes rests entirely with the user. The provisions of Articles X and B shall remain in effect even after termination or expiration of this Agreement.
 
 
 By using this Tool, you confirm that you have read, understood, and agreed to all terms of this Agreement. You acknowledge that liability rests solely with you for any unauthorized, malicious, or illegal actions and accept that the Tool is provided without any warranties or guarantees.
 
-⚠️ Disclaimer: This project is for **educational and authorized security testing only**. Do not use against systems you do not own or lack explicit permission to test.
-
-
 You voluntarily acknowledge and accept the terms and consequences of this Agreement. By using the Tool, you confirm that you have read, understood, and are fully literate in the content of this Agreement, including, but not limited to, Article A and Article B.
 
 This Tool is intended solely for authorized and ethical purposes, including bug bounty testing and security assessments of systems for which you have explicit permission. It may also be used on websites or systems that you own. The author shall not be held liable for any unauthorized or improper use, and by using the Tool, you acknowledge and accept this limitation of liability.
 
-The author shall not be considered liable for the same, as it was your intent of so, and this applies to every part of this Agreement, including but not limtied to: Article A and Article B.
+The author shall not be considered liable for the same, as it was your intent of so, and this applies to every part of this Agreement, including but not limited to: Article A and Article B.
 
 Any invocation, deployment, or use of this Tool must strictly comply with the terms of this Agreement. By using the Tool in any manner, you acknowledge and accept these terms and assume full responsibility for all consequences arising from such use.
 
@@ -150,7 +147,7 @@ Article B:
  * Enforcement of Copyright - SECTION B.2: Any use, modification, or distribution of this software that violates the license is strictly prohibited. The sole copyright owner reserves the right to enforce their intellectual property rights to the fullest extent of the law, which may include issuing takedown notices or seeking legal remedies such as cease and desist orders or restraining orders, with/without a copyright strike at a minimum as a takedown.
 
 
- * User Responsibility & Competency - SECTION B.3: This is a tool designed for security professionals. By using it, you affirm that you possess the necessary knowledge to understand the scan results and their technical implications. You are solely responsible for how you use the software and for interpreting its output. We shall not be liable for any consequences regarding the same.
+ * User Responsibility & Competency - SECTION B.3: This is a tool designed for professionals. By using it, you affirm that you possess the necessary knowledge to understand the scan results and their technical implications. You are solely responsible for how you use the software and for interpreting its output. We shall not be liable for any consequences regarding the same.
 
 
  * Authorized Use Only SECTION B.4: You agree to use WebVigil exclusively for lawful purposes. It should only be used to test systems for which you have explicit, prior, and mutual written authorization from the system owner. Unauthorized testing is illegal and unethical.
@@ -166,7 +163,9 @@ Section B.7 - SURVIVAL OF ARTICLE B AND A AFTER TERMINATION OR EXPIRY:
 The provisions of both Article A and B shall survive termination or expiration of this Agreement.
 The provisions of the agreement shall survive termination or expiration/void state of the Agreement, which includes but is not limited to: Articles A and B.
 
----
+--- **ARTICLE C**:
+
+ By using the Tool, you confirm that you have read, understood, and are fully literate in the content of this Agreement, including, but not limited to, Article A, Article B, and Article C.
 
 
 #  Copyright (c) 2025 space-code and all code that comes from this GitHub Author and will be declared, therefore. All Rights Reserved. 
