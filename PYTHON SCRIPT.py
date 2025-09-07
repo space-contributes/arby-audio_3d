@@ -20,6 +20,13 @@ multichannel_wav = "3d_music_7_1_4_reflections.wav"
 binaural_wav = "3d_music_binaural_reflections.wav"
 c = 343.0  # speed of sound m/s
 MAX_DISTANCE_FOR_FILTER = 20.0 # Distance in meters for max filtering effect
+
+parser = argparse.ArgumentParser(description="3D audio simulation with reflections")
+parser.add_argument("--music_url", type=str, default=MUSIC_URL,
+                    help="URL of the music file to use (default: %(default)s)")
+args = parser.parse_args()
+music_url = args.music_url
+
 # -----------------------
 # Download and prepare music file
 # -----------------------
@@ -170,4 +177,5 @@ display(Audio(binaural_wav, rate=fs))
 with open(binaural_wav, "rb") as f:
     b64 = base64.b64encode(f.read()).decode()
 display(HTML(f'<a download="{binaural_wav}" href="data:audio/wav;base64,{b64}">⬇️ Download stereo WAV</a>'))
+
 print("Done — full music track, 7.1.4 with adaptive frequency-based reflections, time delays, and low-pass filtering.")
