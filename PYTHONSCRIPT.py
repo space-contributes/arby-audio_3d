@@ -28,7 +28,7 @@ args = parser.parse_args()
 music_url = args.music_url
 
 # -----------------------
-# Download and prepare music file
+# Download and prepare the music file
 # -----------------------
 if not os.path.exists(music_file):
     print("Downloading music file...")
@@ -179,3 +179,7 @@ with open(binaural_wav, "rb") as f:
 display(HTML(f'<a download="{binaural_wav}" href="data:audio/wav;base64,{b64}">⬇️ Download stereo WAV</a>'))
 
 print("Done — full music track, 7.1.4 with adaptive frequency-based reflections, time delays, and low-pass filtering.")
+
+
+
+
