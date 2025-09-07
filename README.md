@@ -5,7 +5,7 @@
 ![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen)
 
 **Experience living sound that adapts, bounces, and reacts—7.1.4 spatial audio with advanced Dolby Atmos–style realism.**
-*Made with ❤️ by space-contributes*
+*Made with ❤️ by Space-code*
 
 ---
 
