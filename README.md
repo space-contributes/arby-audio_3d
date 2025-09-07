@@ -21,7 +21,7 @@ Arby Audio delivers **cinematic-grade 3D sound experiences** with immersive **7.
 
 Dolby Atmos is an advanced audio technology that:
 
-* Maps virtual objects as sound waves to bounce, reflect, delay for reflection, delay to reach the virtual object, and bounce back. These delays are for enhanced * realism.
+* Maps virtual objects as sound waves to bounce, reflect, delay for reflection, delay to reach the virtual object, and bounce back. These delays are for enhancedrealism.
 * 360 surround sound
 * 42KHZ, 24BIT by default*
 * Spatial realism by adapting to various spaces
