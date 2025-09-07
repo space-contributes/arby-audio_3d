@@ -18,7 +18,7 @@ By submitting a contribution, the contributor acknowledges and agrees that I, as
 ## How?
 
 ---
-Licensing a repository - GitHub Docs https://share.google/CnHFdX5KE9qdROKLJ
+Licensing a repository - GitHub Docs [ https://share.google/CnHFdX5KE9qdROKLJ](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/licensing-a-repository)
 ----
 
 From the GitHub docs, it says that I am under no obligation to choose a license, and in their words: "You're under no obligation to choose a license. However, without a license, the default copyright laws apply, meaning that you retain all rights to your source code and no one may reproduce, distribute, or create derivative works from your work."
