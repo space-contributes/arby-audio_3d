@@ -38,7 +38,7 @@ Arby Audio goes beyond standard audio engines by simulating **real-world acousti
 * Binaural downmix  
 * Trajectory simulation  
 * Furniture/environment scanning for realistic reflections  
-* Automatic normalization  
+* Automatic normalization and a lowpass filter to remove high or sudden frequencies beyond normal high frequency effects
 * Nearly 4x the industry standard for movies (in terms of quality): 96KHZ, 32BIT Audio  
 * Open Source
 
@@ -52,6 +52,7 @@ Arby Audio goes beyond standard audio engines by simulating **real-world acousti
 * **Sound Bounces** - with a delay (for realism) to reach the object and bounce off it.
 * **Distance-Based Time Delays** – Delays replicate real-world propagation for precise spatialization.
 * **Frequency-Dependent Low-Pass Filtering** – Simulates material absorption and air damping.
+* **Lowpass Filter for High frequencies** - Removes high or sudden frequencies beyond normal high frequency effects
 * **Advanced Speaker Mapping** – Supports 7.1.4 layouts (7 speakers down, 4 up, 1 subwoofer).
 * **Binaural Downmix** – Optimized for headphone playback with immersive depth.
 * **Trajectory Simulation** – Sound sources move dynamically along realistic paths.
