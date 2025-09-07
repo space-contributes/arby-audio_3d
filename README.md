@@ -101,4 +101,7 @@ This project is for **educational and ethical testing only**.
 
 All trademarks, service marks, and logos associated with Dolby Atmos and IMAX Audio are the property of their respective owners. This project/material is not affiliated with, endorsed by, or sponsored by Dolby Laboratories or IMAX Corporation. All rights reserved by their respective trademark holders. Any use of these names or technologies is for educational, research, or demonstration purposes only and does not imply any official association.
 
+## Not to Defame:
+This project/material is intended for informational and educational purposes only and is not intended to disparage, defame, or negatively impact the reputation of Dolby Laboratories, IMAX Corporation, or any other trademark holder. The author's intent is not to defame, disparage, or negatively impact the reputation of Dolby Laboratories, IMAX Corporation, or any other trademark holder.
+
 💡 Contributions welcome! Use the **main branch** or create a branch with your name and submit a pull request.
