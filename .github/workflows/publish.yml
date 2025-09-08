@@ -26,8 +26,7 @@ jobs:
           python -m pip install build twine
 
       - name: Build Arby Audio 3D
-        run: |
-          python -m build
+        run: python -m build
 
       - name: Upload build artifacts (optional)
         uses: actions/upload-artifact@v4
@@ -39,3 +38,5 @@ jobs:
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           packages-dir: dist/
+        env:
+          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
