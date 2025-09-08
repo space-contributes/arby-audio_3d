@@ -1,24 +1,35 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # ========================================
-# 3D Audio Processing Launcher (Linux/macOS)
+# 3D Audio Processing Launcher (macOS/Linux)
 # ========================================
 
-# --- Prompt for WAV file URL or local path ---
-read -p "Enter full path to WAV file or URL: " MUSIC_INPUT
+# --- Ask user for OS ---
+echo "Select your OS: MacOS is not Linux, at least in this case"
+echo "1) macOS"
+echo "2) Linux"
+read -p "Enter 1 or 2: " OS_CHOICE
 
-# --- Check if Python is installed ---
-if ! command -v python3 &> /dev/null
-then
+# --- Check if Python3 is installed ---
+if ! command -v python3 &> /dev/null; then
     echo "Python3 not found! Installing..."
-    if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-        sudo apt update && sudo apt install -y python3 python3-pip
-    elif [[ "$OSTYPE" == "darwin"* ]]; then
+    if [[ "$OS_CHOICE" == "1" ]]; then
+        # macOS
+        if ! command -v brew &> /dev/null; then
+            echo "Homebrew not found! Installing Homebrew..."
+            /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        fi
         brew install python
+    elif [[ "$OS_CHOICE" == "2" ]]; then
+        # Linux (Debian/Ubuntu)
+        sudo apt update && sudo apt install -y python3 python3-pip
     else
-        echo "Unsupported OS. Install Python manually."
+        echo "Invalid choice. Exiting."
         exit 1
     fi
 fi
+
+# --- Prompt for WAV file URL or local path ---
+read -p "Enter full path to WAV file or URL: " MUSIC_INPUT
 
 # --- Download WAV file if it's a URL ---
 if [[ "$MUSIC_INPUT" == http* ]]; then
@@ -42,7 +53,8 @@ if [[ ! -f "$PY_SCRIPT" ]]; then
 fi
 
 # --- Install Python dependencies ---
-python3 -m pip install --upgrade pip
+echo "Installing Python dependencies..."
+python3 -m pip install --upgrade pip --user
 python3 -m pip install numpy scipy pydub --user
 
 # --- Run Python script ---
