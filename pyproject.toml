@@ -2,9 +2,9 @@
 name = "arby-audio3d"
 version = "0.1.0"
 description = "Arby Audio 3D – Cinematic-grade spatial audio engine"
-authors = [{name="Your Name", email="youremail@example.com"}]
+authors = [{name="Space-code", email="somethingsomething2726@gmail.com"}]
 readme = "README.md"
-license = {text="MIT"}
+license = {text="GIVEN IN github.com/space-contributes/arby-audio_3d"}
 requires-python = ">=3.8"
 dependencies = [
     "numpy",
