@@ -3,23 +3,58 @@ REM ========================================
 REM 3D Audio Processing Launcher (Windows)
 REM ========================================
 
+REM --- Check for admin rights ---
+net session >nul 2>&1
+IF %ERRORLEVEL% NEQ 0 (
+    echo Please run this script as Administrator!
+    pause
+    exit /b 1
+)
+
 REM --- Prompt for WAV file URL or local path ---
 set /p MUSIC_INPUT="Enter full path to WAV file or URL: "
 
-REM --- Check if Python is installed ---
-where python >nul 2>nul
-IF %ERRORLEVEL% NEQ 0 (
+REM --- Function to detect Python ---
+set PYTHON_EXE=
+
+for %%P in (
+    "%ProgramFiles%\Python312\python.exe"
+    "%LocalAppData%\Programs\Python\Python312\python.exe"
+    "%ProgramFiles%\Python311\python.exe"
+    "%LocalAppData%\Programs\Python\Python311\python.exe"
+) do (
+    if exist "%%P" set PYTHON_EXE=%%P
+)
+
+REM --- Install Python if not found ---
+IF "%PYTHON_EXE%"=="" (
     echo Python not found! Installing Python 3.12...
     powershell -Command "Invoke-WebRequest -Uri 'https://www.python.org/ftp/python/3.12.0/python-3.12.0-amd64.exe' -OutFile 'python_installer.exe'"
-    python_installer.exe /quiet InstallAllUsers=1 PrependPath=1
-    IF %ERRORLEVEL% NEQ 0 (
-        echo Python installation failed. Please install manually.
+    start /wait python_installer.exe /quiet InstallAllUsers=1 PrependPath=1
+    del python_installer.exe
+
+    REM Try detecting Python again
+    for %%P in (
+        "%ProgramFiles%\Python312\python.exe"
+        "%LocalAppData%\Programs\Python\Python312\python.exe"
+    ) do (
+        if exist "%%P" set PYTHON_EXE=%%P
+    )
+
+    IF "%PYTHON_EXE%"=="" (
+        echo Python installation failed. Please install manually and re-run this script.
         pause
         exit /b 1
     )
-    del python_installer.exe
     echo Python installed successfully.
 )
+
+REM --- Ensure pip is upgraded ---
+"%PYTHON_EXE%" -m ensurepip
+"%PYTHON_EXE%" -m pip install --upgrade pip
+
+REM --- Install required Python dependencies ---
+"%PYTHON_EXE%" -m pip install numpy scipy pydub
 
 REM --- Download the WAV file if it's a URL ---
 echo %MUSIC_INPUT% | findstr /b "http" >nul
@@ -53,14 +88,9 @@ IF NOT EXIST "%PY_SCRIPT%" (
     )
 )
 
-REM --- Check/install Python dependencies ---
-python -m pip show numpy >nul 2>nul || python -m pip install numpy
-python -m pip show scipy >nul 2>nul || python -m pip install scipy
-python -m pip show pydub >nul 2>nul || python -m pip install pydub
-
 REM --- Run Python script ---
 echo Running 3D audio processing...
-python "%PY_SCRIPT%" --music_url "%MUSIC_FILE%"
+"%PYTHON_EXE%" "%PY_SCRIPT%" --music_url "%MUSIC_FILE%"
 
 echo Done.
 pause
