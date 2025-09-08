@@ -19,9 +19,9 @@ Enjoy **living sound that reacts in real time**, bringing games, movies, and mus
 
 ---
 
-## ❓ Arby Audio vs Other Technology
+## ❓ Arby Audio vs the typical system
 
-### 🎬 Other technology
+### 🎬 The typical system
 
 * Maps sound objects as virtual waves with delays and reflections.
 * Provides 360° surround immersion.
@@ -117,3 +117,29 @@ This project is for **educational and ethical use only**.
 **⚖️ For educational and ethical testing only — unauthorized use is illegal.**
 
 💡 **Contributions welcome!** Fork the repo, create a branch, and submit a PR!
+
+
+## Disclaimer – Educational and Ethical Use Only
+
+This project is created strictly for **educational and ethical use only**. All product names, trademarks, and registered trademarks mentioned are the property of their respective owners.
+
+This project is **not affiliated with, endorsed by, or sponsored by any company, brand, or trademark holder**.
+
+### Not to Defame
+
+This material is intended for **informational, research, and educational purposes only**. It is **not intended to disparage, defame, or negatively impact the reputation** of any company, brand, or trademark holder.
+
+The author's intent is strictly **educational and research-focused**. Any misuse of this project or its materials is the sole responsibility of the user. The author shall not be liable or responsible for such misuse, as that was never the intent.
+
+Any issues, concerns, or clarifications regarding this project may be directed to: **[somethingsomething2726@gmail.com](mailto:somethingsomething2726@gmail.com)**.
+
+### Independent Development
+
+Arby Audio 3D is an **independent, open-source project**. While it draws **inspiration from cinematic-grade audio technologies** such as object-based surround and spatial audio systems, it has **no official affiliation with any company, brand, or trademark holder**.
+
+### Trademark Notice
+
+All names, logos, and brands mentioned in this project are the property of their respective owners. References are made **solely for descriptive, educational, and comparative purposes**.
+
+---
+
