@@ -116,12 +116,12 @@ By downloading, installing, or using **Arby Audio 3D**, you agree to the terms i
 This project is for **educational and ethical use only**.
 
 All trademarks (Dolby Atmos, IMAX Audio, etc.) belong to their respective owners.
-This project is **not affiliated with, endorsed by, or sponsored by** Dolby Laboratories or IMAX Corporation.
+This project is **not affiliated with, endorsed by, or sponsored by** Dolby Laboratories.
 
 ### Not to Defame
 
 This project/material is intended for informational and educational/research purposes only and is not intended to disparage, defame, or negatively impact the reputation of Dolby Laboratories, IMAX Corporation, or any other trademark holder. The author's intent is not to defame, disparage, or negatively impact the reputation of Dolby Laboratories, IMAX Corporation, or any other trademark holder. I shall not be liable or responsible for the same, as that was not the intent, and it is the user's responsibility for the same. Any issues regarding the same shall only be handled at the email: somethingsomething2726@gmail.com.
-Arby Audio 3D is inspired by cinematic-grade audio technologies such as object-based surround systems (e.g., Dolby Atmos, IMAX Audio), but is an independent, open-source project with no official affiliation. The author takes no liability for misuse regarding this Not To Defame section. It is inspired by concepts used in cinematic audio systems (such as object-based surround technologies like Dolby Atmos® and IMAX Audio®), but:
+Arby Audio 3D is inspired by cinematic-grade audio technologies such as object-based surround systems, but is an independent, open-source project with no official affiliation. The author takes no liability for misuse regarding this Not To Defame section. It is inspired by concepts used in cinematic audio systems (such as object-based surround technologies like Dolby Atmos® and IMAX Audio®), but:
 
 It has no official affiliation with Dolby Laboratories, IMAX Corporation, or any other trademark holder.
 
@@ -131,7 +131,7 @@ References are made for educational, descriptive, and comparative purposes only.
 
 ## Trademark Notice -
 
-Dolby Atmos® and IMAX® and/or IMAX Audio® are registered trademarks/copyrighted works of their respective owners.
+Dolby Atmos® is a registered trademark/copyrighted works of their respective owners.
 All other names, logos, and brands are the property of their respective owners.
 ---
 
