@@ -124,14 +124,12 @@ This project is for **educational and ethical use only**.
 This project is created strictly for **educational and ethical use only**. All product names, trademarks, and registered trademarks mentioned are the property of their respective owners.
 
 This project is **not affiliated with, endorsed by, or sponsored by any company, brand, or trademark holder**.
-
+This service is provided on a "as-is" basis, with good faith and no obligations or warranties towards the same.
 ### Not to Defame
 
 This material is intended for **informational, research, and educational purposes only**. It is **not intended to disparage, defame, or negatively impact the reputation** of any company, brand, or trademark holder.
 
 The author's intent is strictly **educational and research-focused**. Any misuse of this project or its materials is the sole responsibility of the user. The author shall not be liable or responsible for such misuse, as that was never the intent.
-
-Any issues, concerns, or clarifications regarding this project may be directed to: **[somethingsomething2726@gmail.com](mailto:somethingsomething2726@gmail.com)**.
 
 ### Independent Development
 
