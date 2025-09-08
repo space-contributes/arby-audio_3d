@@ -101,15 +101,16 @@ OR: DOWNLOAD THE FILES INDIVIDUALLY through the GitHub website
 *(replace with your own .wav URL)*
 
 ## OR, FOR WINDOWS:
-Still requires cloning the repo, or downloading files individually from the GitHub website.
+Still requires cloning the repo or downloading files individually from the GitHub website.
 Run the WOO.BAT as administrator.
+Then, if it gets stuck, restart it.
 
 # FOR MACOS AND LINUX:
 
 or .WOO.sh for Linux OR MacOS file as root/sudo/su.
 For .sh:
 chmod +x WOO.sh && sudo ./WOO.sh
-
+Then, if it gets stuck, restart it. If it were to be stuck on Python installation, confirm Python is installed by a command, and then restart WOO.sh, because sometimes it forgets that Python is done installing.
 
 ---
 
