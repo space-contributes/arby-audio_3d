@@ -102,7 +102,7 @@ OR: DOWNLOAD THE FILES INDIVIDUALLY through the GitHub website
 
 ## OR, FOR WINDOWS:
 Still requires cloning the repo, or downloading files individually from the GitHub website.
-Run the WOO.bat as administrator.
+Run the WOO.BAT as administrator.
 
 # FOR MACOS AND LINUX:
 
