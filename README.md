@@ -3,7 +3,7 @@
 
 # Arby Audio 3D – Cinematic Spatial Sound Engine 🎧
 
-## 🛡️ **Experience living sound that adapts, bounces, and reacts — 7.1.4 spatial audio with advanced Dolby Atmos–style realism.**
+## 🛡️ **Experience living sound that adapts, bounces, and reacts (without configuration) — with advanced object-based 7.1.4 spatial realism.**
 
 *Made with ❤️ by Space-code*
 
