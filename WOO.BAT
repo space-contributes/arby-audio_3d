@@ -42,7 +42,7 @@ IF "%PYTHON_EXE%"=="" (
     )
 
     IF "%PYTHON_EXE%"=="" (
-        echo Python installation failed. Please install manually and re-run this script.
+        echo Python installation almost done! Re-run this script, and if it starts trying to install again...install manually
         pause
         exit /b 1
     )
