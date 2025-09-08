@@ -64,6 +64,26 @@ The Service and the author disclaim any liability for security breaches, vulnera
 Any analytics, insights, or recommendations derived from the Tool or from contributed data are provided strictly “as-is.” The author makes no guarantees regarding their accuracy, completeness, timeliness, or suitability for decision-making. Users assume all risk associated with relying on such data and are solely responsible for any decisions or actions taken based on it.
 
 
+This project is created strictly for **educational and ethical use only**. All product names, trademarks, and registered trademarks mentioned are the property of their respective owners.
+
+This project is **not affiliated with, endorsed by, or sponsored by any company, brand, or trademark holder**.
+
+### Not to Defame
+
+This material is intended for **informational, research, and educational purposes only**. It is **not intended to disparage, defame, or negatively impact the reputation** of any company, brand, or trademark holder.
+
+The author's intent is strictly **educational and research-focused**. Any misuse of this project or its materials is the sole responsibility of the user. The author shall not be liable or responsible for such misuse, as that was never the intent.
+
+Any issues, concerns, or clarifications regarding this project may be directed to: **[somethingsomething2726@gmail.com](mailto:somethingsomething2726@gmail.com)**.
+
+### Independent Development
+
+Arby Audio 3D is an **independent, open-source project**. While it draws **inspiration from cinematic-grade audio technologies** such as object-based surround and spatial audio systems, it has **no official affiliation with any company, brand, or trademark holder**.
+
+### Trademark Notice
+
+All names, logos, and brands mentioned in this project are the property of their respective owners. References are made **solely for descriptive, educational, and comparative purposes**.
+
 Users who contribute content or code affirm that they either own the rights to the contributed materials or have obtained appropriate licenses and permissions. By contributing, users grant the author the rights to use, modify, and distribute their contributions. Contributors are solely responsible for the content they submit and any consequences that may arise from it.
 
 This service is provided on an "as-is" basis with no obligations or warranties given towards the same.
