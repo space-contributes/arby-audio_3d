@@ -99,9 +99,13 @@ python "PYTHONSCRIPT.py" --music_url https://your-music-url.com/file.wav
 
 *(replace with your own .wav URL)*
 
-## OR:
+## OR: FOR WINDOWS, FASTER WAY:
 
-Run the WOO.bat or .WOO.sh file as admin/root.
+Run the WOO.bat
+
+# FOR MACOS AND LINUX:
+
+or .WOO.sh for Linux OR MacOS file as admin/root.
 For .sh:
 chmod +x WOO.sh && sudo ./WOO.sh
 
