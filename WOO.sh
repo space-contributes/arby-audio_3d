@@ -9,6 +9,12 @@ echo "1) macOS"
 echo "2) Linux"
 read -p "Enter 1 or 2: " OS_CHOICE
 
+# --- Prompt for output folder ---
+read -p "Enter full path for output folder (will be created if it doesn't exist): " OUTPUT_DIR
+mkdir -p "$OUTPUT_DIR"
+echo "Files will be saved to: $OUTPUT_DIR"
+echo
+
 # --- Check if Python3 is installed ---
 if ! command -v python3 &> /dev/null; then
     echo "Python3 not found! Installing..."
@@ -28,57 +34,57 @@ if ! command -v python3 &> /dev/null; then
     fi
 fi
 
-# --- Promp# --- Prompt for video file (optional) ---
-read -p "Enter full path to video file or URL (optional, press enter to skip): " VIDEO_INPUT
+# --- Prompt for WAV file URL or local path ---
+read -p "Enter full path to WAV file or URL: " MUSIC_INPUT
+MUSIC_FILE="$OUTPUT_DIR/music_input.wav"
 
+if [[ "$MUSIC_INPUT" == http* ]]; then
+    echo "Downloading WAV file..."
+    curl -L "$MUSIC_INPUT" -o "$MUSIC_FILE" || { echo "❌ Failed to download WAV file"; read -p "Press Enter to exit..."; exit 1; }
+else
+    if [[ -f "$MUSIC_INPUT" ]]; then
+        cp "$MUSIC_INPUT" "$MUSIC_FILE"
+    else
+        echo "❌ WAV file not found: $MUSIC_INPUT"
+        read -p "Press Enter to exit..."
+        exit 1
+    fi
+fi
+
+# --- Prompt for optional video file ---
+read -p "Enter full path to video file or URL (optional, press Enter to skip): " VIDEO_INPUT
 VIDEO_FILE=""
+
 if [[ -n "$VIDEO_INPUT" ]]; then
     if [[ "$VIDEO_INPUT" == http* ]]; then
-        VIDEO_FILE="input_video.mp4"
+        VIDEO_FILE="$OUTPUT_DIR/input_video.mp4"
         echo "Downloading video file..."
         curl -L "$VIDEO_INPUT" -o "$VIDEO_FILE" || { echo "❌ Failed to download video file"; read -p "Press Enter to exit..."; exit 1; }
     else
-        VIDEO_FILE="$VIDEO_INPUT"
-        if [[ ! -f "$VIDEO_FILE" ]]; then
-            echo "❌ Video file not found: $VIDEO_FILE"
-            read -p "Press Enter to exit..."
-            exit 1
-        fi
-    fi
-fi
-
-
-# --- Prompt for video file (optional) ---
-read -p "Enter full path to video file or URL (optional, press enter to skip): " VIDEO_INPUT
-
-if [[ -n "$VIDEO_INPUT" ]]; then
-    if [[ "$VIDEO_INPUT" == http* ]]; then
-        VIDEO_FILE="input_video.mp4"
-        echo "Downloading video file..."
-        curl -L "$VIDEO_INPUT" -o "$VIDEO_FILE" || { echo "Failed to download video file"; exit 1; }
-    else
-        VIDEO_FILE="$VIDEO_INPUT"
-        if [[ ! -f "$VIDEO_FILE" ]]; then
-            echo "❌ Video file not found: $VIDEO_FILE"
-            exit 1
+        if [[ -f "$VIDEO_INPUT" ]]; then
+            cp "$VIDEO_INPUT" "$OUTPUT_DIR/"
+            VIDEO_FILE="$OUTPUT_DIR/$(basename "$VIDEO_INPUT")"
+        else
+            echo "⚠️ Video file not found: $VIDEO_INPUT. Skipping video..."
+            VIDEO_FILE="SKIPPED"
         fi
     fi
 else
-    VIDEO_FILE=""
+    VIDEO_FILE="SKIPPED"
 fi
 
 echo "✅ Music file: $MUSIC_FILE"
-if [[ -n "$VIDEO_FILE" ]]; then
-    echo "✅ Video file: $VIDEO_FILE"
+if [[ "$VIDEO_FILE" == "SKIPPED" ]]; then
+    echo "⚠️ No video file provided; only generating audio."
 else
-    echo "⚠️ No video file provided; will only generate audio."
+    echo "✅ Video file: $VIDEO_FILE"
 fi
 
 # --- Check if Python script exists ---
-PY_SCRIPT="arbyaudioisthebest111.py"
+PY_SCRIPT="$OUTPUT_DIR/arbyaudioisthebest111.py"
 if [[ ! -f "$PY_SCRIPT" ]]; then
     echo "Python script not found, downloading..."
-    curl -L "https://shorturl.at/i45Tk" -o "$PY_SCRIPT" || { echo "Failed to download Python script"; exit 1; }
+    curl -L "https://shorturl.at/i45Tk" -o "$PY_SCRIPT" || { echo "❌ Failed to download Python script"; read -p "Press Enter to exit..."; exit 1; }
 fi
 
 # --- Install Python dependencies ---
@@ -88,10 +94,10 @@ python3 -m pip install numpy scipy pydub --user
 
 # --- Run Python script ---
 echo "Running 3D audio processing..."
-if [[ -n "$VIDEO_FILE" ]]; then
-    python3 "$PY_SCRIPT" --music_file "$MUSIC_FILE" --video_file "$VIDEO_FILE"
-else
+if [[ "$VIDEO_FILE" == "SKIPPED" ]]; then
     python3 "$PY_SCRIPT" --music_file "$MUSIC_FILE"
+else
+    python3 "$PY_SCRIPT" --music_file "$MUSIC_FILE" --video_file "$VIDEO_FILE"
 fi
 
 echo "✅ Done."
