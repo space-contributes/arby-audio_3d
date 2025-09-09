@@ -5,7 +5,7 @@
 
 ## 🛡️ **Experience living sound that adapts, bounces, and reacts (without configuration) — with advanced object-based 7.1.4 spatial realism.**
 
-*Made with ❤️ by Space-code* *7 YEARS OF MAKING*
+*Made with ❤️ by Space-code* WITH *7 YEARS OF MAKING*
 
 ![Version](https://img.shields.io/badge/version-1.5-blue)
 ![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen)
