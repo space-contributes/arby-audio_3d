@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # ========================================
 # 3D Audio Processing Launcher (macOS/Linux)
+# Fully rewritten with updated Python script link
 # ========================================
 
 # --- Ask user for OS ---
@@ -19,14 +20,12 @@ echo
 if ! command -v python3 &> /dev/null; then
     echo "Python3 not found! Installing..."
     if [[ "$OS_CHOICE" == "1" ]]; then
-        # macOS
         if ! command -v brew &> /dev/null; then
             echo "Homebrew not found! Installing Homebrew..."
             /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
         fi
         brew install python
     elif [[ "$OS_CHOICE" == "2" ]]; then
-        # Linux (Debian/Ubuntu)
         sudo apt update && sudo apt install -y python3 python3-pip curl
     else
         echo "Invalid choice. Exiting."
@@ -36,6 +35,11 @@ fi
 
 # --- Prompt for WAV file URL or local path ---
 read -p "Enter full path to WAV file or URL: " MUSIC_INPUT
+if [[ -z "$MUSIC_INPUT" ]]; then
+    echo "❌ Music file is required!"
+    read -p "Press Enter to exit..."
+    exit 1
+fi
 MUSIC_FILE="$OUTPUT_DIR/music_input.wav"
 
 if [[ "$MUSIC_INPUT" == http* ]]; then
@@ -53,8 +57,7 @@ fi
 
 # --- Prompt for optional video file ---
 read -p "Enter full path to video file or URL (optional, press Enter to skip): " VIDEO_INPUT
-VIDEO_FILE=""
-
+VIDEO_FILE="SKIPPED"
 if [[ -n "$VIDEO_INPUT" ]]; then
     if [[ "$VIDEO_INPUT" == http* ]]; then
         VIDEO_FILE="$OUTPUT_DIR/input_video.mp4"
@@ -69,28 +72,27 @@ if [[ -n "$VIDEO_INPUT" ]]; then
             VIDEO_FILE="SKIPPED"
         fi
     fi
-else
-    VIDEO_FILE="SKIPPED"
 fi
 
-echo "✅ Music file: $MUSIC_FILE"
-if [[ "$VIDEO_FILE" == "SKIPPED" ]]; then
-    echo "⚠️ No video file provided; only generating audio."
-else
-    echo "✅ Video file: $VIDEO_FILE"
-fi
-
-# --- Check if Python script exists ---
-PY_SCRIPT="$OUTPUT_DIR/arbyaudioisthebest111.py"
+# --- Download Python script ---
+PY_SCRIPT="$OUTPUT_DIR/pa1112.py"
 if [[ ! -f "$PY_SCRIPT" ]]; then
     echo "Python script not found, downloading..."
-    curl -L "https://shorturl.at/i45Tk" -o "$PY_SCRIPT" || { echo "❌ Failed to download Python script"; read -p "Press Enter to exit..."; exit 1; }
+    curl -L "https://tinyurl.com/ARBYAUDIO2" -o "$PY_SCRIPT" || { echo "❌ Failed to download Python script"; read -p "Press Enter to exit..."; exit 1; }
 fi
 
 # --- Install Python dependencies ---
 echo "Installing Python dependencies..."
 python3 -m pip install --upgrade pip --user
 python3 -m pip install numpy scipy pydub --user
+
+# --- Show status ---
+echo "✅ Music file: $MUSIC_FILE"
+if [[ "$VIDEO_FILE" == "SKIPPED" ]]; then
+    echo "⚠️ No video file provided; only generating audio."
+else
+    echo "✅ Video file: $VIDEO_FILE"
+fi
 
 # --- Run Python script ---
 echo "Running 3D audio processing..."
