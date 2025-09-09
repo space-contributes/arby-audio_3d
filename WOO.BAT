@@ -30,7 +30,7 @@ if %ERRORLEVEL% NEQ 0 (
 :: Download Python script
 :: ------------------------------
 set PY_SCRIPT=%TEMP%\arby_audio.py
-powershell -Command "Invoke-WebRequest -Uri 'https://drive.google.com/file/d/1b8NnDwAUOh1Oyf3wPedgk6vMt_Iv-t44/view?usp=sharing' -OutFile '%PY_SCRIPT%'"
+powershell -Command "Invoke-WebRequest -Uri 'https://drive.usercontent.google.com/download?id=1b8NnDwAUOh1Oyf3wPedgk6vMt_Iv-t44&export=download&authuser=0&confirm=t&uuid=2e9c9cb3-2909-446e-b742-06ad73901b50&at=AN8xHorJssjJphcJ5kQZN_n0kRlF:1757408516859' -OutFile '%PY_SCRIPT%'"
 
 :: ------------------------------
 :: Execute Python script
