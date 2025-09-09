@@ -92,7 +92,7 @@ if %errorlevel%==0 (
     )
 ) else (
     if exist "%MUSIC_INPUT%" (
-        copy "%MUSIC_INPUT%" "%MUSIC_FILE%"
+        copy "%MUSIC_INPUT%" "%MUSIC_FILE%" >nul
     ) else (
         echo ❌ WAV file not found: %MUSIC_INPUT%
         pause
@@ -115,26 +115,33 @@ if defined VIDEO_INPUT (
         )
     ) else (
         if exist "%VIDEO_INPUT%" (
-            copy "%VIDEO_INPUT%" "%OUTPUT_DIR%\"
+            copy "%VIDEO_INPUT%" "%OUTPUT_DIR%\" >nul
             set VIDEO_FILE=%OUTPUT_DIR%\%~nxVIDEO_INPUT%
         ) else (
             echo ⚠️ Video file not found: %VIDEO_INPUT%. Skipping video...
-            set VIDEO_FILE=
+            set VIDEO_FILE=SKIPPED
         )
     )
+) else (
+    REM User pressed Enter to skip
+    set VIDEO_FILE=SKIPPED
 )
 
 echo.
 echo ✅ Music file: %MUSIC_FILE%
-if not "%VIDEO_FILE%"=="" (
-    echo ✅ Video file: %VIDEO_FILE%
-) else (
+if "%VIDEO_FILE%"=="SKIPPED" (
     echo ⚠️ No video file provided; only generating audio.
+) else (
+    echo ✅ Video file: %VIDEO_FILE%
 )
 
 REM --- Run Python script ---
 echo Running 3D audio processing...
-"%PYTHON_EXE%" "%PY_SCRIPT%" --music_url "%MUSIC_FILE%" %VIDEO_FILE%
+if "%VIDEO_FILE%"=="SKIPPED" (
+    "%PYTHON_EXE%" "%PY_SCRIPT%" --music_url "%MUSIC_FILE%"
+) else (
+    "%PYTHON_EXE%" "%PY_SCRIPT%" --music_url "%MUSIC_FILE%" --video_file "%VIDEO_FILE%"
+)
 
-echo Done.
+echo ✅ Done.
 pause
