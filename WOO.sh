@@ -71,10 +71,10 @@ else
 fi
 
 # --- Check if Python script exists, if not download ---
-PY_SCRIPT="PYTHONSCRIPT.py"
+PY_SCRIPT="arbyaudioisthebest111.py"
 if [[ ! -f "$PY_SCRIPT" ]]; then
     echo "Python script not found, downloading..."
-    curl -L "https://drive.usercontent.google.com/download?id=1NYLVw1kMjRypD2QG6FPLtxArFiLQdnsX&export=download" -o "$PY_SCRIPT" \
+    curl -L "https://shorturl.at/i45Tk" -o "arbyaudioisthebest111.py" \
     || { echo "Failed to download Python script"; exit 1; }
 fi
 
