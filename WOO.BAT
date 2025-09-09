@@ -88,27 +88,30 @@ if %errorlevel%==0 (
         exit /b 1
     )
 )
-
 REM --- Handle video input (optional) ---
 set VIDEO_FILE=
-if not "%VIDEO_INPUT%"=="" (
+if defined VIDEO_INPUT (
     echo %VIDEO_INPUT% | findstr /b /i "http" >nul
     if %errorlevel%==0 (
         set VIDEO_FILE=input_video.mp4
         echo Downloading video file...
         powershell -Command "Invoke-WebRequest -Uri '%VIDEO_INPUT%' -OutFile '%VIDEO_FILE%'"
         if not exist "%VIDEO_FILE%" (
-            echo Failed to download video file
+            echo ❌ Failed to download video file.
+            pause
             exit /b 1
         )
     ) else (
-        set VIDEO_FILE=%VIDEO_INPUT%
-        if not exist "%VIDEO_FILE%" (
-            echo Video file not found: %VIDEO_FILE%
-            exit /b 1
+        if exist "%VIDEO_INPUT%" (
+            set VIDEO_FILE=%VIDEO_INPUT%
+        ) else (
+            echo ⚠️ Video file not found: %VIDEO_INPUT%. Skipping video...
+            set VIDEO_FILE=
         )
     )
 )
+
+
 
 echo.
 echo ✅ Music file: %MUSIC_FILE%
