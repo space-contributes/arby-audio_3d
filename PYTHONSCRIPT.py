@@ -363,8 +363,7 @@ if __name__ == "__main__":
         output_video = None
 
     display_audio_video_links(output_video)
-
-  def cleanup_old_music_and_video(music_files, old_video_file=None):
+def cleanup_old_music_and_video(music_files, old_video_file=None):
     """Prompt user to remove old music WAV files and the original video file."""
     files_to_check = [f for f in music_files if os.path.exists(f)]
     if old_video_file and os.path.exists(old_video_file):
@@ -405,6 +404,7 @@ if __name__ == "__main__":
         music_files=["music.wav", "music_96k.wav"],
         old_video_file=video_file
     )
+
 
 
 
