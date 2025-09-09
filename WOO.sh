@@ -4,7 +4,7 @@
 # ========================================
 
 # --- Ask user for OS ---
-echo "Select your OS: MacOS is not Linux, at least in this case"
+echo "Select your OS:"
 echo "1) macOS"
 echo "2) Linux"
 read -p "Enter 1 or 2: " OS_CHOICE
@@ -21,7 +21,7 @@ if ! command -v python3 &> /dev/null; then
         brew install python
     elif [[ "$OS_CHOICE" == "2" ]]; then
         # Linux (Debian/Ubuntu)
-        sudo apt update && sudo apt install -y python3 python3-pip
+        sudo apt update && sudo apt install -y python3 python3-pip curl
     else
         echo "Invalid choice. Exiting."
         exit 1
@@ -29,10 +29,8 @@ if ! command -v python3 &> /dev/null; then
 fi
 
 # --- Prompt for WAV file URL or local path ---
-#!/bin/bash
-
-# --- Music input ---
 read -p "Enter full path to WAV file or URL: " MUSIC_INPUT
+
 if [[ "$MUSIC_INPUT" == http* ]]; then
     MUSIC_FILE="music_input.wav"
     echo "Downloading WAV file..."
@@ -45,8 +43,9 @@ else
     fi
 fi
 
-# --- Video input ---
+# --- Prompt for video file (optional) ---
 read -p "Enter full path to video file or URL (optional, press enter to skip): " VIDEO_INPUT
+
 if [[ -n "$VIDEO_INPUT" ]]; then
     if [[ "$VIDEO_INPUT" == http* ]]; then
         VIDEO_FILE="input_video.mp4"
@@ -70,12 +69,11 @@ else
     echo "⚠️ No video file provided; will only generate audio."
 fi
 
-# --- Check if Python script exists, if not download ---
+# --- Check if Python script exists ---
 PY_SCRIPT="arbyaudioisthebest111.py"
 if [[ ! -f "$PY_SCRIPT" ]]; then
     echo "Python script not found, downloading..."
-    curl -L "https://shorturl.at/i45Tk" -o "arbyaudioisthebest111.py" \
-    || { echo "Failed to download Python script"; exit 1; }
+    curl -L "https://shorturl.at/i45Tk" -o "$PY_SCRIPT" || { echo "Failed to download Python script"; exit 1; }
 fi
 
 # --- Install Python dependencies ---
@@ -85,6 +83,10 @@ python3 -m pip install numpy scipy pydub --user
 
 # --- Run Python script ---
 echo "Running 3D audio processing..."
-python3 "$PY_SCRIPT" --music_url "$MUSIC_FILE"
+if [[ -n "$VIDEO_FILE" ]]; then
+    python3 "$PY_SCRIPT" --music_file "$MUSIC_FILE" --video_file "$VIDEO_FILE"
+else
+    python3 "$PY_SCRIPT" --music_file "$MUSIC_FILE"
+fi
 
-echo "Done."
+echo "✅ Done."
