@@ -252,6 +252,102 @@ write(binaural_wav, fs, stereo.astype(np.float32))
 # -----------------------
 # Display output
 # -----------------------
+
+import os
+import argparse
+import subprocess
+from IPython.display import Audio, HTML, display
+
+# Example global variables for your audio
+stereo_wav = "3d_music_binaural_reflections.wav"
+multichannel_wav = "3d_music_7_1_4_reflections.wav"
+fs = 96000
+
+def ensure_ffmpeg():
+    # Your existing FFmpeg installer logic
+    ffmpeg_path = "ffmpeg"  # placeholder, return actual path
+    return ffmpeg_path
+
+def merge_audio(video_file, audio_file, ffmpeg_path, output_video=None):
+    if output_video is None:
+        output_video = os.path.splitext(video_file)[0] + "_7_1_4.mp4"
+
+    print("🎬 Merging multichannel audio with video using ffmpeg...")
+    cmd = [
+        ffmpeg_path,
+        "-y",
+        "-i", video_file,
+        "-i", audio_file,
+        "-map", "0:v",
+        "-map", "1:a",
+        "-c:v", "copy",
+        "-c:a", "pcm_s24le",   # Lossless, supports 7.1.4 channels
+        output_video
+    ]
+    subprocess.run(cmd, check=True)
+    print(f"✅ Done — output video with full 7.1.4 multichannel: {output_video}")
+    return output_video
+
+def display_audio_video_links(video_file=None):
+    """Ask user only if files are missing; otherwise just show/download."""
+    from IPython import get_ipython
+    def is_notebook():
+        try:
+            shell = get_ipython().__class__.__name__
+            return shell == 'ZMQInteractiveShell'
+        except:
+            return False
+
+    if is_notebook():
+        # Ask for video display only if video exists
+        if video_file and os.path.exists(video_file):
+            answer = input(f"Do you want to display the video {os.path.basename(video_file)} in the browser? (y/n): ").strip().lower()
+            if answer == 'y':
+                from IPython.display import Video
+                display(Video(video_file, embed=True))
+
+        # Always show audio download links if they exist
+        if os.path.exists(stereo_wav):
+            display(Audio(stereo_wav, rate=fs))
+            with open(stereo_wav, "rb") as f:
+                b64 = base64.b64encode(f.read()).decode()
+            display(HTML(f'<a download="{os.path.basename(stereo_wav)}" href="data:audio/wav;base64,{b64}">⬇️ Download stereo WAV</a>'))
+
+        if os.path.exists(multichannel_wav):
+            with open(multichannel_wav, "rb") as f:
+                b64_mc = base64.b64encode(f.read()).decode()
+            display(HTML(f'<a download="{os.path.basename(multichannel_wav)}" href="data:audio/wav;base64,{b64_mc}">⬇️ Download 7.1.4 multichannel WAV</a>'))
+    else:
+        print(f"Stereo WAV: {stereo_wav}, Multichannel WAV: {multichannel_wav}")
+        if video_file:
+            print(f"Video path: {video_file}")
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Merge a 7.1.4 multichannel WAV into a video.")
+    parser.add_argument("--video_file", help="Path to the video file (e.g., input.mp4)")
+    parser.add_argument("--audio_file", help="Path to the 7.1.4 WAV file (e.g., multichannel.wav)")
+    args = parser.parse_args()
+
+    # --- Only ask for video/audio if files are missing ---
+    video_file = args.video_file
+    if video_file and not os.path.exists(video_file):
+        video_file = input("Enter path to video file or URL: ").strip()
+        # Optional: add download logic for URL
+
+    audio_file = args.audio_file
+    if audio_file and not os.path.exists(audio_file):
+        audio_file = input("Enter path to audio file or URL: ").strip()
+        # Optional: add download logic for URL
+
+    ffmpeg_path = ensure_ffmpeg()
+
+    if video_file and os.path.exists(video_file) and audio_file and os.path.exists(audio_file):
+        output_video = merge_audio(video_file, audio_file, ffmpeg_path)
+    else:
+        output_video = None
+
+    display_audio_video_links(output_video)
+
   def cleanup_old_music_and_video(music_files, old_video_file=None):
     """Prompt user to remove old music WAV files and the original video file."""
     files_to_check = [f for f in music_files if os.path.exists(f)]
@@ -293,3 +389,4 @@ if __name__ == "__main__":
         music_files=["music.wav", "music_96k.wav"],
         old_video_file=video_file
     )
+
