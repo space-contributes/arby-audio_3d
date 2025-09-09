@@ -28,20 +28,25 @@ if ! command -v python3 &> /dev/null; then
     fi
 fi
 
-# --- Prompt for WAV file URL or local path ---
-read -p "Enter full path to WAV file or URL: " MUSIC_INPUT
+# --- Promp# --- Prompt for video file (optional) ---
+read -p "Enter full path to video file or URL (optional, press enter to skip): " VIDEO_INPUT
 
-if [[ "$MUSIC_INPUT" == http* ]]; then
-    MUSIC_FILE="music_input.wav"
-    echo "Downloading WAV file..."
-    curl -L "$MUSIC_INPUT" -o "$MUSIC_FILE" || { echo "Failed to download WAV file"; exit 1; }
-else
-    MUSIC_FILE="$MUSIC_INPUT"
-    if [[ ! -f "$MUSIC_FILE" ]]; then
-        echo "❌ WAV file not found: $MUSIC_FILE"
-        exit 1
+VIDEO_FILE=""
+if [[ -n "$VIDEO_INPUT" ]]; then
+    if [[ "$VIDEO_INPUT" == http* ]]; then
+        VIDEO_FILE="input_video.mp4"
+        echo "Downloading video file..."
+        curl -L "$VIDEO_INPUT" -o "$VIDEO_FILE" || { echo "❌ Failed to download video file"; read -p "Press Enter to exit..."; exit 1; }
+    else
+        VIDEO_FILE="$VIDEO_INPUT"
+        if [[ ! -f "$VIDEO_FILE" ]]; then
+            echo "❌ Video file not found: $VIDEO_FILE"
+            read -p "Press Enter to exit..."
+            exit 1
+        fi
     fi
 fi
+
 
 # --- Prompt for video file (optional) ---
 read -p "Enter full path to video file or URL (optional, press enter to skip): " VIDEO_INPUT
