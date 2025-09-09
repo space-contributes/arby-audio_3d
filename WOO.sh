@@ -24,9 +24,9 @@ fi
 PYTHON_BIN=python3
 
 %PYTHON_BIN% -m pip install --upgrade pip
-%PYTHON_BIN% -m pip install numpy scipy pydub requests py7zr ipython
+%PYTHON_BIN% -m pip install numpy scipy pydub requests py7zr ipython pyaudioop
 python -m pip install --upgrade pip
-python -m pip install numpy scipy pydub requests py7zr ipython
+python -m pip install numpy scipy pydub requests py7zr ipython pyaudioop
 # ------------------------------
 # Download Python script
 # ------------------------------
