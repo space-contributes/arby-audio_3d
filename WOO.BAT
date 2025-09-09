@@ -2,6 +2,7 @@
 REM ========================================
 REM 3D Audio Processing Launcher (Windows)
 REM Single-folder workflow with music URL
+REM Warn if no video, ask to proceed
 REM ========================================
 
 setlocal enabledelayedexpansion
@@ -22,7 +23,7 @@ if "%MUSIC_URL%"=="" (
 )
 set MUSIC_FILE=%FOLDER_PATH%\music_input.wav
 
-:: --- Detect optional video file ---
+:: --- Detect optional video file in folder ---
 set VIDEO_FILE=
 for %%V in ("%FOLDER_PATH%\*.mp4" "%FOLDER_PATH%\*.mov" "%FOLDER_PATH%\*.mkv") do (
     set VIDEO_FILE=%%V
@@ -30,48 +31,82 @@ for %%V in ("%FOLDER_PATH%\*.mp4" "%FOLDER_PATH%\*.mov" "%FOLDER_PATH%\*.mkv") d
 )
 :FOUND_VIDEO
 if "%VIDEO_FILE%"=="" (
-    echo ⚠️ No video file found; will only generate audio.
+    echo ⚠️ No video file found in folder.
+    set /p PROCEED="Do you want to proceed without a video file? (y/n): "
+    if /i NOT "%PROCEED%"=="y" (
+        echo Exiting as requested.
+        pause
+        exit /b 1
+    )
 ) else (
     echo ✅ Video file found: %VIDEO_FILE%
 )
 
-:: --- PowerShell: Python detection, install, dependencies, downloads ---
-powershell -NoProfile -Command ^
-$ErrorActionPreference='Stop'; ^
-$py=@("$env:ProgramFiles\Python312\python.exe","$env:LocalAppData\Programs\Python\Python312\python.exe") | Where-Object { Test-Path $_ } | Select-Object -First 1; ^
-if (-not $py) { ^
-    Write-Host "Python 3.12 not found. Installing..."; ^
-    Invoke-WebRequest -Uri 'https://www.python.org/ftp/python/3.12.0/python-3.12.0-amd64.exe' -OutFile 'python_installer.exe'; ^
-    Start-Process -Wait python_installer.exe -ArgumentList '/quiet InstallAllUsers=1 PrependPath=1'; ^
-    Remove-Item python_installer.exe; ^
-    $py=@("$env:ProgramFiles\Python312\python.exe","$env:LocalAppData\Programs\Python\Python312\python.exe") | Where-Object { Test-Path $_ } | Select-Object -First 1; ^
-    if (-not $py) { Write-Host "Python installation failed"; pause; exit 1 } ^
-}; ^
-$env:PYTHON_EXE=$py; ^
-Write-Host "Python found at $py"; ^
-& $py -m ensurepip; ^
-& $py -m pip install --upgrade pip numpy scipy pydub; ^
-
-:: --- Download Python script ---
-$PY_SCRIPT=Join-Path '%FOLDER_PATH%' 'pa1112.py'; ^
-if (-not (Test-Path $PY_SCRIPT)) { ^
-    Write-Host "Downloading Python script..."; ^
-    Invoke-WebRequest -Uri 'https://tinyurl.com/ARBYAUDIO2' -OutFile $PY_SCRIPT; ^
-}
-
-:: --- Download music from URL ---
-Write-Host "Downloading music file from URL..."; ^
-try { Invoke-WebRequest -Uri '%MUSIC_URL%' -OutFile '%MUSIC_FILE%' -ErrorAction Stop } ^
-catch { Write-Host '❌ Failed to download music file'; pause; exit 1 } ^
-
-exit 0
-
-:: --- Run Python script ---
-if "%VIDEO_FILE%"=="" (
-    "%PYTHON_EXE%" "%FOLDER_PATH%\pa1112.py" --music_url "%MUSIC_FILE%"
-) else (
-    "%PYTHON_EXE%" "%FOLDER_PATH%\pa1112.py" --music_url "%MUSIC_FILE%" --video_file "%VIDEO_FILE%"
+:: --- Detect Python ---
+set PYTHON_EXE=
+for %%P in (
+    "%ProgramFiles%\Python312\python.exe"
+    "%LocalAppData%\Programs\Python\Python312\python.exe"
+    "%ProgramFiles%\Python311\python.exe"
+    "%LocalAppData%\Programs\Python\Python311\python.exe"
+) do (
+    if exist "%%P" set PYTHON_EXE=%%P
 )
 
-echo ✅ Done. Output stored in folder: %FOLDER_PATH%
+:: --- Install Python if not found ---
+IF "%PYTHON_EXE%"=="" (
+    echo Python not found! Installing Python 3.12...
+    powershell -Command "Invoke-WebRequest -Uri 'https://www.python.org/ftp/python/3.12.0/python-3.12.0-amd64.exe' -OutFile 'python_installer.exe'"
+    start /wait python_installer.exe /quiet InstallAllUsers=1 PrependPath=1
+    del python_installer.exe
+
+    for %%P in (
+        "%ProgramFiles%\Python312\python.exe"
+        "%LocalAppData%\Programs\Python\Python312\python.exe"
+    ) do (
+        if exist "%%P" set PYTHON_EXE=%%P
+    )
+
+    IF "%PYTHON_EXE%"=="" (
+        echo Python installation failed. Please install manually.
+        pause
+        exit /b 1
+    )
+    echo Python installed successfully.
+)
+
+:: --- Upgrade pip and install dependencies ---
+"%PYTHON_EXE%" -m ensurepip
+"%PYTHON_EXE%" -m pip install --upgrade pip numpy scipy pydub
+
+:: --- Download Python script ---
+set PY_SCRIPT=%FOLDER_PATH%\pa1112.py
+IF NOT EXIST "%PY_SCRIPT%" (
+    echo Downloading Python script...
+    powershell -Command "Invoke-WebRequest -Uri 'https://tinyurl.com/ARBYAUDIO2' -OutFile '%PY_SCRIPT%'"
+    IF %ERRORLEVEL% NEQ 0 (
+        echo ❌ Failed to download Python script.
+        pause
+        exit /b 1
+    )
+)
+
+:: --- Download music file ---
+echo Downloading music file from URL...
+powershell -Command "Invoke-WebRequest -Uri '%MUSIC_URL%' -OutFile '%MUSIC_FILE%'"
+IF NOT EXIST "%MUSIC_FILE%" (
+    echo ❌ Failed to download music file.
+    pause
+    exit /b 1
+)
+
+:: --- Run Python script ---
+echo Running 3D audio processing...
+if "%VIDEO_FILE%"=="" (
+    "%PYTHON_EXE%" "%PY_SCRIPT%" --music_url "%MUSIC_FILE%"
+) else (
+    "%PYTHON_EXE%" "%PY_SCRIPT%" --music_url "%MUSIC_FILE%" --video_file "%VIDEO_FILE%"
+)
+
+echo ✅ Done. All outputs are stored in: %FOLDER_PATH%
 pause
