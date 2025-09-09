@@ -7,41 +7,6 @@ REM ========================================
 
 setlocal enabledelayedexpansion
 
-:: --- Ask for folder path ---
-set /p FOLDER_PATH="Enter full path to folder for downloads and outputs: "
-if "%FOLDER_PATH%"=="" set FOLDER_PATH=%cd%\output
-if not exist "%FOLDER_PATH%" mkdir "%FOLDER_PATH%"
-echo Using folder: %FOLDER_PATH%
-echo.
-
-:: --- Ask for music URL ---
-set /p MUSIC_URL="Enter URL to WAV music file: "
-if "%MUSIC_URL%"=="" (
-    echo ❌ Music URL is required!
-    pause
-    exit /b 1
-)
-set MUSIC_FILE=%FOLDER_PATH%\music_input.wav
-
-:: --- Detect optional video file in folder ---
-set VIDEO_FILE=
-for %%V in ("%FOLDER_PATH%\*.mp4" "%FOLDER_PATH%\*.mov" "%FOLDER_PATH%\*.mkv") do (
-    set VIDEO_FILE=%%V
-    goto :FOUND_VIDEO
-)
-:FOUND_VIDEO
-if "%VIDEO_FILE%"=="" (
-    echo ⚠️ No video file found in folder.
-    set /p PROCEED="Do you want to proceed without a video file? (y/n): "
-    if /i NOT "%PROCEED%"=="y" (
-        echo Exiting as requested.
-        pause
-        exit /b 1
-    )
-) else (
-    echo ✅ Video file found: %VIDEO_FILE%
-)
-
 :: --- Detect Python ---
 set PYTHON_EXE=
 for %%P in (
@@ -91,21 +56,12 @@ IF NOT EXIST "%PY_SCRIPT%" (
     )
 )
 
-:: --- Download music file ---
-echo Downloading music file from URL...
-powershell -Command "Invoke-WebRequest -Uri '%MUSIC_URL%' -OutFile '%MUSIC_FILE%'"
-IF NOT EXIST "%MUSIC_FILE%" (
-    echo ❌ Failed to download music file.
-    pause
-    exit /b 1
-)
-
 :: --- Run Python script ---
 echo Running 3D audio processing...
 if "%VIDEO_FILE%"=="" (
-    "%PYTHON_EXE%" "%PY_SCRIPT%" --music_url "%MUSIC_FILE%"
+    "%PYTHON_EXE%" "%PY_SCRIPT%" 
 ) else (
-    "%PYTHON_EXE%" "%PY_SCRIPT%" --music_url "%MUSIC_FILE%" --video_file "%VIDEO_FILE%"
+    "%PYTHON_EXE%" "%PY_SCRIPT%"
 )
 
 echo ✅ Done. All outputs are stored in: %FOLDER_PATH%
