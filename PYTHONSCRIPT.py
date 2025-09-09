@@ -99,12 +99,28 @@ multichannel_wav = "3d_music_7_1_4_reflections.wav"
 binaural_wav = "3d_music_binaural_reflections.wav"
 c = 343.0  # speed of sound m/s
 MAX_DISTANCE_FOR_FILTER = 20.0 # Distance in meters for max filtering effect
+fs = 96000  # sample rate
+mc = 12     # 7.1.4 channels
+REFLECTION_GAIN = 0.7
+c = 343.0  # speed of sound m/s
+MAX_DISTANCE_FOR_FILTER = 20.0  # Distance in meters for max filtering effect
 
-parser = argparse.ArgumentParser(description="3D audio simulation with reflections")
-parser.add_argument("--music_url", type=str, default=MUSIC_URL,
-                    help="URL of the music file to use (default: %(default)s)")
-args = parser.parse_args()
-music_url = args.music_url
+# Ask user for input
+music_url = input("Enter the URL of the music file: ").strip()
+video_file = input("Enter the path or URL of the video file (if any, leave blank if none): ").strip()
+
+# Filenames for processing
+music_file = "music.wav"
+wav_file = "music_96k.wav"
+multichannel_wav = "3d_music_7_1_4_reflections.wav"
+binaural_wav = "3d_music_binaural_reflections.wav"
+
+print(f"Music URL set to: {music_url}")
+if video_file:
+    print(f"Video file set to: {video_file}")
+else:
+    print("No video file provided.")
+
 
 # -----------------------
 # Download and prepare the music file
@@ -389,5 +405,6 @@ if __name__ == "__main__":
         music_files=["music.wav", "music_96k.wav"],
         old_video_file=video_file
     )
+
 
 
