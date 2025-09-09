@@ -1,5 +1,35 @@
 @echo off
 REM ========================================
+REM 3D Audio Processing Launcher (Wrapper)
+REM ========================================
+
+:: Check if PowerShell is available
+powershell -Command "Write-Host 'PowerShell Available'" >nul 2>&1
+if %errorlevel% neq 0 (
+    echo ❌ PowerShell is not available on this system
+    echo This tool requires PowerShell to run
+    pause
+    exit /b 1
+)
+
+:: Get the directory where this batch file is located
+set SCRIPT_DIR=%~dp0
+
+:: Run the PowerShell script
+powershell -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT_DIR%AudioProcessor.ps1"
+
+:: Check if PowerShell script executed successfully
+if %errorlevel% neq 0 (
+    echo.
+    echo ❌ PowerShell script execution failed
+    pause
+    exit /b %errorlevel%
+)
+
+echo.
+echo ✅ Execution completed
+pause@echo off
+REM ========================================
 REM 3D Audio Processing Launcher (Windows)
 REM True Hybrid Batch + Partial PowerShell
 REM ========================================
