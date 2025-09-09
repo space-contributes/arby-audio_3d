@@ -7,6 +7,85 @@ from pydub import AudioSegment
 from scipy.signal import butter, lfilter
 from IPython.display import Audio, HTML, display
 import math
+import subprocess
+import sys
+import os
+import platform
+import shutil
+import requests
+import argparse
+
+try:
+    import py7zr
+except ImportError:
+    subprocess.run([sys.executable, "-m", "pip", "install", "py7zr"], check=True)
+    import py7zr
+
+
+def ensure_ffmpeg():
+    """Ensure ffmpeg is installed and return the path to ffmpeg executable."""
+    if shutil.which("ffmpeg"):
+        return "ffmpeg"
+
+    system = platform.system().lower()
+    print(f"⚠️ ffmpeg not found, installing for {system}...")
+
+    if system == "windows":
+        # Download official static build from gyan.dev
+        url = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-git-full.7z"
+        ffmpeg_dir = os.path.abspath("FFMPEG")
+
+        os.makedirs(ffmpeg_dir, exist_ok=True)
+        archive_path = os.path.join(ffmpeg_dir, "ffmpeg.7z")
+
+        if not os.path.exists(archive_path):
+            print("⬇️ Downloading ffmpeg...")
+            r = requests.get(url, stream=True)
+            with open(archive_path, "wb") as f:
+                for chunk in r.iter_content(chunk_size=8192):
+                    f.write(chunk)
+            print("✅ Download complete.")
+
+        print("📦 Extracting ffmpeg...")
+        with py7zr.SevenZipFile(archive_path, mode="r") as z:
+            z.extractall(path=ffmpeg_dir)
+
+        # Find the first extracted folder
+        subfolders = [d for d in os.listdir(ffmpeg_dir) if os.path.isdir(os.path.join(ffmpeg_dir, d))]
+        if not subfolders:
+            sys.exit("❌ Could not find ffmpeg folder after extraction.")
+
+        ffmpeg_bin = os.path.join(ffmpeg_dir, subfolders[0], "bin", "ffmpeg.exe")
+        if not os.path.exists(ffmpeg_bin):
+            sys.exit("❌ ffmpeg.exe not found in extracted archive.")
+
+        print(f"✅ ffmpeg ready at: {ffmpeg_bin}")
+        return ffmpeg_bin
+
+    elif system == "darwin":  # macOS
+        if shutil.which("brew"):
+            subprocess.run(["brew", "install", "ffmpeg"], check=True)
+            return "ffmpeg"
+        else:
+            sys.exit("❌ Homebrew not found. Install ffmpeg manually: https://ffmpeg.org/download.html#build-mac")
+
+    elif system == "linux":
+        if shutil.which("apt"):
+            subprocess.run(["sudo", "apt", "update"], check=True)
+            subprocess.run(["sudo", "apt", "install", "-y", "ffmpeg"], check=True)
+        elif shutil.which("dnf"):
+            subprocess.run(["sudo", "dnf", "install", "-y", "ffmpeg"], check=True)
+        elif shutil.which("pacman"):
+            subprocess.run(["sudo", "pacman", "-S", "--noconfirm", "ffmpeg"], check=True)
+        else:
+            sys.exit("❌ Unsupported Linux package manager. Install ffmpeg manually.")
+
+        return "ffmpeg"
+
+    else:
+        sys.exit(f"❌ Unsupported OS: {system}")
+
+
 # -----------------------
 # Parameters
 # -----------------------
@@ -173,12 +252,59 @@ write(binaural_wav, fs, stereo.astype(np.float32))
 # -----------------------
 # Display output
 # -----------------------
-display(Audio(binaural_wav, rate=fs))
-with open(binaural_wav, "rb") as f:
-    b64 = base64.b64encode(f.read()).decode()
-display(HTML(f'<a download="{binaural_wav}" href="data:audio/wav;base64,{b64}">⬇️ Download stereo WAV</a>'))
+    print("🎬 Merging multichannel audio with video using ffmpeg...")
+
+    cmd = [
+        ffmpeg_path,
+        "-y",
+        "-i", video_file,
+        "-i", audio_file,
+        "-map", "0:v",
+        "-map", "1:a",
+        "-c:v", "copy",
+        "-c:a", "pcm_s24le",   # Lossless, supports 7.1.4 channels
+        output_video
+    ]
+
+    subprocess.run(cmd, check=True)
+    print(f"✅ Done — output video with full 7.1.4 multichannel: {output_video}")
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Merge a 7.1.4 multichannel WAV into a video.")
+    parser.add_argument("video_file", help="Path to the video file (e.g., input.mp4)")
+    parser.add_argument("audio_file", help="Path to the 7.1.4 WAV file (e.g., multichannel.wav)")
+    args = parser.parse_args()
+
+    ffmpeg_path = ensure_ffmpeg()
+    merge_audio(args.video_file, args.audio_file, ffmpeg_path)
+def display_video_prompt(video_file):
+    """Ask the user if they want to display the video and audio download links in-browser (Jupyter/Colab)."""
+    if is_notebook():
+        answer = input(f"Do you want to display the video {os.path.basename(video_file)} in the browser? (y/n): ").strip().lower()
+        if answer == 'y':
+            from IPython.display import Video
+            display(Video(video_file, embed=True))
+                # Stereo preview playable in browser
+            display(Audio(stereo_wav, rate=fs))
+
+            # Download link for stereo
+            with open(stereo_wav, "rb") as f:
+                b64 = base64.b64encode(f.read()).decode()
+            display(HTML(f'<a download="{os.path.basename(stereo_wav)}" href="data:audio/wav;base64,{b64}">⬇️ Download stereo WAV (browser playable)</a>'))
+
+            # Download link for full 7.1.4 multichannel
+            with open(multichannel_wav, "rb") as f:
+                b64_mc = base64.b64encode(f.read()).decode()
+            display(HTML(f'<a download="{os.path.basename(multichannel_wav)}" href="data:audio/wav;base64,{b64_mc}">⬇️ Download full 7.1.4 multichannel WAV</a>'))
+        else:
+            print(f"Skipped video display. Video path: {video_file}")
+    else:
+        print(f"Not running in a notebook. Video path: {video_file}")
+
 
 print("Done — full music track, 7.1.4 with adaptive frequency-based reflections, time delays, and low-pass filtering.")
+
 
 
 
