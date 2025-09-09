@@ -4,6 +4,14 @@ REM 3D Audio Processing Launcher (Windows)
 REM ========================================
 setlocal enabledelayedexpansion
 
+REM --- Prompt user for output folder ---
+set /p OUTPUT_DIR="Enter full path for output folder (will be created if it doesn't exist): "
+if not exist "%OUTPUT_DIR%" (
+    mkdir "%OUTPUT_DIR%"
+)
+echo Files will be saved to: %OUTPUT_DIR%
+echo.
+
 REM --- Check for admin rights ---
 net session >nul 2>&1
 IF %ERRORLEVEL% NEQ 0 (
@@ -60,7 +68,7 @@ REM --- Install required Python dependencies ---
 "%PYTHON_EXE%" -m pip install --upgrade numpy scipy pydub
 
 REM --- Download or verify Python script ---
-set PY_SCRIPT=pa1112.py
+set PY_SCRIPT=%OUTPUT_DIR%\pa1112.py
 IF NOT EXIST "%PY_SCRIPT%" (
     echo Python script not found, downloading...
     powershell -Command "Invoke-WebRequest -Uri 'https://shorturl.at/i45Tk' -OutFile '%PY_SCRIPT%'"
@@ -72,28 +80,32 @@ IF NOT EXIST "%PY_SCRIPT%" (
 )
 
 REM --- Handle music input (URL or local) ---
-set MUSIC_FILE=%MUSIC_INPUT%
+set MUSIC_FILE=%OUTPUT_DIR%\music_input.wav
 echo %MUSIC_INPUT% | findstr /b /i "http" >nul
 if %errorlevel%==0 (
-    set MUSIC_FILE=music_input.wav
     echo Downloading WAV file...
     powershell -Command "Invoke-WebRequest -Uri '%MUSIC_INPUT%' -OutFile '%MUSIC_FILE%'"
     if not exist "%MUSIC_FILE%" (
-        echo Failed to download WAV file.
+        echo ❌ Failed to download WAV file.
+        pause
         exit /b 1
     )
 ) else (
-    if not exist "%MUSIC_FILE%" (
-        echo WAV file not found: %MUSIC_FILE%
+    if exist "%MUSIC_INPUT%" (
+        copy "%MUSIC_INPUT%" "%MUSIC_FILE%"
+    ) else (
+        echo ❌ WAV file not found: %MUSIC_INPUT%
+        pause
         exit /b 1
     )
 )
+
 REM --- Handle video input (optional) ---
 set VIDEO_FILE=
 if defined VIDEO_INPUT (
     echo %VIDEO_INPUT% | findstr /b /i "http" >nul
     if %errorlevel%==0 (
-        set VIDEO_FILE=input_video.mp4
+        set VIDEO_FILE=%OUTPUT_DIR%\input_video.mp4
         echo Downloading video file...
         powershell -Command "Invoke-WebRequest -Uri '%VIDEO_INPUT%' -OutFile '%VIDEO_FILE%'"
         if not exist "%VIDEO_FILE%" (
@@ -103,7 +115,8 @@ if defined VIDEO_INPUT (
         )
     ) else (
         if exist "%VIDEO_INPUT%" (
-            set VIDEO_FILE=%VIDEO_INPUT%
+            copy "%VIDEO_INPUT%" "%OUTPUT_DIR%\"
+            set VIDEO_FILE=%OUTPUT_DIR%\%~nxVIDEO_INPUT%
         ) else (
             echo ⚠️ Video file not found: %VIDEO_INPUT%. Skipping video...
             set VIDEO_FILE=
@@ -111,7 +124,7 @@ if defined VIDEO_INPUT (
     )
 )
 
-
+echo.
 echo ✅ Music file: %MUSIC_FILE%
 if not "%VIDEO_FILE%"=="" (
     echo ✅ Video file: %VIDEO_FILE%
