@@ -26,6 +26,8 @@ if %ERRORLEVEL% NEQ 0 (
     set PYTHON_BIN=python3
 )
 
+%PYTHON_BIN% -m pip install --upgrade pip
+%PYTHON_BIN% -m pip install numpy scipy pydub requests py7zr ipython
 :: ------------------------------
 :: Download Python script
 :: ------------------------------
