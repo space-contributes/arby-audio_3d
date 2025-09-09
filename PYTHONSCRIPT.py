@@ -250,7 +250,7 @@ stereo[:, 1] = out_mc[:, 1] + 0.5*out_mc[:, 5] + 0.5*out_mc[:, 7] + 0.3*out_mc[:
 stereo /= np.max(np.abs(stereo)) + 1e-12
 write(binaural_wav, fs, stereo.astype(np.float32))
 # -----------------------
-# Display output
+# Combine audio file with video file and if permitted display output in-line and save the files of audio and video
 # -----------------------
 
 import os
@@ -389,4 +389,5 @@ if __name__ == "__main__":
         music_files=["music.wav", "music_96k.wav"],
         old_video_file=video_file
     )
+
 
