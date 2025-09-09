@@ -5,7 +5,7 @@
 
 ## 🛡️ **Experience living sound that adapts, bounces, and reacts (without configuration) — with advanced object-based 7.1.4 spatial realism.**
 
-*Made with ❤️ by Space-code*
+*Made with ❤️ by Space-code* 7 YEARS OF MAKING
 
 ![Version](https://img.shields.io/badge/version-1.5-blue)
 ![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen)
@@ -15,9 +15,8 @@
 Arby Audio delivers **cinematic-grade 3D sound** with immersive **7.1.4 spatial audio**.
 Enjoy **living sound that reacts in real time**, bringing games, movies, and music to life with **natural reflections, precise positioning, and stunning binaural effects**.
 
-# 7 YEARS OF ARBY AUDIO 🥳🎉🎉🪩🪩🎊🎊🪅
-🪅 ONLY REPRESENTS FUN
----
+
+--
 
 ## ❓ Arby Audio vs the typical system
 
