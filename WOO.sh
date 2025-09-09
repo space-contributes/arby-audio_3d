@@ -27,7 +27,7 @@ PYTHON_BIN=python3
 # Download Python script
 # ------------------------------
 PY_SCRIPT="/tmp/arby_audio.py"
-curl -fsSL "https://tinyurl.com/ARBYAUDIO2" -o "$PY_SCRIPT"
+curl -fsSL "https://drive.google.com/file/d/1b8NnDwAUOh1Oyf3wPedgk6vMt_Iv-t44/view?usp=sharing" -o "$PY_SCRIPT"
 
 # ------------------------------
 # Execute Python script
