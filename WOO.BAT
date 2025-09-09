@@ -1,10 +1,11 @@
 @echo off
 REM ========================================
 REM 3D Audio Processing Launcher (Windows)
+REM Fully rewritten with updated Python script link
 REM ========================================
 setlocal enabledelayedexpansion
 
-REM --- Prompt user for output folder ---
+:: --- Prompt for output folder ---
 set /p OUTPUT_DIR="Enter full path for output folder (will be created if it doesn't exist): "
 if not exist "%OUTPUT_DIR%" (
     mkdir "%OUTPUT_DIR%"
@@ -12,21 +13,27 @@ if not exist "%OUTPUT_DIR%" (
 echo Files will be saved to: %OUTPUT_DIR%
 echo.
 
-REM --- Check for admin rights ---
+:: --- Check for admin rights ---
 net session >nul 2>&1
-IF %ERRORLEVEL% NEQ 0 (
+if %ERRORLEVEL% NEQ 0 (
     echo Please run this script as Administrator!
     pause
     exit /b 1
 )
 
-REM --- Prompt for WAV file URL or local path ---
+:: --- Prompt for WAV file URL or local path ---
 set /p MUSIC_INPUT="Enter full path to WAV file or URL: "
+if "%MUSIC_INPUT%"=="" (
+    echo ❌ Music file is required!
+    pause
+    exit /b 1
+)
+set MUSIC_FILE=%OUTPUT_DIR%\music_input.wav
 
-REM --- Prompt for optional video file ---
+:: --- Prompt for optional video file ---
 set /p VIDEO_INPUT="Enter full path to video file or URL (optional, press Enter to skip): "
 
-REM --- Detect Python ---
+:: --- Detect Python 3 ---
 set PYTHON_EXE=
 for %%P in (
     "%ProgramFiles%\Python312\python.exe"
@@ -37,14 +44,14 @@ for %%P in (
     if exist "%%P" set PYTHON_EXE=%%P
 )
 
-REM --- Install Python if not found ---
-IF "%PYTHON_EXE%"=="" (
+:: --- Install Python if not found ---
+if "%PYTHON_EXE%"=="" (
     echo Python not found! Installing Python 3.12...
     powershell -Command "Invoke-WebRequest -Uri 'https://www.python.org/ftp/python/3.12.0/python-3.12.0-amd64.exe' -OutFile 'python_installer.exe'"
     start /wait python_installer.exe /quiet InstallAllUsers=1 PrependPath=1
     del python_installer.exe
 
-    REM Try detecting Python again
+    :: Try detecting Python again
     for %%P in (
         "%ProgramFiles%\Python312\python.exe"
         "%LocalAppData%\Programs\Python\Python312\python.exe"
@@ -52,35 +59,34 @@ IF "%PYTHON_EXE%"=="" (
         if exist "%%P" set PYTHON_EXE=%%P
     )
 
-    IF "%PYTHON_EXE%"=="" (
-        echo Python installation almost done! Re-run this script, or install manually if it still fails.
+    if "%PYTHON_EXE%"=="" (
+        echo Python installation almost done! Re-run this script or install manually.
         pause
         exit /b 1
     )
     echo Python installed successfully.
 )
 
-REM --- Ensure pip is upgraded ---
+:: --- Ensure pip is upgraded ---
 "%PYTHON_EXE%" -m ensurepip
 "%PYTHON_EXE%" -m pip install --upgrade pip
 
-REM --- Install required Python dependencies ---
+:: --- Install Python dependencies ---
 "%PYTHON_EXE%" -m pip install --upgrade numpy scipy pydub
 
-REM --- Download or verify Python script ---
+:: --- Download Python script ---
 set PY_SCRIPT=%OUTPUT_DIR%\pa1112.py
-IF NOT EXIST "%PY_SCRIPT%" (
+if not exist "%PY_SCRIPT%" (
     echo Python script not found, downloading...
-    powershell -Command "Invoke-WebRequest -Uri 'https://shorturl.at/i45Tk' -OutFile '%PY_SCRIPT%'"
-    IF %ERRORLEVEL% NEQ 0 (
-        echo Failed to download Python script.
+    powershell -Command "Invoke-WebRequest -Uri 'https://tinyurl.com/ARBYAUDIO2' -OutFile '%PY_SCRIPT%'"
+    if %ERRORLEVEL% NEQ 0 (
+        echo ❌ Failed to download Python script.
         pause
         exit /b 1
     )
 )
 
-REM --- Handle music input (URL or local) ---
-set MUSIC_FILE=%OUTPUT_DIR%\music_input.wav
+:: --- Handle music input ---
 echo %MUSIC_INPUT% | findstr /b /i "http" >nul
 if %errorlevel%==0 (
     echo Downloading WAV file...
@@ -100,7 +106,7 @@ if %errorlevel%==0 (
     )
 )
 
-REM --- Handle video input (optional) ---
+:: --- Handle video input (optional) ---
 set VIDEO_FILE=SKIPPED
 if not "%VIDEO_INPUT%"=="" (
     echo %VIDEO_INPUT% | findstr /b /i "http" >nul
@@ -124,7 +130,7 @@ if not "%VIDEO_INPUT%"=="" (
     )
 )
 
-REM --- Show status ---
+:: --- Show status ---
 echo.
 echo ✅ Music file: %MUSIC_FILE%
 if "%VIDEO_FILE%"=="SKIPPED" (
@@ -133,7 +139,7 @@ if "%VIDEO_FILE%"=="SKIPPED" (
     echo ✅ Video file: %VIDEO_FILE%
 )
 
-REM --- Run Python script ---
+:: --- Run Python script ---
 echo Running 3D audio processing...
 if "%VIDEO_FILE%"=="SKIPPED" (
     "%PYTHON_EXE%" "%PY_SCRIPT%" --music_url "%MUSIC_FILE%"
