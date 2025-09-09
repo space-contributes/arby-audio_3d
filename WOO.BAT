@@ -55,25 +55,60 @@ REM --- Ensure pip is upgraded ---
 
 REM --- Install required Python dependencies ---
 "%PYTHON_EXE%" -m pip install numpy scipy pydub
+@echo off
+setlocal enabledelayedexpansion
 
-REM --- Download the WAV file if it's a URL ---
-echo %MUSIC_INPUT% | findstr /b "http" >nul
-IF %ERRORLEVEL% EQU 0 (
-    set MUSIC_FILE=music_input.wav
+:: --- Music input ---
+set /p MUSIC_INPUT=Enter full path to WAV file or URL: 
+
+:: Check if it starts with http
+echo %MUSIC_INPUT% | findstr /b /i "http" >nul
+if %errorlevel%==0 (
+    set "MUSIC_FILE=music_input.wav"
     echo Downloading WAV file...
     powershell -Command "Invoke-WebRequest -Uri '%MUSIC_INPUT%' -OutFile '%MUSIC_FILE%'"
-    IF %ERRORLEVEL% NEQ 0 (
-        echo Failed to download WAV file.
-        pause
+    if not exist "%MUSIC_FILE%" (
+        echo Failed to download WAV file
         exit /b 1
     )
-) ELSE (
-    set MUSIC_FILE=%MUSIC_INPUT%
-    IF NOT EXIST "%MUSIC_FILE%" (
-        echo File not found!
-        pause
+) else (
+    set "MUSIC_FILE=%MUSIC_INPUT%"
+    if not exist "%MUSIC_FILE%" (
+        echo WAV file not found: %MUSIC_FILE%
         exit /b 1
     )
+)
+
+:: --- Video input (optional) ---
+set /p VIDEO_INPUT=Enter full path to video file or URL (optional, press enter to skip): 
+
+if not "%VIDEO_INPUT%"=="" (
+    echo %VIDEO_INPUT% | findstr /b /i "http" >nul
+    if %errorlevel%==0 (
+        set "VIDEO_FILE=input_video.mp4"
+        echo Downloading video file...
+        powershell -Command "Invoke-WebRequest -Uri '%VIDEO_INPUT%' -OutFile '%VIDEO_FILE%'"
+        if not exist "%VIDEO_FILE%" (
+            echo Failed to download video file
+            exit /b 1
+        )
+    ) else (
+        set "VIDEO_FILE=%VIDEO_INPUT%"
+        if not exist "%VIDEO_FILE%" (
+            echo Video file not found: %VIDEO_FILE%
+            exit /b 1
+        )
+    )
+) else (
+    set "VIDEO_FILE="
+)
+
+echo.
+echo ✅ Music file: %MUSIC_FILE%
+if not "%VIDEO_FILE%"=="" (
+    echo ✅ Video file: %VIDEO_FILE%
+) else (
+    echo ⚠️ No video file provided; will only generate audio.
 )
 
 REM --- Check if Python script exists, if not download ---
