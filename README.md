@@ -15,8 +15,8 @@
 Arby Audio delivers **cinematic-grade 3D sound** with immersive **7.1.4 spatial audio**.
 Enjoy **living sound that reacts in real time**, bringing games, movies, and music to life with **natural reflections, precise positioning, and stunning binaural effects**.
 
-
-
+# 7 YEARS OF ARBY AUDIO 🥳🎉🎉🪩🪩🎊🎊🪅
+🪅 ONLY REPRESENTS FUN
 ---
 
 ## ❓ Arby Audio vs the typical system
