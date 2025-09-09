@@ -252,60 +252,44 @@ write(binaural_wav, fs, stereo.astype(np.float32))
 # -----------------------
 # Display output
 # -----------------------
-    print("🎬 Merging multichannel audio with video using ffmpeg...")
+  def cleanup_old_music_and_video(music_files, old_video_file=None):
+    """Prompt user to remove old music WAV files and the original video file."""
+    files_to_check = [f for f in music_files if os.path.exists(f)]
+    if old_video_file and os.path.exists(old_video_file):
+        files_to_check.append(old_video_file)
 
-    cmd = [
-        ffmpeg_path,
-        "-y",
-        "-i", video_file,
-        "-i", audio_file,
-        "-map", "0:v",
-        "-map", "1:a",
-        "-c:v", "copy",
-        "-c:a", "pcm_s24le",   # Lossless, supports 7.1.4 channels
-        output_video
-    ]
+    if not files_to_check:
+        return
 
-    subprocess.run(cmd, check=True)
-    print(f"✅ Done — output video with full 7.1.4 multichannel: {output_video}")
+    print("\n⚠️ The following original files can be removed:")
+    for f in files_to_check:
+        print(f" - {f}")
+
+    answer = input("Do you want to delete these original files? (y/n): ").strip().lower()
+    if answer == 'y':
+        for f in files_to_check:
+            try:
+                os.remove(f)
+                print(f"✅ Deleted {f}")
+            except Exception as e:
+                print(f"❌ Failed to delete {f}: {e}")
+    else:
+        print("Skipped deleting original files.")
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Merge a 7.1.4 multichannel WAV into a video.")
-    parser.add_argument("video_file", help="Path to the video file (e.g., input.mp4)")
-    parser.add_argument("audio_file", help="Path to the 7.1.4 WAV file (e.g., multichannel.wav)")
-    args = parser.parse_args()
-
+    # --- previous workflow ---
     ffmpeg_path = ensure_ffmpeg()
-    merge_audio(args.video_file, args.audio_file, ffmpeg_path)
-def display_video_prompt(video_file):
-    """Ask the user if they want to display the video and audio download links in-browser (Jupyter/Colab)."""
-    if is_notebook():
-        answer = input(f"Do you want to display the video {os.path.basename(video_file)} in the browser? (y/n): ").strip().lower()
-        if answer == 'y':
-            from IPython.display import Video
-            display(Video(video_file, embed=True))
-                # Stereo preview playable in browser
-            display(Audio(stereo_wav, rate=fs))
 
-            # Download link for stereo
-            with open(stereo_wav, "rb") as f:
-                b64 = base64.b64encode(f.read()).decode()
-            display(HTML(f'<a download="{os.path.basename(stereo_wav)}" href="data:audio/wav;base64,{b64}">⬇️ Download stereo WAV (browser playable)</a>'))
-
-            # Download link for full 7.1.4 multichannel
-            with open(multichannel_wav, "rb") as f:
-                b64_mc = base64.b64encode(f.read()).decode()
-            display(HTML(f'<a download="{os.path.basename(multichannel_wav)}" href="data:audio/wav;base64,{b64_mc}">⬇️ Download full 7.1.4 multichannel WAV</a>'))
-        else:
-            print(f"Skipped video display. Video path: {video_file}")
+    if video_file and os.path.exists(video_file) and audio_file and os.path.exists(audio_file):
+        output_video = merge_audio(video_file, audio_file, ffmpeg_path)
     else:
-        print(f"Not running in a notebook. Video path: {video_file}")
+        output_video = None
 
+    display_audio_video_links(output_video)
 
-print("Done — full music track, 7.1.4 with adaptive frequency-based reflections, time delays, and low-pass filtering.")
-
-
-
-
-
+    # --- cleanup only music files + old video ---
+    cleanup_old_music_and_video(
+        music_files=["music.wav", "music_96k.wav"],
+        old_video_file=video_file
+    )
