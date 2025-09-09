@@ -112,8 +112,6 @@ if defined VIDEO_INPUT (
 )
 
 
-
-echo.
 echo ✅ Music file: %MUSIC_FILE%
 if not "%VIDEO_FILE%"=="" (
     echo ✅ Video file: %VIDEO_FILE%
