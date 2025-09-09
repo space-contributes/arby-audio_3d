@@ -2,7 +2,8 @@
 REM ========================================
 REM 3D Audio Processing Launcher (Windows)
 REM ========================================
-set pa1112.py=%PY_SCRIPT%
+setlocal enabledelayedexpansion
+
 REM --- Check for admin rights ---
 net session >nul 2>&1
 IF %ERRORLEVEL% NEQ 0 (
@@ -14,9 +15,11 @@ IF %ERRORLEVEL% NEQ 0 (
 REM --- Prompt for WAV file URL or local path ---
 set /p MUSIC_INPUT="Enter full path to WAV file or URL: "
 
-REM --- Function to detect Python ---
-set PYTHON_EXE=
+REM --- Prompt for optional video file ---
+set /p VIDEO_INPUT="Enter full path to video file or URL (optional, press Enter to skip): "
 
+REM --- Detect Python ---
+set PYTHON_EXE=
 for %%P in (
     "%ProgramFiles%\Python312\python.exe"
     "%LocalAppData%\Programs\Python\Python312\python.exe"
@@ -42,7 +45,7 @@ IF "%PYTHON_EXE%"=="" (
     )
 
     IF "%PYTHON_EXE%"=="" (
-        echo Python installation almost done! Re-run this script, and if it starts trying to install again...install manually
+        echo Python installation almost done! Re-run this script, or install manually if it still fails.
         pause
         exit /b 1
     )
@@ -54,68 +57,13 @@ REM --- Ensure pip is upgraded ---
 "%PYTHON_EXE%" -m pip install --upgrade pip
 
 REM --- Install required Python dependencies ---
-"%PYTHON_EXE%" -m pip install numpy scipy pydub
-@echo off
-setlocal enabledelayedexpansion
+"%PYTHON_EXE%" -m pip install --upgrade numpy scipy pydub
 
-:: --- Music input ---
-set /p MUSIC_INPUT=Enter full path to WAV file or URL: 
-
-:: Check if it starts with http
-echo %MUSIC_INPUT% | findstr /b /i "http" >nul
-if %errorlevel%==0 (
-    set "MUSIC_FILE=music_input.wav"
-    echo Downloading WAV file...
-    powershell -Command "Invoke-WebRequest -Uri '%MUSIC_INPUT%' -OutFile '%MUSIC_FILE%'"
-    if not exist "%MUSIC_FILE%" (
-        echo Failed to download WAV file
-        exit /b 1
-    )
-) else (
-    set "MUSIC_FILE=%MUSIC_INPUT%"
-    if not exist "%MUSIC_FILE%" (
-        echo WAV file not found: %MUSIC_FILE%
-        exit /b 1
-    )
-)
-
-:: --- Video input (optional) ---
-set /p VIDEO_INPUT=Enter full path to video file or URL (optional, press enter to skip): 
-
-if not "%VIDEO_INPUT%"=="" (
-    echo %VIDEO_INPUT% | findstr /b /i "http" >nul
-    if %errorlevel%==0 (
-        set "VIDEO_FILE=input_video.mp4"
-        echo Downloading video file...
-        powershell -Command "Invoke-WebRequest -Uri '%VIDEO_INPUT%' -OutFile '%VIDEO_FILE%'"
-        if not exist "%VIDEO_FILE%" (
-            echo Failed to download video file
-            exit /b 1
-        )
-    ) else (
-        set "VIDEO_FILE=%VIDEO_INPUT%"
-        if not exist "%VIDEO_FILE%" (
-            echo Video file not found: %VIDEO_FILE%
-            exit /b 1
-        )
-    )
-) else (
-    set "VIDEO_FILE="
-)
-
-echo.
-echo ✅ Music file: %MUSIC_FILE%
-if not "%VIDEO_FILE%"=="" (
-    echo ✅ Video file: %VIDEO_FILE%
-) else (
-    echo ⚠️ No video file provided; will only generate audio.
-)
-
-REM --- Check if Python script exists, if not download ---
-set PY_SCRIPT=PYTHONSCRIPT.py
+REM --- Download or verify Python script ---
+set PY_SCRIPT=pa1112.py
 IF NOT EXIST "%PY_SCRIPT%" (
     echo Python script not found, downloading...
-    powershell -Command "Invoke-WebRequest -Uri 'https://shorturl.at/i45Tk' -OutFile 'pa1112.py'
+    powershell -Command "Invoke-WebRequest -Uri 'https://shorturl.at/i45Tk' -OutFile '%PY_SCRIPT%'"
     IF %ERRORLEVEL% NEQ 0 (
         echo Failed to download Python script.
         pause
@@ -123,9 +71,56 @@ IF NOT EXIST "%PY_SCRIPT%" (
     )
 )
 
+REM --- Handle music input (URL or local) ---
+set MUSIC_FILE=%MUSIC_INPUT%
+echo %MUSIC_INPUT% | findstr /b /i "http" >nul
+if %errorlevel%==0 (
+    set MUSIC_FILE=music_input.wav
+    echo Downloading WAV file...
+    powershell -Command "Invoke-WebRequest -Uri '%MUSIC_INPUT%' -OutFile '%MUSIC_FILE%'"
+    if not exist "%MUSIC_FILE%" (
+        echo Failed to download WAV file.
+        exit /b 1
+    )
+) else (
+    if not exist "%MUSIC_FILE%" (
+        echo WAV file not found: %MUSIC_FILE%
+        exit /b 1
+    )
+)
+
+REM --- Handle video input (optional) ---
+set VIDEO_FILE=
+if not "%VIDEO_INPUT%"=="" (
+    echo %VIDEO_INPUT% | findstr /b /i "http" >nul
+    if %errorlevel%==0 (
+        set VIDEO_FILE=input_video.mp4
+        echo Downloading video file...
+        powershell -Command "Invoke-WebRequest -Uri '%VIDEO_INPUT%' -OutFile '%VIDEO_FILE%'"
+        if not exist "%VIDEO_FILE%" (
+            echo Failed to download video file
+            exit /b 1
+        )
+    ) else (
+        set VIDEO_FILE=%VIDEO_INPUT%
+        if not exist "%VIDEO_FILE%" (
+            echo Video file not found: %VIDEO_FILE%
+            exit /b 1
+        )
+    )
+)
+
+echo.
+echo ✅ Music file: %MUSIC_FILE%
+if not "%VIDEO_FILE%"=="" (
+    echo ✅ Video file: %VIDEO_FILE%
+) else (
+    echo ⚠️ No video file provided; only generating audio.
+)
+
 REM --- Run Python script ---
 echo Running 3D audio processing...
-"%PYTHON_EXE%" "%PY_SCRIPT%" --music_url "%MUSIC_FILE%"
+"%PYTHON_EXE%" "%PY_SCRIPT%" --music_url "%MUSIC_FILE%" %VIDEO_FILE%
 
 echo Done.
 pause
