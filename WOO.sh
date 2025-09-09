@@ -29,9 +29,10 @@ if ! command -v python3 &> /dev/null; then
 fi
 
 # --- Prompt for WAV file URL or local path ---
-read -p "Enter full path to WAV file or URL: " MUSIC_INPUT
+#!/bin/bash
 
-# --- Download WAV file if it's a URL ---
+# --- Music input ---
+read -p "Enter full path to WAV file or URL: " MUSIC_INPUT
 if [[ "$MUSIC_INPUT" == http* ]]; then
     MUSIC_FILE="music_input.wav"
     echo "Downloading WAV file..."
@@ -39,9 +40,34 @@ if [[ "$MUSIC_INPUT" == http* ]]; then
 else
     MUSIC_FILE="$MUSIC_INPUT"
     if [[ ! -f "$MUSIC_FILE" ]]; then
-        echo "File not found!"
+        echo "❌ WAV file not found: $MUSIC_FILE"
         exit 1
     fi
+fi
+
+# --- Video input ---
+read -p "Enter full path to video file or URL (optional, press enter to skip): " VIDEO_INPUT
+if [[ -n "$VIDEO_INPUT" ]]; then
+    if [[ "$VIDEO_INPUT" == http* ]]; then
+        VIDEO_FILE="input_video.mp4"
+        echo "Downloading video file..."
+        curl -L "$VIDEO_INPUT" -o "$VIDEO_FILE" || { echo "Failed to download video file"; exit 1; }
+    else
+        VIDEO_FILE="$VIDEO_INPUT"
+        if [[ ! -f "$VIDEO_FILE" ]]; then
+            echo "❌ Video file not found: $VIDEO_FILE"
+            exit 1
+        fi
+    fi
+else
+    VIDEO_FILE=""
+fi
+
+echo "✅ Music file: $MUSIC_FILE"
+if [[ -n "$VIDEO_FILE" ]]; then
+    echo "✅ Video file: $VIDEO_FILE"
+else
+    echo "⚠️ No video file provided; will only generate audio."
 fi
 
 # --- Check if Python script exists, if not download ---
