@@ -101,8 +101,8 @@ if %errorlevel%==0 (
 )
 
 REM --- Handle video input (optional) ---
-set VIDEO_FILE=
-if defined VIDEO_INPUT (
+set VIDEO_FILE=SKIPPED
+if not "%VIDEO_INPUT%"=="" (
     echo %VIDEO_INPUT% | findstr /b /i "http" >nul
     if %errorlevel%==0 (
         set VIDEO_FILE=%OUTPUT_DIR%\input_video.mp4
@@ -115,18 +115,16 @@ if defined VIDEO_INPUT (
         )
     ) else (
         if exist "%VIDEO_INPUT%" (
-            copy "%VIDEO_INPUT%" "%OUTPUT_DIR%\" >nul
+            copy "%VIDEO_INPUT%" "%OUTPUT_DIR%" >nul
             set VIDEO_FILE=%OUTPUT_DIR%\%~nxVIDEO_INPUT%
         ) else (
             echo ⚠️ Video file not found: %VIDEO_INPUT%. Skipping video...
             set VIDEO_FILE=SKIPPED
         )
     )
-) else (
-    REM User pressed Enter to skip
-    set VIDEO_FILE=SKIPPED
 )
 
+REM --- Show status ---
 echo.
 echo ✅ Music file: %MUSIC_FILE%
 if "%VIDEO_FILE%"=="SKIPPED" (
