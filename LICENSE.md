@@ -143,6 +143,7 @@ SECTION X.7 - FURTHER DISCLAIMER OF LIABILITY
 
  The Service hereby disclaims any and all liability to you or any third party for any User and User(s) ("Content"). Your use of or reliance on any User and User(s) ("Content") or materials posted via the Platform/App is at your own risk. The Company is under no obligation to review, monitor, edit, or control User and User(s) ("Content"), although it reserves the right to do so in its sole discretion.
 
+You acknowledge that this representation may be based on mock data and/or assumptions that may or may not be true, it is the sole responsibility and the intent of the user for the same and any result shall be based on your use of the app as defined in the code as. Scores represent the estimated probability of suspicious activity. They are not definitive. This service is provided on an “as-is” basis, and any misuse of the same shall be considered your sole responsibility and intent as all the results are derived from user input and simply analysing it.
  
  SECTION X.9 - DISCLAIMER OF CONTENT, WHICH IS UNDER LIMITATION OF LIABILITY UNDER THE RECORDS:
  
