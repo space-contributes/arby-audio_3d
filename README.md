@@ -1,156 +1,190 @@
+Got it! Here's a polished, “Arby Audio–style” description for your **Matrimony Fraud Detector** project based on the code/features you shared:
+
 
 ---
 
-# Arby Audio 3D – Cinematic Spatial Sound Engine 🎧
 
-## 🛡️ **Experience living sound that adapts, bounces, and reacts (without configuration) — with advanced object-based 7.1.4 spatial realism.**
+# Matrimony Fraud Detector – AI-Powered Profile Analysis 💌
 
-*Made with ❤️ by Space-code* WITH *7 YEARS OF MAKING*
 
-![Version](https://img.shields.io/badge/version-1.5-blue)
+## 🛡️ **Detect suspicious matrimonial profiles with AI-driven insights — fully local and privacy-conscious.**
+![Version](https://img.shields.io/badge/version-1.0-blue)
+![Privacy-First](https://img.shields.io/badge/privacy-local-yellow)
+![Language](https://img.shields.io/badge/language-JavaScript-brightgreen)
+![Framework](https://img.shields.io/badge/framework-TensorFlow%20JS-blueviolet) NO INSTALL NEEDED.
+![Open Source](https://img.shields.io/badge/open%20source-yes-lightgrey)
 ![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen)
+![Local Processing](https://img.shields.io/badge/processing-local-blue)
+![AI-Powered](https://img.shields.io/badge/AI-powered-lightblue)
+
+*Made with ❤️ by Aryaman M*
+
+
+![Version](https://img.shields.io/badge/version-1.0-blue)
+
+![Privacy-first](https://img.shields.io/badge/privacy-local-yellow)
+
 
 ---
 
-Arby Audio delivers **cinematic-grade 3D sound** with immersive **7.1.4 spatial audio**.
-Enjoy **living sound that reacts in real time**, bringing games, movies, and music to life with **natural reflections, precise positioning, and stunning binaural effects**.
 
+Matrimony Fraud Detector is a **browser-based AI tool** that analyzes uploaded profiles to identify **suspicious activity patterns**. Using a **multi-feature ensemble**, it evaluates profiles for potential fraud while keeping all data **local to your device**.
 
---
-
-## ❓ Arby Audio vs the typical system
-
-### 🎬 The typical system
-
-* Maps sound objects as virtual waves with delays and reflections.
-* Provides 360° surround immersion.
-* Default quality: **42kHz / 24-bit\***
-* Adaptive spatial realism across devices.
-* Widely adopted in theaters and consumer hardware.
-
-\* depends on system configuration
-
-### 🎮 Arby Audio
-
-**Living sound that bounces, adapts, and reacts. Not just heard, but felt. Smart room scaling brings audio to life.**
-
-Arby Audio pushes beyond traditional audio engines with **real-world acoustic simulation**:
-
-* Room geometry & reflections
-* Distance-based and sound wave bouncing time delays
-* Frequency-dependent low-pass filtering, if bounced (sound wave if bounced, less frequency) + clipping for random high frequency audio
-* Background noise reduction
-* Speaker mapping to **7.1.4 layout** (7 down, 4 up, 1 sub)
-* Binaural downmix for headphones
-* Trajectory-based moving sound sources
-* Furniture/environment scanning for realistic reflections
-* Automatic normalization & high-frequency smoothing
-* **High-fidelity output**: 96kHz / 32-bit (≈4× industry standard)
-* Fully **open source & customizable**
 
 ---
+
+
+## ❓ Typical profile screening vs. our system
+
+
+### 🔹 Traditional approaches
+
+
+* Manual vetting and verification
+
+* Limited cross-profile comparison
+
+* Often misses subtle duplications or reused data
+
+* Privacy risk when data leaves the device
+
+
+### 🔹 Matrimony Fraud Detector
+
+
+**Living profiles, intelligently analyzed. Not just scanned, but understood.**
+
+
+* Computes **bio similarity, photo reuse, credential overlap, timing variance, visit frequency, Aadhaar verification weight, and phonetic name similarity**
+
+* Detects patterns like reused phone/email, repeated photos, or similar bios across multiple profiles
+
+* Multi-layered scoring: **Linear model + Naive Bayes ensemble**
+
+* Fully **in-browser execution**: no data leaves your device
+
+* Adjustable ensemble weights & thresholds for **custom detection sensitivity**
+
+* Real-time visualization of suspicious scores with intuitive color coding:
+
+
+  * **Low risk:** green
+
+  * **Medium:** yellow
+
+  * **High:** red
+
+* Detailed feature breakdown per profile for audit & transparency
+
+* Export results as JSON for reporting or research
+
+
+---
+
 
 ## 🔍 Feature Breakdown
 
-* **Room Geometry & Reflections** – Sound bounces naturally off virtual walls, ceilings, and objects.
-* **Virtual Object Detection** – Sounds interact with detected scene objects.
-* **Realistic Delays** – Travel & reflection delays modeled after real physics.
-* **Material-Aware Filtering** – Simulates absorption & air damping.
-* **Speaker Mapping** – True 7.1.4 Atmos-style layout.
-* **Binaural Downmix** – Immersive stereo playback.
-* **Background Noise Removal** - Removes background noise
-* **Dynamic Trajectories** – Moving sources with path realism.
-* **Environment Scanning** – Furniture/objects intelligently shape reflections.
-* **Clipping Protection** – Auto-normalization ensures stable output.
-* **Room Geometry & Reflections** – Sound bounces naturally off virtual walls, ceilings, and objects.
-* **Detects Virtual Objects** - Sound bounces off naturally over virtual objects detected in the scene
-* **Sound Bounces** - with a delay (for realism) to reach the object and bounce off it.
-* **Distance-Based Time Delays** – Delays replicate real-world propagation for precise spatialization.
-* **Frequency-Dependent Low-Pass Filtering** – Simulates material absorption and air damping.
-* **Studio-Grade Fidelity** – 96kHz / 32-bit audio. (≈4× the industry standard)
+
+* **Bio Analysis** – Detect overlapping phrases or word patterns across profiles
+
+* **Photo Reuse Detection** – Matches photo content or filenames across profiles
+
+* **Credential Overlap** – Detects reused phone numbers and emails
+
+* **Activity Timing Analysis** – Checks visit patterns and timing variance
+
+* **Name Phonetic Similarity** – Boosts similarity score for similar-sounding names
+
+* **Aadhaar Verification Weight** – Trusted identity markers influence scores
+
+* **Linear + Naive Bayes Ensemble** – Combines deterministic and probabilistic scoring
+
+* **Noise Layer** – Adds slight randomness to prevent overfitting in small datasets
+
+* **Privacy-First Design** – All processing stays **on your device**
+
+* **Exportable Results** – Save suspicious scores for offline analysis
+
 
 ---
+
 
 ## 👥 Who Is It For?
 
-* 🎮 Gamers & Game Developers
-* 🎧 Audiophiles & Music Producers
-* 🥽 VR / AR Developers
-* 🎬 Film & Multimedia Editors
-* 🧪 Educational & Research Labs
+
+* Matrimony platform moderators
+
+* Fraud detection & risk teams
+
+* Researchers analyzing online identity reuse
+
+* Developers building safer matchmaking systems
+
 
 ---
+
 
 ## ⚙️ Setup & Usage
 
-Clone or download the repo:
 
-```bash
-git clone https://github.com/space-code/arby-audio.git
-cd arby-audio
-```
+Simply open the HTML in a modern browser (Chrome/Edge/Firefox recommended):
 
-Run the engine with your audio file:
 
-```bash
-python "PYTHONSCRIPT.py" --music_url https://your-music-url.com/file.wav
-```
-OR: DOWNLOAD THE FILES INDIVIDUALLY through the GitHub website
+1. **Upload or paste JSON profiles**
 
-*(replace with your own .wav URL)*
+2. **Optionally train the linear + Naive Bayes ensemble**
 
-## OR, FOR WINDOWS:
-Still requires cloning the repo or downloading files individually from the GitHub website.
-Run the WOO.BAT as administrator.
-Then, if it gets stuck, restart it.
-If it is not processing the .WAV, try shortening the URL using tinyurl.com and try again with the updated link.
+3. **Adjust thresholds and ensemble weights**
 
-# FOR MACOS AND LINUX:
+4. **Run detection**
 
-or .WOO.sh for Linux OR MacOS file as root/sudo/su.
-For .sh:
-chmod +x WOO.sh && sudo ./WOO.sh
-Then, if it gets stuck, restart it. If it were to be stuck on Python installation, confirm Python is installed by a command, and then restart WOO.sh, because sometimes it forgets that Python is done installing.
+5. **View results or export as JSON**
+
+
+All calculations are **performed locally**, ensuring maximum privacy.
+
 
 ---
+
 
 ## 🔮 Roadmap
 
-* Google Drive integration
-* Windows `.bat` launcher (double-click ready)
-* GUI front-end for non-technical users
-* Expanded VR/AR SDK support
+
+* Automated batch imports from CSV/JSON
+
+* Visualization dashboard for networked fraud patterns
+
+* Integration with identity verification APIs
+
+* Mobile-friendly web version
+
 
 ---
+
 
 ## ⚖️ License & Legal
 
-By downloading, installing, or using **Arby Audio 3D**, you agree to the terms in **[LICENSE.md](./LICENSE.md)**.
-This project is for **educational and ethical use only**.
-**⚖️ For educational and ethical testing only — unauthorized use is illegal.**
 
-💡 **Contributions welcome!** Fork the repo, create a branch, and submit a PR!
+By using **Matrimony Fraud Detector**, you agree to the terms in **[LICENSE.md](https://github.com/space-contributes/frauddetect_marriage/blob/main/LICENSE.md)**.
 
 
-## Disclaimer – Educational and Ethical Use Only
+💡 **Educational and ethical use only** — unauthorized use to harm or defraud is strictly prohibited.
 
-This project is created strictly for **educational and ethical use only**. All product names, trademarks, and registered trademarks mentioned are the property of their respective owners.
 
-This project is **not affiliated with, endorsed by, or sponsored by any company, brand, or trademark holder**.
-This service is provided on a "as-is" basis, with good faith and no obligations or warranties towards the same.
+### Disclaimer – Educational and Research Use Only
+
+
+* Profiles are analyzed **for pattern detection** only; results are **probabilistic estimates**, not definitive proof of fraud.
+
+* This project is **independent**, with no affiliation to any matrimony service or platform.
+
+* All misuse is the **sole responsibility of the user**.
+
+
 ### Not to Defame
 
-This material is intended for **informational, research, and educational purposes only**. It is **not intended to disparage, defame, or negatively impact the reputation** of any company, brand, or trademark holder.
 
-The author's intent is strictly **educational and research-focused**. Any misuse of this project or its materials is the sole responsibility of the user. The author shall not be liable or responsible for such misuse, as that was never the intent.
+This material is **informational and research-focused**, not intended to disparage or harm any individual or company.
 
-### Independent Development
 
-Arby Audio 3D is an **independent, open-source project**. While it draws **inspiration from cinematic-grade audio technologies** such as object-based surround and spatial audio systems, it has **no official affiliation with any company, brand, or trademark holder**.
-
-### Trademark Notice
-
-All names, logos, and brands mentioned in this project are the property of their respective owners. References are made **solely for descriptive, educational, and comparative purposes**.
-
----
-
+--- 
