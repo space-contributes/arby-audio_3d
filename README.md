@@ -1,8 +1,3 @@
-Got it! Here's a polished, “Arby Audio–style” description for your **Matrimony Fraud Detector** project based on the code/features you shared:
-
-
----
-
 
 # Matrimony Fraud Detector – AI-Powered Profile Analysis 💌
 
@@ -11,24 +6,18 @@ Got it! Here's a polished, “Arby Audio–style” description for your **Matri
 ![Version](https://img.shields.io/badge/version-1.0-blue)
 ![Privacy-First](https://img.shields.io/badge/privacy-local-yellow)
 ![Language](https://img.shields.io/badge/language-JavaScript-brightgreen)
-![Framework](https://img.shields.io/badge/framework-TensorFlow%20JS-blueviolet) NO INSTALL NEEDED.
+![Framework](https://img.shields.io/badge/framework-TensorFlow%20JS-blueviolet)
 ![Open Source](https://img.shields.io/badge/open%20source-yes-lightgrey)
 ![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen)
 ![Local Processing](https://img.shields.io/badge/processing-local-blue)
 ![AI-Powered](https://img.shields.io/badge/AI-powered-lightblue)
-
-*Made with ❤️ by Aryaman M*
-
-
 ![Version](https://img.shields.io/badge/version-1.0-blue)
-
 ![Privacy-first](https://img.shields.io/badge/privacy-local-yellow)
-
-
+*Made with ❤️ by Aryaman M*
+## NO INSTALL NEEDEED FOR TENSORFLOW LIBRARY
 ---
 
-
-Matrimony Fraud Detector is a **browser-based AI tool** that analyzes uploaded profiles to identify **suspicious activity patterns**. Using a **multi-feature ensemble**, it evaluates profiles for potential fraud while keeping all data **local to your device**.
+Matrimony Fraud Detector is a **browser-based AI-LIKE tool** that analyzes uploaded profiles to identify **suspicious activity patterns**. Using a **multi-feature ensemble**, it evaluates profiles for potential fraud while keeping all data **local to your device**.
 
 
 ---
