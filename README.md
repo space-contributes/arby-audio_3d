@@ -8,21 +8,23 @@
 *Made with ❤️ by Space-code* WITH *7 YEARS OF MAKING*
 
 ![Version](https://img.shields.io/badge/version-1.5-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
 ![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen)
 ![Python Version](https://img.shields.io/badge/python-3.11-blue)
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
-![Last Commit](https://img.shields.io/github/last-commit/space-code/arby-audio)
-![Stars](https://img.shields.io/github/stars/space-code/arby-audio?style=social)
-![Forks](https://img.shields.io/github/forks/space-code/arby-audio?style=social)
-![Open Issues](https://img.shields.io/github/issues/space-code/arby-audio)
-![Closed Issues](https://img.shields.io/github/issues-closed/space-code/arby-audio)
-![Downloads](https://img.shields.io/github/downloads/space-code/arby-audio/total)
+![Last Commit](https://img.shields.io/github/last-commit/space-contributes/arby-audio)
+![Stars](https://img.shields.io/github/stars/space-contributes/arby-audio?style=social)
+![Forks](https://img.shields.io/github/forks/space-contributes/arby-audio?style=social)
+![Open Issues](https://img.shields.io/github/issues/space-contributes/arby-audio)
+![Closed Issues](https://img.shields.io/github/issues-closed/space-contributes/arby-audio)
+![Downloads](https://img.shields.io/github/downloads/space-contributes/arby-audio/total)
 ![Maintenance](https://img.shields.io/badge/maintenance-active-brightgreen)
 ![Supported OS](https://img.shields.io/badge/os-windows%20|%20macOS%20|%20Linux-lightgrey)
-![Top Language](https://img.shields.io/github/languages/top/space-code/arby-audio)
-![Repo Size](https://img.shields.io/github/repo-size/space-code/arby-audio)
-![Commits](https://img.shields.io/github/commit-activity/m/space-code/arby-audio)
-![Issues Closed](https://img.shields.io/github/issues-pr-closed/space-code/arby-audio)
+![Top Language](https://img.shields.io/github/languages/top/space-contributes/arby-audio)
+![Repo Size](https://img.shields.io/github/repo-size/space-contributes/arby-audio)
+![Commits](https://img.shields.io/github/commit-activity/m/space-contributes/arby-audio)
+![Issues Closed](https://img.shields.io/github/issues-pr-closed/space-contributes/arby-audio)
+
 
 
 ---
