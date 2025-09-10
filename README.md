@@ -12,18 +12,18 @@
 ![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen)
 ![Python Version](https://img.shields.io/badge/python-3.11-blue)
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
-![Last Commit](https://img.shields.io/github/last-commit/space-contributes/arby-audio)
-![Stars](https://img.shields.io/github/stars/space-contributes/arby-audio?style=social)
-![Forks](https://img.shields.io/github/forks/space-contributes/arby-audio?style=social)
-![Open Issues](https://img.shields.io/github/issues/space-contributes/arby-audio)
-![Closed Issues](https://img.shields.io/github/issues-closed/space-contributes/arby-audio)
-![Downloads](https://img.shields.io/github/downloads/space-contributes/arby-audio/total)
+![Last Commit](https://img.shields.io/github/last-commit/space-contributes/arby-audio_3d)
+![Stars](https://img.shields.io/github/stars/space-contributes/arby-audio_3d?style=social)
+![Forks](https://img.shields.io/github/forks/space-contributes/arby-audio_3d?style=social)
+![Open Issues](https://img.shields.io/github/issues/space-contributes/arby-audio_3d)
+![Closed Issues](https://img.shields.io/github/issues-closed/space-contributes/arby-audio_3d)
+![Downloads](https://img.shields.io/github/downloads/space-contributes/arby-audio_3d/total)
 ![Maintenance](https://img.shields.io/badge/maintenance-active-brightgreen)
 ![Supported OS](https://img.shields.io/badge/os-windows%20|%20macOS%20|%20Linux-lightgrey)
-![Top Language](https://img.shields.io/github/languages/top/space-contributes/arby-audio)
-![Repo Size](https://img.shields.io/github/repo-size/space-contributes/arby-audio)
-![Commits](https://img.shields.io/github/commit-activity/m/space-contributes/arby-audio)
-![Issues Closed](https://img.shields.io/github/issues-pr-closed/space-contributes/arby-audio)
+![Top Language](https://img.shields.io/github/languages/top/space-contributes/arby-audio_3d)
+![Repo Size](https://img.shields.io/github/repo-size/space-contributes/arby-audio_3d)
+![Commits](https://img.shields.io/github/commit-activity/m/space-contributes/arby-audio_3d)
+![Issues Closed](https://img.shields.io/github/issues-pr-closed/space-contributes/arby-audio_3d)
 
 
 
@@ -103,8 +103,8 @@ Arby Audio pushes beyond traditional audio engines with **real-world acoustic si
 Clone or download the repo:
 
 ```bash
-git clone https://github.com/space-code/arby-audio.git
-cd arby-audio
+git clone https://github.com/space-code/arby-audio_3d.git
+cd arby-audio_3d
 ```
 
 Run the engine with your audio file:
