@@ -130,8 +130,26 @@ Simply open the HTML in a modern browser (Chrome/Edge/Firefox recommended):
 5. **View results or export as JSON**
 
 
-All calculations are **performed locally**, ensuring maximum privacy.
+All calculations are **performed locally**, ensuring maximum privacy. Compliance matched*
+*subject to terms and conditions and not guaranteed
+# JSON FORMAT:
 
+[
+  {
+    "id": "p1",
+    "name": "Asha Sharma",
+    "bio": "I love traveling, photography, and exploring new cuisines.",
+    "phone": "+911234567890",
+    "email": "asha@example.com",
+    "photos": ["asha1.jpg", "asha2.jpg"],
+    "activity": {
+      "visits": 120,
+      "logs": [{"time": 1620012345}, {"time": 1620013345}]
+    },
+    "verifications": {
+      "aadhaar": true
+    }
+  },
 
 ---
 
