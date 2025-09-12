@@ -90,6 +90,10 @@ The use of this Tool is governed by this LICENSE.md file. Unauthorized reproduct
 
 By using this Tool, you confirm that you have read, understood, and agreed to all terms of this Agreement. You acknowledge that liability rests solely with you for any unauthorized, malicious, or illegal actions and accept that the Tool is provided without any warranties or guarantees.
 
+
+
+This material is **informational and research-focused**, not intended to disparage or harm any individual or company.
+All names, logos, and brands or entities mentioned in this project are the property of their respective owners. References are made solely for descriptive, educational, and comparative purposes, and even indirect references and other types of references like INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, INCLUDING WITHOUT LIMITATION regarding, LOSS OF PROFITS, LOSS OF DATA, BUSINESS INTERRUPTION, OR LOSS OF BUSINESS OPPORTUNITIES.
 You voluntarily acknowledge and accept the terms and consequences of this Agreement. By using the Tool, you confirm that you have read, understood, and are fully literate in the content of this Agreement, including, but not limited to, Article A and Article B.
 
 This Tool is intended solely for authorized and ethical purposes, including bug bounty testing and security assessments of systems for which you have explicit permission. It may also be used on websites or systems that you own. The author shall not be held liable for any unauthorized or improper use, and by using the Tool, you acknowledge and accept this limitation of liability.
