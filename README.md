@@ -166,7 +166,7 @@ Arby Audio 3D is an **independent, open-source project**. While it draws **inspi
 
 ### Trademark Notice
 
-All names, logos, and brands mentioned in this project are the property of their respective owners. References are made **solely for descriptive, educational, and comparative purposes**.
+All names, logos, and brands mentioned in this project are the property of their respective owners. References are made **solely for descriptive, educational, and comparative purposes** and even indirect references and other types of references like INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, INCLUDING WITHOUT LIMITATION regarding, LOSS OF PROFITS, LOSS OF DATA, BUSINESS INTERRUPTION, OR LOSS OF BUSINESS OPPORTUNITIES
 
 ---
 
