@@ -252,9 +252,27 @@ for i in range(0, total_samples, hop):
         add_length = min(len(filtered_frame), total_samples - (i + delay_samples))
         # Ensure the slice of out_mc has the same length as the portion of filtered_frame being added
         out_mc[i+delay_samples : i+delay_samples+add_length, :] += filtered_frame[:add_length, None] * gains_r * refl_att
+# -----------------------
+# Ask user for output format
+# -----------------------
+print("\nChoose output format:")
+print("1. 96 kHz, 32-bit float (original)")
+print("2. 42 kHz, 32-bit float (resampled)")
+choice = input("Enter 1 or 2: ").strip()
 
-TARGET_FS = 42000  # 42 kHz
-BIT_DEPTH = np.float32  # 32-bit float
+if choice == "1":
+    TARGET_FS = 96000
+    BIT_DEPTH = np.float32
+    suffix = "96k_32bit"
+elif choice == "2":
+    TARGET_FS = 42000
+    BIT_DEPTH = np.float32
+    suffix = "42k_32bit"
+else:
+    print("Invalid choice, defaulting to 42 kHz.")
+    TARGET_FS = 42000
+    BIT_DEPTH = np.float32
+    suffix = "42k_32bit"
 
 # -----------------------
 # Resample and normalize multichannel
@@ -262,31 +280,29 @@ BIT_DEPTH = np.float32  # 32-bit float
 num_samples_target = int(out_mc.shape[0] * TARGET_FS / fs)
 out_mc_resampled = resample(out_mc, num_samples_target, axis=0)
 out_mc_resampled /= np.max(np.abs(out_mc_resampled)) + 1e-12
-write("3d_music_7_1_4_reflections_42k_32bit.wav", TARGET_FS, out_mc_resampled.astype(BIT_DEPTH))
+mc_filename = f"3d_music_7_1_4_reflections_{suffix}.wav"
+write(mc_filename, TARGET_FS, out_mc_resampled.astype(BIT_DEPTH))
 
 # -----------------------
 # Create stereo mix from multichannel
 # -----------------------
-# Simple downmix: sum left channels and right channels
 stereo = np.zeros((out_mc.shape[0], 2), dtype=np.float32)
-# Assuming channels are ordered: FL, FR, C, LFE, SL, SR, RL, RR, FHL, FHR, RHL, RHR
-# Left channels: FL (0), SL (4), RL (6), FHL (8), RHL (10)
 stereo[:, 0] = out_mc[:, 0] + out_mc[:, 4] + out_mc[:, 6] + out_mc[:, 8] + out_mc[:, 10]
-# Right channels: FR (1), SR (5), RR (7), FHR (9), RHR (11)
 stereo[:, 1] = out_mc[:, 1] + out_mc[:, 5] + out_mc[:, 7] + out_mc[:, 9] + out_mc[:, 11]
-# Center (2) and LFE (3) channels are often mixed into both or handled separately, here we'll mix them to both
-stereo[:, 0] += out_mc[:, 2] * 0.707 + out_mc[:, 3] * 0.5 # Simple distribution
-stereo[:, 1] += out_mc[:, 2] * 0.707 + out_mc[:, 3] * 0.5 # Simple distribution
-
+stereo[:, 0] += out_mc[:, 2] * 0.707 + out_mc[:, 3] * 0.5
+stereo[:, 1] += out_mc[:, 2] * 0.707 + out_mc[:, 3] * 0.5
 
 # -----------------------
 # Resample and normalize stereo
 # -----------------------
 stereo_resampled = resample(stereo, num_samples_target, axis=0)
 stereo_resampled /= np.max(np.abs(stereo_resampled)) + 1e-12
-write("3d_music_binaural_reflections_42k_32bit.wav", TARGET_FS, stereo_resampled.astype(BIT_DEPTH))
+stereo_filename = f"3d_music_binaural_reflections_{suffix}.wav"
+write(stereo_filename, TARGET_FS, stereo_resampled.astype(BIT_DEPTH))
 
-print("✅ Multichannel and stereo files saved at 42 kHz, 32-bit float lossless.")
+print(f"✅ Multichannel saved: {mc_filename}")
+print(f"✅ Stereo saved: {stereo_filename}")
+
 # -----------------------
 # Combine audio file with video file and if permitted display output in-line and save the files of audio and video
 # -----------------------
@@ -405,3 +421,4 @@ cleanup_old_music_and_video(
     music_files=["music.wav", "music_96k.wav"],
     old_video_file=video_file # Use the video_file variable from input()
 )
+
