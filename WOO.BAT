@@ -30,6 +30,7 @@ if %ERRORLEVEL% NEQ 0 (
 %PYTHON_BIN% -m pip install numpy scipy pydub requests py7zr ipython audioop pyaudioop
 python -m pip install --upgrade pip
 python -m pip install numpy scipy pydub requests py7zr ipython audioop pyaudioop 
+python -m pip install audioop-lts
 :: ------------------------------
 :: Download Python script
 :: ------------------------------
