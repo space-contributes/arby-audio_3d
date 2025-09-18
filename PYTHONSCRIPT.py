@@ -1,4 +1,4 @@
-﻿import os
+import os
 import numpy as np
 import requests
 import base64
@@ -92,7 +92,7 @@ def ensure_ffmpeg():
 fs = 96000  # sample rate
 mc = 12     # 7.1.4 channels
 REFLECTION_GAIN = 0.7
-music_url = "https://TESTURL.COM"
+music_url = "https://drive.usercontent.google.com/download?export=download&confirm=t&id=1T4vmSW_1uZEAVcUtHFSOm1ljVgJwyPtL"
 music_file = "music.wav"
 wav_file = "music_96k.wav"
 multichannel_wav = "3d_music_7_1_4_reflections.wav"
@@ -338,31 +338,6 @@ def display_audio_video_links(video_file=None):
         if video_file:
             print(f"Video path: {video_file}")
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Merge a 7.1.4 multichannel WAV into a video.")
-    parser.add_argument("--video_file", help="Path to the video file (e.g., input.mp4)")
-    parser.add_argument("--audio_file", help="Path to the 7.1.4 WAV file (e.g., multichannel.wav)")
-    args = parser.parse_args()
-
-    # --- Only ask for video/audio if files are missing ---
-    video_file = args.video_file
-    if video_file and not os.path.exists(video_file):
-        video_file = input("Enter path to video file or URL: ").strip()
-        # Optional: add download logic for URL
-
-    audio_file = args.audio_file
-    if audio_file and not os.path.exists(audio_file):
-        audio_file = input("Enter path to audio file or URL: ").strip()
-        # Optional: add download logic for URL
-
-    ffmpeg_path = ensure_ffmpeg()
-
-    if video_file and os.path.exists(video_file) and audio_file and os.path.exists(audio_file):
-        output_video = merge_audio(video_file, audio_file, ffmpeg_path)
-    else:
-        output_video = None
-
-    display_audio_video_links(output_video)
 def cleanup_old_music_and_video(music_files, old_video_file=None):
     """Prompt user to remove old music WAV files and the original video file."""
     files_to_check = [f for f in music_files if os.path.exists(f)]
@@ -387,24 +362,24 @@ def cleanup_old_music_and_video(music_files, old_video_file=None):
     else:
         print("Skipped deleting original files.")
 
+# --- Main execution flow for the notebook ---
+ffmpeg_path = ensure_ffmpeg()
 
-if __name__ == "__main__":
-    # --- previous workflow ---
-    ffmpeg_path = ensure_ffmpeg()
-
-    if video_file and os.path.exists(video_file) and audio_file and os.path.exists(audio_file):
-        output_video = merge_audio(video_file, audio_file, ffmpeg_path)
+# Use the variables set by input() directly
+output_video = None
+if video_file and os.path.exists(video_file):
+    # Assuming multichannel_wav is the audio file to merge, as generated earlier
+    if os.path.exists(multichannel_wav):
+        output_video = merge_audio(video_file, multichannel_wav, ffmpeg_path)
     else:
-        output_video = None
+        print(f"⚠️ Multichannel audio file not found at {multichannel_wav}. Skipping video merge.")
+else:
+    print("No valid video file provided or found. Skipping video merge.")
 
-    display_audio_video_links(output_video)
+display_audio_video_links(output_video)
 
-    # --- cleanup only music files + old video ---
-    cleanup_old_music_and_video(
-        music_files=["music.wav", "music_96k.wav"],
-        old_video_file=video_file
-    )
-
-
-
-
+# --- cleanup only music files + old video ---
+cleanup_old_music_and_video(
+    music_files=["music.wav", "music_96k.wav"],
+    old_video_file=video_file # Use the video_file variable from input()
+)
