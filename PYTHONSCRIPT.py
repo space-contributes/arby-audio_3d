@@ -224,12 +224,16 @@ for i in range(0, total_samples, hop):
         el_r = math.asin((listener[2]-s_ref[2])/d_ref)
         gains_r = speaker_gains_7_1_4(az_r, el_r)
         refl_att = REFLECTION_GAIN/(1+0.05*d_ref)
-        add_length = min(len(filtered_frame), total_samples - (i+delay_samples))
-        end_idx = i+delay_samples+add_length
-        if end_idx>out_mc.shape[0]:
-            pad_amount = end_idx - out_mc.shape[0]
-            out_mc = np.pad(out_mc, ((0,pad_amount),(0,0)),'constant')
-        out_mc[i+delay_samples:i+delay_samples+add_length,:] += filtered_frame[:add_length,None]*gains_r*refl_att
+
+        # Ensure add_length is not negative
+        add_length = min(len(filtered_frame), total_samples - (i + delay_samples))
+        if add_length > 0:
+            end_idx = i+delay_samples+add_length
+            if end_idx>out_mc.shape[0]:
+                pad_amount = end_idx - out_mc.shape[0]
+                out_mc = np.pad(out_mc, ((0,pad_amount),(0,0)),'constant')
+            out_mc[i+delay_samples:i+delay_samples+add_length,:] += filtered_frame[:add_length,None]*gains_r*refl_att
+
 
 # -----------------------
 # Output format
