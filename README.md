@@ -50,6 +50,8 @@ Enjoy **living sound that reacts in real time**, bringing games, movies, and mus
 
 **Living sound that bounces, adapts, and reacts. Not just heard, but felt. Smart room scaling brings audio to life.**
 
+#  Reflections, furniture occlusion, immersive realism—without any sensors, cameras, microphones. Mind = blown. 🤯
+
 Arby Audio pushes beyond traditional audio engines with **real-world acoustic simulation**:
 
 * Room geometry & reflections
@@ -63,6 +65,7 @@ Arby Audio pushes beyond traditional audio engines with **real-world acoustic si
 * Automatic normalization & high-frequency smoothing
 * **High-fidelity output**: 96kHz / 32-bit (≈4× industry standard)
 * Fully **open source & customizable**
+
 
 ---
 
