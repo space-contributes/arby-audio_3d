@@ -143,8 +143,8 @@ def process_reflections(frame, s_pos, listener, planes, out_mc, fs, traj_idx):
 # -----------------------
 # Input
 # -----------------------
-music_url = input("Enter the URL of the music file: ").strip()
-video_file = input("Enter the path or URL of the video file (leave blank if none): ").strip()
+music_url = input("Enter the URL of the music file, if no URL, press enter: ").strip()
+video_file = input("Enter the path or URL of the video/audio file (leave blank if none): ").strip()
 
 music_file = "music.wav"
 processed_music_file = "processed_music.wav" # New file for ffmpeg conversion output
@@ -476,3 +476,4 @@ def cleanup_old_music_and_video(music_files, old_video_file=None):
 
 
 cleanup_old_music_and_video(["music.wav","music_96k.wav"], video_file)
+
