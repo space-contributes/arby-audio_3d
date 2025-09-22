@@ -125,26 +125,26 @@ def process_reflections(frame, s_pos, listener, planes, out_mc, fs, idx, room_di
     Adaptive reflection processing that automatically reduces gain if levels get too high.
     """
     c = 343.0
-    
+
     for plane in planes:
         s_ref = reflect_point_across_plane(s_pos, plane['p0'], plane['n'])
         d_ref = dist(listener, s_ref) + 1e-6
         d_direct = dist(listener, s_pos) + 1e-6
-        
+
         # Use the dynamically adjusted reflection gain
         refl_att = current_refl_gain / (1 + 0.3*d_ref**1.5)
-        
+
         # More conservative frequency filtering
         norm_dist = min(1.0, d_ref / room_diag)
         cutoff_freq = fs * (0.45 - 0.35*norm_dist)
         cutoff_freq = np.clip(cutoff_freq, fs*0.1, fs*0.45)
-        
+
         # Apply filtering
         filtered_frame = apply_lowpass(frame, cutoff_freq)
-        
+
         # Calculate delay
         delay_samples = max(0, int(round((d_ref - d_direct) / c * fs)))
-        
+
         # Calculate reflection direction and gains
         vec_ref = listener - s_ref
         d_ref_norm = np.linalg.norm(vec_ref)
@@ -155,16 +155,16 @@ def process_reflections(frame, s_pos, listener, planes, out_mc, fs, idx, room_di
             gains_r = speaker_gains_7_1_4(az_r, el_r)
         else:
             gains_r = np.zeros(mc)
-        
+
         # Add delayed reflection
         start_idx = idx + delay_samples
         add_length = min(len(filtered_frame), out_mc.shape[0] - start_idx)
-        
+
         if add_length > 0 and start_idx < out_mc.shape[0]:
             out_mc[start_idx:start_idx+add_length,:] += (
                 filtered_frame[:add_length,None] * gains_r * refl_att
             )
-    
+
     return out_mc
 
 # -----------------------
@@ -252,7 +252,7 @@ room = {'x': 8.0, 'y': 6.0, 'z': 3.2}
 rx, ry, rz = room['x']/2, room['y']/2, room['z']/2
 planes = [
     {'p0': np.array([rx, 0, 0]), 'n': np.array([-1, 0, 0])},   # Right wall
-    {'p0': np.array([-rx, 0, 0]), 'n': np.array([1, 0, 0])},   # Left wall  
+    {'p0': np.array([-rx, 0, 0]), 'n': np.array([1, 0, 0])},   # Left wall
     {'p0': np.array([0, ry, 0]), 'n': np.array([0, -1, 0])},   # Front wall
     {'p0': np.array([0, -ry, 0]), 'n': np.array([0, 1, 0])},   # Back wall
     {'p0': np.array([0, 0, -rz]), 'n': np.array([0, 0, 1])},   # Floor
@@ -274,20 +274,20 @@ def speaker_gains_7_1_4(az, el):
     SL = max(0, np.cos(az - np.pi/2)) * max(0, np.cos(el)) * 0.6
     SR = max(0, np.cos(az + np.pi/2)) * max(0, np.cos(el)) * 0.6
     LFE = 0.15  # Reduced LFE contribution
-    
+
     # Height channels (attenuated when el is negative)
     height_factor = max(0.1, np.sin(el) + 0.3)
     FHL = max(0, np.cos(az - np.pi/4)) * height_factor
-    FHR = max(0, np.cos(az + np.pi/4)) * height_factor  
+    FHR = max(0, np.cos(az + np.pi/4)) * height_factor
     RHL = max(0, np.cos(az - 3*np.pi/4)) * height_factor
     RHR = max(0, np.cos(az + 3*np.pi/4)) * height_factor
-    
+
     gains = np.array([FL, FR, C, LFE, SL, SR, RL, RR, FHL, FHR, RHL, RHR], dtype=np.float32)
-    
+
     # FIXED: Proper normalization to prevent level buildup
     total = np.sum(gains) + 1e-12
     gains = gains / max(total, 1.0)  # Normalize but don't amplify
-    
+
     return gains
 
 # -----------------------
@@ -297,7 +297,7 @@ def generate_trajectory(samples, room_size=(8,6,3.2)):
     t = np.linspace(0, 1, samples)
     # Smoother, smaller movements
     x = np.sin(2*np.pi*0.05*t) * room_size[0] * 0.3  # Reduced amplitude and frequency
-    y = np.cos(2*np.pi*0.03*t) * room_size[1] * 0.3  
+    y = np.cos(2*np.pi*0.03*t) * room_size[1] * 0.3
     z = np.sin(2*np.pi*0.04*t) * room_size[2] * 0.2 + room_size[2]*0.1  # Stay above floor
     return np.stack([x, y, z], axis=1)
 
@@ -309,12 +309,15 @@ traj = generate_trajectory(total_samples)
 window_size = 2048
 hop = 512
 
+# Initialize reflection gain
+current_refl_gain = REFLECTION_GAIN_START
+
 print("Processing audio frames...")
 for i in range(0, total_samples, hop):
     if i % (hop * 100) == 0:  # Progress indicator
         progress = i / total_samples * 100
         print(f"Progress: {progress:.1f}%")
-        
+
     frame = samples[i:i+window_size]
     if len(frame) == 0:
         continue
@@ -324,19 +327,26 @@ for i in range(0, total_samples, hop):
     d = dist(listener, s_pos) + 1e-6
     vec = listener - s_pos
     vec_norm = vec / d
-    
+
     az = math.atan2(vec_norm[1], vec_norm[0])
     el = math.asin(np.clip(vec_norm[2], -1, 1))
-    
+
     gains = speaker_gains_7_1_4(az, el)
     att = max(0.1, min(1.0, 1.0/(1.0 + 0.1*d)))  # More conservative distance attenuation
-    
+
     # Add direct sound
     end_idx = min(i + len(frame), total_samples)
     out_mc[i:end_idx,:] += frame[:end_idx-i,None] * gains * att
 
     # FIXED: Single reflection processing call (removed duplicate code)
-    out_mc = process_reflections(frame, s_pos, listener, planes, out_mc, fs, i, room_diag)
+    # Pass the current reflection gain and update it based on output levels
+    out_mc = process_reflections(frame, s_pos, listener, planes, out_mc, fs, i, room_diag, current_refl_gain)
+
+    # Simple adaptive gain reduction: reduce if output levels exceed a threshold
+    current_peak = np.max(np.abs(out_mc[i:end_idx,:]))
+    if current_peak > 0.8: # Threshold for gain reduction
+        current_refl_gain *= 0.95 # Gentle reduction
+        current_refl_gain = max(current_refl_gain, 0.1) # Don't reduce too much
 
 print("Processing complete!")
 
@@ -373,7 +383,7 @@ if TARGET_FS != fs:
     num_samples_target = int(out_mc.shape[0]*TARGET_FS/fs)
     ratio = Fraction(TARGET_FS, fs).limit_denominator()
     out_mc_resampled = np.zeros((num_samples_target, mc), dtype=np.float32)
-    
+
     print("Resampling multichannel audio...")
     for ch in range(mc):
         out_mc_resampled[:, ch] = resample_poly(out_mc[:, ch], ratio.numerator, ratio.denominator)
@@ -399,11 +409,11 @@ else:
 # Better stereo fold-down coefficients
 if TARGET_FS != fs:
     # Use original sample rate data for stereo mix
-    stereo[:,0] = (out_mc[:,0]*0.7 + out_mc[:,4]*0.5 + out_mc[:,6]*0.4 + 
+    stereo[:,0] = (out_mc[:,0]*0.7 + out_mc[:,4]*0.5 + out_mc[:,6]*0.4 +
                    out_mc[:,2]*0.3 + out_mc[:,3]*0.2 + out_mc[:,8]*0.3 + out_mc[:,10]*0.3)
-    stereo[:,1] = (out_mc[:,1]*0.7 + out_mc[:,5]*0.5 + out_mc[:,7]*0.4 + 
+    stereo[:,1] = (out_mc[:,1]*0.7 + out_mc[:,5]*0.5 + out_mc[:,7]*0.4 +
                    out_mc[:,2]*0.3 + out_mc[:,3]*0.2 + out_mc[:,9]*0.3 + out_mc[:,11]*0.3)
-    
+
     # Resample stereo
     stereo_resampled = np.zeros((num_samples_target, 2), dtype=np.float32)
     for ch in range(2):
@@ -411,11 +421,11 @@ if TARGET_FS != fs:
 else:
     # Work directly with resampled data
     stereo_resampled = np.zeros((out_mc_resampled.shape[0], 2), dtype=np.float32)
-    stereo_resampled[:,0] = (out_mc_resampled[:,0]*0.7 + out_mc_resampled[:,4]*0.5 + 
-                            out_mc_resampled[:,6]*0.4 + out_mc_resampled[:,2]*0.3 + 
+    stereo_resampled[:,0] = (out_mc_resampled[:,0]*0.7 + out_mc_resampled[:,4]*0.5 +
+                            out_mc_resampled[:,6]*0.4 + out_mc_resampled[:,2]*0.3 +
                             out_mc_resampled[:,3]*0.2 + out_mc_resampled[:,8]*0.3 + out_mc_resampled[:,10]*0.3)
-    stereo_resampled[:,1] = (out_mc_resampled[:,1]*0.7 + out_mc_resampled[:,5]*0.5 + 
-                            out_mc_resampled[:,7]*0.4 + out_mc_resampled[:,2]*0.3 + 
+    stereo_resampled[:,1] = (out_mc_resampled[:,1]*0.7 + out_mc_resampled[:,5]*0.5 +
+                            out_mc_resampled[:,7]*0.4 + out_mc_resampled[:,2]*0.3 +
                             out_mc_resampled[:,3]*0.2 + out_mc_resampled[:,9]*0.3 + out_mc_resampled[:,11]*0.3)
 
 # Normalize stereo
