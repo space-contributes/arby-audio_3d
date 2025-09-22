@@ -11,7 +11,7 @@ import subprocess
 import sys
 import platform
 import shutil
-
+from fractions import Fraction
 try:
     import py7zr
 except ImportError:
@@ -134,7 +134,7 @@ planes = [
     {'p0': np.array([0, ry, 0]), 'n': np.array([0, 1, 0])},
     {'p0': np.array([0, -ry, 0]), 'n': np.array([0, -1, 0])},
     {'p0': np.array([0, 0, -rz]), 'n': np.array([0, 0, 1])},
-    {'p0': np.array([0, 0, -rz]), 'n': np.array([0, 0, -1])}, # Fixed duplicate z plane
+    {'p0': np.array([0, 0, +rz]), 'n': np.array([0, 0, -1])}, # Fixed duplicate z plane
 ]
 listener = np.array([0.0, 0.0, 0.15])
 
@@ -259,10 +259,13 @@ else:
 # Resample multichannel
 # -----------------------
 num_samples_target = int(out_mc.shape[0]*TARGET_FS/fs)
+ratio = Fraction(TARGET_FS, fs).limit_denominator()
 out_mc_resampled = np.zeros((num_samples_target, mc), dtype=np.float32)
+
 for ch in range(mc):
-    out_mc_resampled[:,ch] = resample_poly(out_mc[:,ch], TARGET_FS, fs)
-out_mc_resampled /= np.max(np.abs(out_mc_resampled))+1e-12
+    out_mc_resampled[:, ch] = resample_poly(out_mc[:, ch], ratio.numerator, ratio.denominator)
+
+out_mc_resampled /= np.max(np.abs(out_mc_resampled)) + 1e-12
 mc_filename = f"3d_music_7_1_4_reflections_{suffix}.wav"
 write(mc_filename, TARGET_FS, out_mc_resampled.astype(BIT_DEPTH))
 
@@ -361,3 +364,6 @@ def cleanup_old_music_and_video(music_files, old_video_file=None):
         print("Skipped deletion.")
 
 cleanup_old_music_and_video(["music.wav","music_96k.wav"], video_file)
+
+
+
