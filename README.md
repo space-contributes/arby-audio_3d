@@ -7,7 +7,7 @@
 
 *Made with ❤️ by Space-code* WITH *7 YEARS OF MAKING*
 
-![Version](https://img.shields.io/badge/version-1.5-blue)
+![Version](https://img.shields.io/badge/version-2.0-blue)
 ![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen)
 ![Python Version](https://img.shields.io/badge/python-3.11-blue)
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
