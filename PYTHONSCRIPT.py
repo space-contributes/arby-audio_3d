@@ -309,37 +309,37 @@ for i in range(0, total_samples, hop):
     att = max(0.05, min(1.0, 1.0/(1.0+0.05*d)))
     out_mc[i:i+len(frame),:] += frame[:,None]*gains*att
 
-        # Reflections
-        # New automatic reflection processing
-        out_mc = process_reflections(frame, s_pos, listener, planes, out_mc, fs, i)
-        # Lowpass and gains
-        # Precompute room diagonal once
-        room_diag = np.linalg.norm([room['x'], room['y'], room['z']])
+    # Reflections
+    # New automatic reflection processing
+    out_mc = process_reflections(frame, s_pos, listener, planes, out_mc, fs, i)
+    # Lowpass and gains
+    # Precompute room diagonal once
+    room_diag = np.linalg.norm([room['x'], room['y'], room['z']])
 
-        # Inside your reflection loop
-        # Normalize distance relative to room size (0 = listener, 1 = farthest corner)
-        norm_dist = d_ref / room_diag
+    # Inside your reflection loop
+    # Normalize distance relative to room size (0 = listener, 1 = farthest corner)
+    norm_dist = d_ref / room_diag
 
-        # Logarithmic scaling: nearby reflections keep more highs, far ones lose highs
-        cutoff_freq = fs * 0.5 / (1 + 5 * np.log1p(norm_dist))  # automatically decays with distance
+    # Logarithmic scaling: nearby reflections keep more highs, far ones lose highs
+    cutoff_freq = fs * 0.5 / (1 + 5 * np.log1p(norm_dist))  # automatically decays with distance
 
-        # Ensure cutoff is always physically valid
-        cutoff_freq = np.clip(cutoff_freq, fs*0.05, fs*0.95)
+    # Ensure cutoff is always physically valid
+    cutoff_freq = np.clip(cutoff_freq, fs*0.05, fs*0.95)
 
-        filtered_frame = apply_lowpass(frame, cutoff_freq)
-        az_r = math.atan2(listener[1]-s_ref[1], listener[0]-s_ref[0])
-        el_r = math.asin((listener[2]-s_ref[2])/d_ref)
-        gains_r = speaker_gains_7_1_4(az_r, el_r)
-        refl_att = REFLECTION_GAIN/(1+0.05*d_ref)
+    filtered_frame = apply_lowpass(frame, cutoff_freq)
+    az_r = math.atan2(listener[1]-s_ref[1], listener[0]-s_ref[0])
+    el_r = math.asin((listener[2]-s_ref[2])/d_ref)
+    gains_r = speaker_gains_7_1_4(az_r, el_r)
+    refl_att = REFLECTION_GAIN/(1+0.05*d_ref)
 
-        # Add delayed and filtered reflection to the output
-        add_length = min(len(filtered_frame), total_samples - (i + delay_samples))
-        if add_length > 0:
-            end_idx = i+delay_samples+add_length
-            if end_idx>out_mc.shape[0]:
-                pad_amount = end_idx - out_mc.shape[0]
-                out_mc = np.pad(out_mc, ((0,pad_amount),(0,0)),'constant')
-            out_mc[i+delay_samples:i+delay_samples+add_length,:] += filtered_frame[:add_length,None]*gains_r*refl_att
+    # Add delayed and filtered reflection to the output
+    add_length = min(len(filtered_frame), total_samples - (i + delay_samples))
+    if add_length > 0:
+        end_idx = i+delay_samples+add_length
+        if end_idx>out_mc.shape[0]:
+            pad_amount = end_idx - out_mc.shape[0]
+            out_mc = np.pad(out_mc, ((0,pad_amount),(0,0)),'constant')
+        out_mc[i+delay_samples:i+delay_samples+add_length,:] += filtered_frame[:add_length,None]*gains_r*refl_att
 
 
 # -----------------------
@@ -476,4 +476,3 @@ def cleanup_old_music_and_video(music_files, old_video_file=None):
 
 
 cleanup_old_music_and_video(["music.wav","music_96k.wav"], video_file)
-
