@@ -12,11 +12,19 @@ import sys
 import platform
 import shutil
 from fractions import Fraction
+
 try:
     import py7zr
 except ImportError:
     subprocess.run([sys.executable, "-m", "pip", "install", "py7zr"], check=True)
     import py7zr
+
+try:
+    import ffmpeg
+except ImportError:
+    subprocess.run([sys.executable, "-m", "pip", "install", "ffmpeg-python"], check=True)
+    import ffmpeg
+
 
 # -----------------------
 # FFmpeg installer
@@ -96,6 +104,7 @@ music_url = input("Enter the URL of the music file: ").strip()
 video_file = input("Enter the path or URL of the video file (leave blank if none): ").strip()
 
 music_file = "music.wav"
+processed_music_file = "processed_music.wav" # New file for ffmpeg conversion output
 wav_file = "music_96k.wav"
 multichannel_wav = "3d_music_7_1_4_reflections.wav"
 binaural_wav = "3d_music_binaural_reflections.wav"
@@ -106,14 +115,61 @@ print(f"Video file: {video_file if video_file else 'None'}")
 # -----------------------
 # Download and prepare music
 # -----------------------
-if not os.path.exists(music_file):
+if not os.path.exists(music_file) or os.path.getsize(music_file) == 0:
     print("Downloading music file...")
-    r = requests.get(music_url, timeout=30)
-    with open(music_file, 'wb') as f:
-        f.write(r.content)
-    print("✅ Download complete.")
+    try:
+        with requests.get(music_url, stream=True, timeout=30) as r:
+            r.raise_for_status()  # Raise HTTPError for bad responses (4xx or 5xx)
+            r.raw.decode_content = True # Ensure proper decoding for Google Drive links
+            with open(music_file, 'wb') as f:
+                shutil.copyfileobj(r.raw, f)
+        print("✅ Download complete.")
+    except requests.exceptions.RequestException as e:
+        print(f"❌ Error downloading music file: {e}")
+        print("Please check the URL and your internet connection.")
+        exit()
+    except Exception as e:
+        print(f"❌ An unexpected error occurred during download: {e}")
+        exit()
 
-music = AudioSegment.from_file(music_file).set_frame_rate(fs).set_channels(1)
+
+# Check if the downloaded file exists and has a reasonable size
+if not os.path.exists(music_file) or os.path.getsize(music_file) == 0:
+    print(f"❌ Downloaded music file '{music_file}' is missing or empty after download.")
+    print("Please ensure the provided URL is correct and the file is accessible.")
+    exit()
+
+# Ensure ffmpeg is installed, it's needed for both audio processing (via pydub) and video merging.
+# This overrides the previous modification to always install ffmpeg as it's a core dependency.
+ffmpeg_path = ensure_ffmpeg()
+
+# Use ffmpeg-python to convert the downloaded file to a standard WAV format
+print(f"Converting downloaded file '{music_file}' to standard WAV format '{processed_music_file}'...")
+try:
+    (
+        ffmpeg
+        .input(music_file)
+        .output(processed_music_file, acodec='pcm_s16le', ar=str(fs), ac=1) # Convert to 16-bit PCM, target sample rate, mono
+        .run(capture_stdout=True, capture_stderr=True, overwrite_output=True)
+    )
+    print("✅ Conversion complete.")
+except ffmpeg.Error as e:
+    print(f"❌ Error during ffmpeg conversion: {e.stderr.decode()}")
+    print("Please ensure the downloaded file is a valid audio format.")
+    exit()
+except Exception as e:
+    print(f"❌ An unexpected error occurred during ffmpeg conversion: {e}")
+    exit()
+
+# Now use the processed WAV file with pydub
+try:
+    music = AudioSegment.from_file(processed_music_file).set_frame_rate(fs).set_channels(1)
+except Exception as e:
+    print(f"❌ Error processing converted music file '{processed_music_file}': {e}")
+    print("This might still indicate an issue with the original downloaded file.")
+    exit()
+
+
 music.export(wav_file, 'wav')
 sr, samples = read(wav_file)
 samples = samples.astype(np.float32)
@@ -218,7 +274,19 @@ for i in range(0, total_samples, hop):
         delay_samples = max(0,int(round(time_delay_s*fs)))
 
         # Lowpass and gains
-        cutoff_freq = fs*(1.0 - np.clip(d_ref/MAX_DISTANCE_FOR_FILTER,0.0,0.9))
+        # Precompute room diagonal once
+        room_diag = np.linalg.norm([room['x'], room['y'], room['z']])
+
+        # Inside your reflection loop
+        # Normalize distance relative to room size (0 = listener, 1 = farthest corner)
+        norm_dist = d_ref / room_diag
+
+        # Logarithmic scaling: nearby reflections keep more highs, far ones lose highs
+        cutoff_freq = fs * 0.5 / (1 + 5 * np.log1p(norm_dist))  # automatically decays with distance
+
+        # Ensure cutoff is always physically valid
+        cutoff_freq = np.clip(cutoff_freq, fs*0.05, fs*0.95)
+
         filtered_frame = apply_lowpass(frame, cutoff_freq)
         az_r = math.atan2(listener[1]-s_ref[1], listener[0]-s_ref[0])
         el_r = math.asin((listener[2]-s_ref[2])/d_ref)
@@ -331,10 +399,12 @@ def display_audio_video_links(video_file=None):
 # -----------------------
 # Main execution
 # -----------------------
-ffmpeg_path = ensure_ffmpeg()
 output_video = None
 if video_file and os.path.exists(video_file):
     if os.path.exists(mc_filename):
+        # Ensure ffmpeg_path is set before calling merge_audio
+        if ffmpeg_path is None:
+             ffmpeg_path = ensure_ffmpeg()
         output_video = merge_audio(video_file, mc_filename, ffmpeg_path)
     else:
         print(f"⚠️ Multichannel audio {mc_filename} not found, skipping video merge.")
@@ -345,14 +415,16 @@ display_audio_video_links(output_video)
 # -----------------------
 def cleanup_old_music_and_video(music_files, old_video_file=None):
     files_to_check = [f for f in music_files if os.path.exists(f)]
+    # Add the processed music file to the cleanup list
+    files_to_check.append(processed_music_file)
     if old_video_file and os.path.exists(old_video_file):
         files_to_check.append(old_video_file)
     if not files_to_check:
         return
-    print("\n⚠️ Original files can be removed:")
+    print("\n⚠️ Original and intermediate files can be removed:")
     for f in files_to_check:
         print(f" - {f}")
-    answer=input("Delete these original files? (y/n): ").strip().lower()
+    answer=input("Delete these original and intermediate files? (y/n): ").strip().lower()
     if answer=='y':
         for f in files_to_check:
             try:
@@ -363,7 +435,5 @@ def cleanup_old_music_and_video(music_files, old_video_file=None):
     else:
         print("Skipped deletion.")
 
+
 cleanup_old_music_and_video(["music.wav","music_96k.wav"], video_file)
-
-
-
