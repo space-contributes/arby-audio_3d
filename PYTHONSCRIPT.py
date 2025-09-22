@@ -96,6 +96,49 @@ mc = 12             # 7.1.4 channels
 REFLECTION_GAIN = 0.7
 c = 343.0           # speed of sound m/s
 MAX_DISTANCE_FOR_FILTER = 20.0
+# -----------------------
+# Reflection helper (automatic scaling)
+# -----------------------
+def process_reflections(frame, s_pos, listener, planes, out_mc, fs, traj_idx):
+    room_diag = np.linalg.norm([room['x'], room['y'], room['z']])
+    for plane in planes:
+        s_ref = reflect_point_across_plane(s_pos, plane['p0'], plane['n'])
+        d_ref = dist(listener, s_ref)+1e-6
+
+        # Time delay
+        time_delay_s = (d_ref)/c
+        delay_samples = int(round(time_delay_s*fs))
+
+        # Lowpass cutoff: further reflections lose highs
+        cutoff_freq = fs * 0.5 / (1 + 5*np.log1p(d_ref / room_diag))
+        cutoff_freq = np.clip(cutoff_freq, fs*0.05, fs*0.4)
+        filtered_frame = apply_lowpass(frame, cutoff_freq)
+
+        # Reflection gain decays automatically
+        refl_att = 0.7 / (1 + 0.1*d_ref)
+
+        # LFE scaling automatically
+        LFE_gain = 0.2 / (1 + 0.2*d_ref)
+
+        # Compute azimuth/elevation for speaker mapping
+        vec = listener - s_ref
+        az = math.atan2(vec[1], vec[0])
+        el = math.asin(vec[2]/np.linalg.norm(vec))
+        gains = speaker_gains_7_1_4(az, el)
+
+        # Apply LFE
+        gains[3] = LFE_gain
+
+        # Apply to output with delay
+        add_length = min(len(filtered_frame), out_mc.shape[0] - (traj_idx + delay_samples))
+        if add_length > 0:
+            end_idx = traj_idx + delay_samples + add_length
+            if end_idx > out_mc.shape[0]:
+                pad_amount = end_idx - out_mc.shape[0]
+                out_mc = np.pad(out_mc, ((0,pad_amount),(0,0)),'constant')
+            out_mc[traj_idx+delay_samples:traj_idx+delay_samples+add_length, :] += filtered_frame[:add_length, None] * gains * refl_att
+
+    return out_mc
 
 # -----------------------
 # Input
@@ -266,13 +309,9 @@ for i in range(0, total_samples, hop):
     att = max(0.05, min(1.0, 1.0/(1.0+0.05*d)))
     out_mc[i:i+len(frame),:] += frame[:,None]*gains*att
 
-    # Reflections
-    for plane in planes:
-        s_ref = reflect_point_across_plane(s_pos, plane['p0'], plane['n'])
-        d_ref = dist(listener, s_ref)+1e-6
-        time_delay_s = (d_ref-d)/c
-        delay_samples = max(0,int(round(time_delay_s*fs)))
-
+        # Reflections
+        # New automatic reflection processing
+        out_mc = process_reflections(frame, s_pos, listener, planes, out_mc, fs, i)
         # Lowpass and gains
         # Precompute room diagonal once
         room_diag = np.linalg.norm([room['x'], room['y'], room['z']])
@@ -437,3 +476,4 @@ def cleanup_old_music_and_video(music_files, old_video_file=None):
 
 
 cleanup_old_music_and_video(["music.wav","music_96k.wav"], video_file)
+
