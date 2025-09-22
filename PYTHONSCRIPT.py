@@ -99,52 +99,34 @@ MAX_DISTANCE_FOR_FILTER = 20.0
 # -----------------------
 # Reflection helper (automatic scaling)
 # -----------------------
-def process_reflections(frame, s_pos, listener, planes, out_mc, fs, traj_idx):
-    room_diag = np.linalg.norm([room['x'], room['y'], room['z']])
+def process_reflections(frame, s_pos, listener, planes, out_mc, fs, idx):
+    """
+    Automatic reflection processing with distance-scaled gain and low-pass filtering.
+    """
+    c = 343.0
+    room_diag = np.linalg.norm([8,6,3.2])  # same as room size in your code
     for plane in planes:
         s_ref = reflect_point_across_plane(s_pos, plane['p0'], plane['n'])
-        d_ref = dist(listener, s_ref)+1e-6
-
-        # Time delay
-        time_delay_s = (d_ref)/c
-        delay_samples = int(round(time_delay_s*fs))
-
-        # Lowpass cutoff: further reflections lose highs
-        cutoff_freq = fs * 0.5 / (1 + 5*np.log1p(d_ref / room_diag))
-        cutoff_freq = np.clip(cutoff_freq, fs*0.05, fs*0.4)
+        d_ref = dist(listener, s_ref) + 1e-6
+        # Distance-scaled gain: close reflections stronger, far reflections weaker
+        refl_att = 0.7 / (1 + 0.1*d_ref)  # tweak 0.1 for more/less decay
+        # Logarithmic low-pass for far reflections
+        norm_dist = d_ref / room_diag
+        cutoff_freq = fs * 0.5 / (1 + 10*np.log1p(norm_dist))  # more decay for distant reflections
+        cutoff_freq = np.clip(cutoff_freq, fs*0.05, fs*0.95)
         filtered_frame = apply_lowpass(frame, cutoff_freq)
-
-        # Reflection gain decays automatically
-        refl_att = 0.7 / (1 + 0.1*d_ref)
-
-        # LFE scaling automatically
-        LFE_gain = 0.2 / (1 + 0.2*d_ref)
-
-        # Compute azimuth/elevation for speaker mapping
-        vec = listener - s_ref
-        az = math.atan2(vec[1], vec[0])
-        el = math.asin(vec[2]/np.linalg.norm(vec))
-        gains = speaker_gains_7_1_4(az, el)
-
-        # Apply LFE
-        gains[3] = LFE_gain
-
-        # Apply to output with delay
-        add_length = min(len(filtered_frame), out_mc.shape[0] - (traj_idx + delay_samples))
-        if add_length > 0:
-            end_idx = traj_idx + delay_samples + add_length
-            if end_idx > out_mc.shape[0]:
-                pad_amount = end_idx - out_mc.shape[0]
-                out_mc = np.pad(out_mc, ((0,pad_amount),(0,0)),'constant')
-            out_mc[traj_idx+delay_samples:traj_idx+delay_samples+add_length, :] += filtered_frame[:add_length, None] * gains * refl_att
-
+        # Delay
+        delay_samples = max(0,int(round((d_ref-dist(listener, s_pos))/c * fs)))
+        add_length = min(len(filtered_frame), out_mc.shape[0]-(idx+delay_samples))
+        if add_length>0:
+            out_mc[idx+delay_samples:idx+delay_samples+add_length,:] += filtered_frame[:add_length,None]*refl_att
     return out_mc
 
 # -----------------------
 # Input
 # -----------------------
-music_url = input("Enter the URL of the music file, if no URL, press enter: ").strip()
-video_file = input("Enter the path or URL of the video/audio file (leave blank if none): ").strip()
+music_url = input("Enter the URL of the music file: ").strip()
+video_file = input("Enter the path or URL of the video file (leave blank if none): ").strip()
 
 music_file = "music.wav"
 processed_music_file = "processed_music.wav" # New file for ffmpeg conversion output
@@ -476,4 +458,3 @@ def cleanup_old_music_and_video(music_files, old_video_file=None):
 
 
 cleanup_old_music_and_video(["music.wav","music_96k.wav"], video_file)
-
