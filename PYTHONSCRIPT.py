@@ -231,7 +231,7 @@ while i<total_samples:
     az = math.atan2(vec_norm[1],vec_norm[0])
     el = math.asin(np.clip(vec_norm[2],-1,1))
     gains = speaker_gains_7_1_4(az,el)
-    att = max(0.1,min(1.0,1.0/(1.0+0.1*d)))
+    att = max(0.1,min(1.0,1.0/(1.0+0.1+*d)))
     end_idx = min(i+len(frame),total_samples)
     out_mc[i:end_idx,:] += frame[:end_idx-i,None]*gains*att
 
@@ -271,5 +271,6 @@ if peak_stereo>0:
 stereo_filename = f"3d_music_binaural_reflections_{TARGET_FS//1000}k_32bit.wav"
 write(stereo_filename,TARGET_FS,stereo.astype(BIT_DEPTH))
 
-print(f"✅ Multichannel saved: {mc_filename}")
+print(f"✅ Multichannel saved as an audio file to be attached to your video file, please note that your use is subject to the terms and conditions of this software at https://github.com/space-contributes/arby-audio_3d/blob/main/LICENSE.md: {mc_filename}")
 print(f"✅ Stereo saved: {stereo_filename}")
+
