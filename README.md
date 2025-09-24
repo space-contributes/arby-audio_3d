@@ -24,7 +24,7 @@
 ![Commits](https://img.shields.io/github/commit-activity/m/space-contributes/arby-audio_3d)
 ![Issues Closed](https://img.shields.io/github/issues-pr-closed/space-contributes/arby-audio_3d)
 
-![Arby Audio Logo](https://raw.githubusercontent.com/space-contributes/arby-audio_3d/refs/heads/main/Arby%20Logo%20Design%20Proto.1.jpg)
+![Arby Audio Logo](https://raw.githubusercontent.com/space-contributes/arby-audio_3d/refs/heads/main/Arby%20Logo%20Design%20Proto.1(1).jpg)
 
 
 
