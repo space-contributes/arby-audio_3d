@@ -24,7 +24,8 @@
 ![Commits](https://img.shields.io/github/commit-activity/m/space-contributes/arby-audio_3d)
 ![Issues Closed](https://img.shields.io/github/issues-pr-closed/space-contributes/arby-audio_3d)
 
-![Arby-audio Logo](![Alt text](https://objects.githubusercontent.com/github-production-repository-file-5c1aeb/1052083320/22512527?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVCODYLSA53PQK4ZA%2F20250924%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20250924T110919Z&X-Amz-Expires=300&X-Amz-Signature=1ab9a70f2037471028765db43c163f78abe1ecf0bc0d4b801952b6ec03ebab82&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3Bfilename%3DArby.Logo.Design.Proto.1.tiff&response-content-type=image%2Ftiff "Optional title text") "Optional title text")
+![Arby Audio Logo](https://raw.githubusercontent.com/user/repo/branch/images/Arby.Logo.Design.Proto.1.tiff)
+
 
 
 ---
