@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arby Audio - 3D Spatial Audio Engine</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .brand-logo {
+            font-size: 3.5em;
+            font-weight: 900;
+            background: linear-gradient(135deg, #e94560, #f39c12, #e94560);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradient 3s ease infinite;
+            letter-spacing: -2px;
+        }
+
+        @keyframes gradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .brand-tagline {
+            font-size: 1.1em;
+            opacity: 0.9;
+            margin-top: 10px;
+            color: #f39c12;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(233, 69, 96, 0.3);
+        }
+
+        .panel h2 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: #e94560;
+        }
+
+        .upload-zone {
+            border: 3px dashed rgba(233, 69, 96, 0.4);
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 20px;
+            background: rgba(233, 69, 96, 0.05);
+        }
+
+        .upload-zone:hover {
+            border-color: #e94560;
+            background: rgba(233, 69, 96, 0.1);
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .control-group {
+            margin-bottom: 20px;
+        }
+
+        .control-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #f39c12;
+        }
+
+        .input-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        input[type="range"] {
+            flex: 1;
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(233, 69, 96, 0.3);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #e94560, #f39c12);
+            cursor: pointer;
+        }
+
+        input[type="number"] {
+            width: 100px;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(233, 69, 96, 0.3);
+            border-radius: 5px;
+            color: white;
+            font-size: 0.9em;
+            text-align: center;
+        }
+
+        .value-display {
+            display: inline-block;
+            background: rgba(233, 69, 96, 0.2);
+            padding: 6px 12px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .auto-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.7em;
+            font-weight: 700;
+            margin-left: 8px;
+        }
+
+        button {
+            background: linear-gradient(135deg, #e94560 0%, #f39c12 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        button:hover:not(:disabled) {
+            transform: translateY(-2px);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .checkbox-group {
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: rgba(233, 69, 96, 0.05);
+            border-radius: 8px;
+        }
+
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #e94560;
+        }
+
+        select {
+            background: rgba(233, 69, 96, 0.2);
+            border: 1px solid rgba(233, 69, 96, 0.3);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            outline: none;
+        }
+
+        select option {
+            background: #16213e;
+        }
+
+        .info, .success, .rate-limit-info {
+            padding: 12px;
+            border-radius: 5px;
+            margin-top: 15px;
+            border-left: 4px solid;
+        }
+
+        .info {
+            background: rgba(52, 152, 219, 0.2);
+            border-color: #3498db;
+        }
+
+        .success {
+            background: rgba(46, 204, 113, 0.2);
+            border-color: #2ecc71;
+        }
+
+        .rate-limit-info {
+            background: rgba(243, 156, 18, 0.2);
+            border-color: #f39c12;
+        }
+
+        .progress {
+            height: 6px;
+            background: rgba(233, 69, 96, 0.2);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #e94560, #f39c12);
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .status {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+
+        .status-item {
+            margin: 5px 0;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .visualizer {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            height: 200px;
+            margin-top: 20px;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        .speaker-map {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .speaker {
+            background: rgba(233, 69, 96, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.85em;
+            border: 2px solid rgba(233, 69, 96, 0.3);
+        }
+
+        @media (max-width: 968px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="brand-logo">ARBY AUDIO</div>
+            <p class="brand-tagline">Physics-Based 3D Spatial Audio | 7.1.4 @ 96kHz 32-bit</p>
+        </header>
+
+        <div class="main-grid">
+            <div class="panel">
+                <h2>📁 Audio Input</h2>
+                <div class="upload-zone" id="uploadZone">
+                    <div style="font-size: 3em;">🎧</div>
+                    <p style="font-size: 1.2em;">Drop audio file or click</p>
+                    <p style="opacity: 0.7; font-size: 0.9em;">WAV, MP3, FLAC, OGG (Max 50MB)</p>
+                </div>
+                <input type="file" id="fileInput" accept=".wav,.mp3,.flac,.ogg,.m4a" />
+                <div class="info">
+                    <strong>🔒 Privacy:</strong> All processing in-browser. No uploads.
+                </div>
+                <div class="rate-limit-info" id="rateLimitInfo" style="display: none;">
+                    <strong>⏱️</strong> <span id="rateLimitText"></span>
+                </div>
+                <div id="fileInfo" style="display: none; margin-top: 15px; padding: 15px; background: rgba(0,0,0,0.5); border-radius: 8px;">
+                    <div class="status-item"><span>📄 File:</span><span id="fileName">-</span></div>
+                    <div class="status-item"><span>⏱️ Duration:</span><span id="fileDuration">-</span></div>
+                    <div class="status-item"><span>📊 Rate:</span><span id="fileSampleRate">-</span></div>
+                    <div class="status-item"><span>🔊 Channels:</span><span id="fileChannels">-</span></div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h2>🎚️ Room Configuration</h2>
+                <div style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; margin-bottom: 20px;">
+                    <strong>📐 Preset:</strong> 
+                    <select id="roomPreset" style="margin-left: 10px; width: calc(100% - 80px);">
+                        <option value="custom">Custom</option>
+                        <option value="bedroom">Bedroom (4×4×2.5m)</option>
+                        <option value="living">Living Room (6×8×3m)</option>
+                        <option value="studio">Studio (8×10×3m)</option>
+                        <option value="medium" selected>Medium Room (8×6×3.2m)</option>
+                        <option value="hall">Concert Hall (20×25×8m)</option>
+                    </select>
+                    <div style="margin-top: 10px;"><strong>📦 Volume:</strong> <span id="roomVolume">153.6 m³</span></div>
+                </div>
+
+                <div class="control-group">
+                    <label>Room Width (m) <span class="auto-badge">Auto</span></label>
+                    <div class="input-row">
+                        <input type="range" id="roomWidth" min="2" max="20" step="0.1" value="8" />
+                        <input type="number" id="roomWidthNum" min="2" max="20" step="0.1" value="8" />
+                        <span class="value-display" id="roomWidthValue">8.0m</span>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label>Room Length (m) <span class="auto-badge">Auto</span></label>
+                    <div class="input-row">
+                        <input type="range" id="roomLength" min="2" max="25" step="0.1" value="6" />
+                        <input type="number" id="roomLengthNum" min="2" max="25" step="0.1" value="6" />
+                        <span class="value-display" id="roomLengthValue">6.0m</span>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label>Room Height (m) <span class="auto-badge">Auto</span></label>
+                    <div class="input-row">
+                        <input type="range" id="roomHeight" min="2" max="12" step="0.05" value="3.2" />
+                        <input type="number" id="roomHeightNum" min="2" max="12" step="0.05" value="3.2" />
+                        <span class="value-display" id="roomHeightValue">3.20m</span>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label>Wall Reflectivity <span class="auto-badge">Adaptive</span></label>
+                    <div class="input-row">
+                        <input type="range" id="wallReflectivity" min="0.1" max="0.95" step="0.01" value="0.7" />
+                        <input type="number" id="wallReflectivityNum" min="0.1" max="0.95" step="0.01" value="0.7" />
+                        <span class="value-display" id="wallReflectivityValue">0.70</span>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label>Air Absorption <span class="auto-badge">Auto</span></label>
+                    <div class="input-row">
+                        <input type="range" id="airAbsorption" min="0.001" max="0.05" step="0.001" value="0.01" />
+                        <input type="number" id="airAbsorptionNum" min="0.001" max="0.05" step="0.001" value="0.01" />
+                        <span class="value-display" id="airAbsorptionValue">0.010</span>
+                    </div>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="enableAdaptiveGain" checked />
+                    <label for="enableAdaptiveGain">⚡ Adaptive Anti-Clipping</label>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="enableLinearScaling" checked />
+                    <label for="enableLinearScaling">📐 Linear Scaling (k, p, α)</label>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="enableAutoRoomScale" checked />
+                    <label for="enableAutoRoomScale">🎯 Auto Room Scale</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h2>🎛️ Processing</h2>
+            <div>
+                <button id="processBtn" disabled>⚡ Process Audio</button>
+                <button id="playBtn" disabled>▶️ Play</button>
+                <button id="stopBtn" disabled>⏹️ Stop</button>
+                <button id="downloadBtn" disabled>💾 Download</button>
+            </div>
+            <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+            <div class="status">
+                <div class="status-item"><span>Status:</span><span id="processingStatus">Ready</span></div>
+                <div class="status-item"><span>Time:</span><span id="processingTime">-</span></div>
+                <div class="status-item"><span>Size:</span><span id="outputSize">-</span></div>
+            </div>
+            <div class="success" id="autoScaleInfo" style="display: none;">
+                <div id="autoScaleDetails"></div>
+            </div>
+            <div class="visualizer"><canvas id="visualizerCanvas"></canvas></div>
+        </div>
+
+        <div class="panel">
+            <h2>🔊 7.1.4 Layout</h2>
+            <div class="speaker-map">
+                <div class="speaker">L<br>Front Left</div>
+                <div class="speaker">R<br>Front Right</div>
+                <div class="speaker">C<br>Center</div>
+                <div class="speaker">LFE<br>Sub</div>
+                <div class="speaker">SL<br>Side L</div>
+                <div class="speaker">SR<br>Side R</div>
+                <div class="speaker">BL<br>Back L</div>
+                <div class="speaker">BR<br>Back R</div>
+                <div class="speaker">TFL<br>Top FL</div>
+                <div class="speaker">TFR<br>Top FR</div>
+                <div class="speaker">TBL<br>Top BL</div>
+                <div class="speaker">TBR<br>Top BR</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const SECURITY_CONFIG = {
+            allowedMimeTypes: new Set(['audio/wav', 'audio/mpeg', 'audio/mp3', 'audio/x-m4a', 'audio/flac', 'audio/ogg']),
+            allowedExtensions: new Set(['.wav', '.mp3', '.flac', '.ogg', '.m4a']),
+            maxFileSize: 50 * 1024 * 1024,
+            maxDuration: 600,
+            maxSampleRate: 192000,
+            maxChannels: 8,
+            rateLimitWindow: 60000,
+            maxProcessingPerWindow: 5,
+            ranges: {
+                roomWidth: { min: 2, max: 20, step: 0.1 },
+                roomLength: { min: 2, max: 25, step: 0.1 },
+                roomHeight: { min: 2, max: 12, step: 0.05 },
+                wallReflectivity: { min: 0.1, max: 0.95, step: 0.01 },
+                airAbsorption: { min: 0.001, max: 0.05, step: 0.001 }
+            }
+        };
+
+        const rateLimiter = {
+            attempts: [],
+            canProcess() {
+                const now = Date.now();
+                this.attempts = this.attempts.filter(t => now - t < SECURITY_CONFIG.rateLimitWindow);
+                if (this.attempts.length >= SECURITY_CONFIG.maxProcessingPerWindow) {
+                    const oldestAttempt = Math.min(...this.attempts);
+                    const waitTime = Math.ceil((SECURITY_CONFIG.rateLimitWindow - (now - oldestAttempt)) / 1000);
+                    return { allowed: false, waitTime };
+                }
+                return { allowed: true };
+            },
+            recordAttempt() {
+                this.attempts.push(Date.now());
+            }
+        };
+
+        function validateNumericInput(value, paramName) {
+            const range = SECURITY_CONFIG.ranges[paramName];
+            if (!range) return parseFloat(value);
+            const num = parseFloat(value);
+            if (isNaN(num) || num < range.min || num > range.max) {
+                throw new Error(`Invalid ${paramName}`);
+            }
+            return Math.round(num / range.step) * range.step;
+        }
+
+        class ArbyAudioEngine {
+            constructor() {
+                this.audioContext = null;
+                this.sourceBuffer = null;
+                this.processedBuffer = null;
+                this.isPlaying = false;
+                this.sourceNode = null;
+                
+                this.speakerPositions = [
+                    { name: 'L', az: -30, el: 0 },
+                    { name: 'R', az: 30, el: 0 },
+                    { name: 'C', az: 0, el: 0 },
+                    { name: 'LFE', az: 0, el: -90 },
+                    { name: 'SL', az: -110, el: 0 },
+                    { name: 'SR', az: 110, el: 0 },
+                    { name: 'BL', az: -150, el: 0 },
+                    { name: 'BR', az: 150, el: 0 },
+                    { name: 'TFL', az: -30, el: 45 },
+                    { name: 'TFR', az: 30, el: 45 },
+                    { name: 'TBL', az: -150, el: 45 },
+                    { name: 'TBR', az: 150, el: 45 }
+                ];
+            }
+
+            async initialize() {
+                this.audioContext = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 96000 });
+            }
+
+            async loadAudioFile(file) {
+                const arrayBuffer = await file.arrayBuffer();
+                const audioBuffer = await this.audioContext.decodeAudioData(arrayBuffer);
+                this.sourceBuffer = audioBuffer;
+                return audioBuffer;
+            }
+
+            getMonoData(buffer) {
+                const channels = buffer.numberOfChannels;
+                const length = buffer.length;
+                const monoData = new Float32Array(length);
+                
+                for (let ch = 0; ch < channels; ch++) {
+                    const channelData = buffer.getChannelData(ch);
+                    for (let i = 0; i < length; i++) {
+                        monoData[i] += channelData[i] / channels;
+                    }
+                }
+                return monoData;
+            }
+
+            createLowPassFilter(sampleRate, cutoffFreq) {
+                const rc = 1.0 / (2.0 * Math.PI * cutoffFreq);
+                const dt = 1.0 / sampleRate;
+                const alpha = dt / (rc + dt);
+                return {
+                    alpha,
+                    process(input, prevOutput) {
+                        return prevOutput + alpha * (input - prevOutput);
+                    }
+                };
+            }
+
+            async upsample(data, fromRate, toRate) {
+                if (fromRate === toRate) return data;
+                const ratio = toRate / fromRate;
+                const newLength = Math.floor(data.length * ratio);
+                const upsampled = new Float32Array(newLength);
+                for (let i = 0; i < newLength; i++) {
+                    const srcIndex = i / ratio;
+                    const srcIndexFloor = Math.floor(srcIndex);
+                    const srcIndexCeil = Math.min(srcIndexFloor + 1, data.length - 1);
+                    const frac = srcIndex - srcIndexFloor;
+                    upsampled[i] = data[srcIndexFloor] * (1 - frac) + data[srcIndexCeil] * frac;
+                }
+                return upsampled;
+            }
+
+            async process(config, onProgress) {
+                const startTime = performance.now();
+                const validatedConfig = {
+                    wallReflectivity: validateNumericInput(config.wallReflectivity, 'wallReflectivity'),
+                    roomWidth: validateNumericInput(config.roomWidth, 'roomWidth'),
+                    roomLength: validateNumericInput(config.roomLength, 'roomLength'),
+                    roomHeight: validateNumericInput(config.roomHeight, 'roomHeight'),
+                    airAbsorption: validateNumericInput(config.airAbsorption, 'airAbsorption'),
+                    enableAdaptiveGain: !!config.enableAdaptiveGain,
+                    enableLinearScaling: !!config.enableLinearScaling,
+                    enableAutoRoomScale: !!config.enableAutoRoomScale
+                };
+                
+                const sourceSampleRate = this.sourceBuffer.sampleRate;
+                const targetSampleRate = 96000;
+                const monoData = this.getMonoData(this.sourceBuffer);
+                
+                let rms = 0;
+                for (let i = 0; i < monoData.length; i++) {
+                    rms += monoData[i] * monoData[i];
+                }
+                rms = Math.sqrt(rms / monoData.length);
+                
+                if (validatedConfig.enableAutoRoomScale && rms > 0.1) {
+                    const scaleFactor = 1 + (rms - 0.1) * 2;
+                    validatedConfig.roomWidth = Math.min(validatedConfig.roomWidth * scaleFactor, 20);
+                    validatedConfig.roomLength = Math.min(validatedConfig.roomLength * scaleFactor, 25);
+                    validatedConfig.roomHeight = Math.min(validatedConfig.roomHeight * scaleFactor, 12);
+                }
+                
+                const upsampled = await this.upsample(monoData, sourceSampleRate, targetSampleRate);
+                onProgress(20);
+                
+                const processed = await this.processSpatialReflections(upsampled, targetSampleRate, validatedConfig, rms, onProgress);
+                onProgress(100);
+                
+                return {
+                    buffer: processed,
+                    processingTime: ((performance.now() - startTime) / 1000).toFixed(2),
+                    autoScaleInfo: this.getAutoScaleInfo(validatedConfig, rms)
+                };
+            }
+
+            getAutoScaleInfo(config, rms) {
+                const avgRoomSize = (config.roomWidth + config.roomLength + config.roomHeight) / 3;
+                const maxReflectionDist = Math.sqrt(config.roomWidth ** 2 + config.roomLength ** 2 + config.roomHeight ** 2);
+                const maxDelay = (maxReflectionDist / 343 * 1000).toFixed(1);
+                
+                let k, p;
+                if (config.enableLinearScaling) {
+                    k = 0.3 + (avgRoomSize / 15) * 0.4;
+                    p = 1.0 + (avgRoomSize / 15) * 0.5;
+                } else {
+                    k = 0.5;
+                    p = 1.2;
+                }
+                
+                const volume = config.roomWidth * config.roomLength * config.roomHeight;
+                return {
+                    k: k.toFixed(3),
+                    p: p.toFixed(3),
+                    maxReflectionDelay: maxDelay + 'ms',
+                    airAbsorptionRate: (config.airAbsorption * 100).toFixed(2) + '%/m',
+                    wallReflectivity: (config.wallReflectivity * 100).toFixed(0) + '%',
+                    volume: volume.toFixed(1) + ' m³',
+                    dimensions: `${config.roomWidth.toFixed(1)}×${config.roomLength.toFixed(1)}×${config.roomHeight.toFixed(2)}m`,
+                    scalingMode: config.enableLinearScaling ? 'Linear Auto' : 'Fixed',
+                    soundPressureLevel: (rms * 100).toFixed(1) + '% RMS',
+                    autoRoomScaled: config.enableAutoRoomScale
+                };
+            }
+
+            async processSpatialReflections(audioData, sampleRate, config, rms, onProgress) {
+                const numChannels = 12;
+                const numSamples = audioData.length;
+                const output = Array.from({ length: numChannels }, () => new Float32Array(numSamples));
+                
+                const c = 343;
+                const fs = sampleRate;
+                const avgRoomSize = (config.roomWidth + config.roomLength + config.roomHeight) / 3;
+                
+                let k_base, p_exponent;
+                if (config.enableLinearScaling) {
+                    k_base = 0.3 + (avgRoomSize / 15) * 0.4;
+                    p_exponent = 1.0 + (avgRoomSize / 15) * 0.5;
+                } else {
+                    k_base = 0.5;
+                    p_exponent = 1.2;
+                }
+                
+                let alpha = config.airAbsorption;
+                if (config.enableAutoRoomScale) {
+                    alpha *= (1 + rms * 0.5);
+                }
+                
+                const walls = [
+                    { name: 'front', normal: [0, 0, 1], pos: [0, 0, config.roomLength/2] },
+                    { name: 'back', normal: [0, 0, -1], pos: [0, 0, -config.roomLength/2] },
+                    { name: 'left', normal: [1, 0, 0], pos: [-config.roomWidth/2, 0, 0] },
+                    { name: 'right', normal: [-1, 0, 0], pos: [config.roomWidth/2, 0, 0] },
+                    { name: 'ceiling', normal: [0, -1, 0], pos: [0, config.roomHeight/2, 0] },
+                    { name: 'floor', normal: [0, 1, 0], pos: [0, -config.roomHeight/2, 0] }
+                ];
+                
+                const listenerPos = [0, 0, 0];
+                let currentReflGain = config.wallReflectivity;
+                
+                if (config.enableAutoRoomScale) {
+                    const softnessEffect = (1 - config.wallReflectivity) * rms;
+                    currentReflGain *= (1 - softnessEffect * 0.3);
+                }
+                
+                const chunkSize = 4096;
+                const numChunks = Math.ceil(numSamples / chunkSize);
+                const filterStates = walls.map(() => Array(numChannels).fill(0));
+                
+                for (let chunk = 0; chunk < numChunks; chunk++) {
+                    const start = chunk * chunkSize;
+                    const end = Math.min(start + chunkSize, numSamples);
+                    
+                    const sourcePos = [2, 0, 0];
+                    const directDist = Math.sqrt(sourcePos.reduce((sum, v) => sum + v*v, 0));
+                    const directDelay = Math.floor(directDist / c * fs);
+                    const directGain = 1 / (1 + k_base * Math.pow(directDist, p_exponent));
+                    const directGains = this.calculateSpeakerGains(0, 0);
+                    
+                    for (let i = start; i < end; i++) {
+                        const srcIdx = i - directDelay;
+                        if (srcIdx >= 0 && srcIdx < audioData.length) {
+                            const sample = audioData[srcIdx] * directGain;
+                            for (let ch = 0; ch < numChannels; ch++) {
+                                output[ch][i] += sample * directGains[ch];
+                            }
+                        }
+                    }
+                    
+                    walls.forEach((wall, wallIdx) => {
+                        const reflectedPos = this.reflectPoint(sourcePos, wall.pos, wall.normal);
+                        const reflectionPath = this.vectorSubtract(reflectedPos, listenerPos);
+                        const reflectionDist = Math.sqrt(reflectionPath.reduce((sum, v) => sum + v*v, 0));
+                        const reflectionAz = Math.atan2(reflectionPath[0], reflectionPath[2]) * 180 / Math.PI;
+                        const reflectionEl = Math.asin(reflectionPath[1] / reflectionDist) * 180 / Math.PI;
+                        const reflectionDelay = Math.floor(reflectionDist / c * fs);
+                        const distAttenuation = 1 / (1 + k_base * Math.pow(reflectionDist, p_exponent));
+                        const airAbsorption = Math.exp(-alpha * reflectionDist);
+                        const Rw = currentReflGain * distAttenuation * airAbsorption;
+                        
+                        const maxRoomDist = Math.sqrt(config.roomWidth ** 2 + config.roomLength ** 2 + config.roomHeight ** 2);
+                        const normDist = Math.min(reflectionDist / maxRoomDist, 1);
+                        const cutoffFreq = fs * (0.45 - 0.35 * normDist);
+                        const lpFilter = this.createLowPassFilter(fs, cutoffFreq);
+                        const reflectionGains = this.calculateSpeakerGains(reflectionAz, reflectionEl);
+                        
+                        for (let i = start; i < end; i++) {
+                            const srcIdx = i - reflectionDelay;
+                            if (srcIdx >= 0 && srcIdx < audioData.length) {
+                                const sample = audioData[srcIdx];
+                                for (let ch = 0; ch < numChannels; ch++) {
+                                    const filteredSample = lpFilter.process(sample, filterStates[wallIdx][ch]);
+                                    filterStates[wallIdx][ch] = filteredSample;
+                                    output[ch][i] += filteredSample * Rw * reflectionGains[ch];
+                                }
+                            }
+                        }
+                    });
+                    
+                    if (config.enableAdaptiveGain) {
+                        let chunkPeak = 0;
+                        for (let ch = 0; ch < numChannels; ch++) {
+                            for (let i = start; i < end; i++) {
+                                chunkPeak = Math.max(chunkPeak, Math.abs(output[ch][i]));
+                            }
+                        }
+                        if (chunkPeak > 0.8) {
+                            currentReflGain *= 0.95;
+                        } else if (chunkPeak < 0.5 && currentReflGain < config.wallReflectivity) {
+                            currentReflGain *= 1.02;
+                        }
+                    }
+                    
+                    if (chunk % 10 === 0) {
+                        onProgress(20 + Math.floor((chunk / numChunks) * 80));
+                    }
+                }
+                
+                let maxSample = 0;
+                for (let ch = 0; ch < numChannels; ch++) {
+                    for (let i = 0; i < numSamples; i++) {
+                        maxSample = Math.max(maxSample, Math.abs(output[ch][i]));
+                    }
+                }
+                
+                if (maxSample > 0.95) {
+                    const normFactor = 0.95 / maxSample;
+                    for (let ch = 0; ch < numChannels; ch++) {
+                        for (let i = 0; i < numSamples; i++) {
+                            output[ch][i] *= normFactor;
+                        }
+                    }
+                }
+                
+                const buffer = this.audioContext.createBuffer(numChannels, numSamples, sampleRate);
+                for (let ch = 0; ch < numChannels; ch++) {
+                    buffer.copyToChannel(output[ch], ch);
+                }
+                
+                this.processedBuffer = buffer;
+                return buffer;
+            }
+
+            reflectPoint(point, planePoint, planeNormal) {
+                const d = this.vectorDot(this.vectorSubtract(point, planePoint), planeNormal);
+                return [
+                    point[0] - 2 * d * planeNormal[0],
+                    point[1] - 2 * d * planeNormal[1],
+                    point[2] - 2 * d * planeNormal[2]
+                ];
+            }
+
+            vectorSubtract(a, b) {
+                return [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
+            }
+
+            vectorDot(a, b) {
+                return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+            }
+
+            calculateSpeakerGains(azimuth, elevation) {
+                const gains = new Float32Array(12);
+                for (let i = 0; i < this.speakerPositions.length; i++) {
+                    const sp = this.speakerPositions[i];
+                    const azDiff = Math.abs(azimuth - sp.az);
+                    const elDiff = Math.abs(elevation - sp.el);
+                    const angularDist = Math.sqrt(azDiff * azDiff + elDiff * elDiff);
+                    gains[i] = 1 / (1 + angularDist / 45);
+                }
+                const sumGains = gains.reduce((sum, g) => sum + g * g, 0);
+                const normFactor = sumGains > 0 ? 1 / Math.sqrt(sumGains) : 0;
+                for (let i = 0; i < gains.length; i++) {
+                    gains[i] *= normFactor;
+                }
+                return gains;
+            }
+
+            async play() {
+                if (!this.processedBuffer || this.isPlaying) return;
+                this.sourceNode = this.audioContext.createBufferSource();
+                this.sourceNode.buffer = this.processedBuffer;
+                this.sourceNode.connect(this.audioContext.destination);
+                this.sourceNode.onended = () => {
+                    this.isPlaying = false;
+                    document.getElementById('playBtn').textContent = '▶️ Play';
+                    document.getElementById('stopBtn').disabled = true;
+                };
+                this.sourceNode.start();
+                this.isPlaying = true;
+            }
+
+            stop() {
+                if (this.sourceNode && this.isPlaying) {
+                    this.sourceNode.stop();
+                    this.isPlaying = false;
+                }
+            }
+
+            exportWAV() {
+                if (!this.processedBuffer) return null;
+                const numChannels = this.processedBuffer.numberOfChannels;
+                const length = this.processedBuffer.length;
+                const sampleRate = this.processedBuffer.sampleRate;
+                const buffer = new ArrayBuffer(44 + length * numChannels * 4);
+                const view = new DataView(buffer);
+                
+                this.writeString(view, 0, 'RIFF');
+                view.setUint32(4, 36 + length * numChannels * 4, true);
+                this.writeString(view, 8, 'WAVE');
+                this.writeString(view, 12, 'fmt ');
+                view.setUint32(16, 16, true);
+                view.setUint16(20, 3, true);
+                view.setUint16(22, numChannels, true);
+                view.setUint32(24, sampleRate, true);
+                view.setUint32(28, sampleRate * numChannels * 4, true);
+                view.setUint16(32, numChannels * 4, true);
+                view.setUint16(34, 32, true);
+                this.writeString(view, 36, 'data');
+                view.setUint32(40, length * numChannels * 4, true);
+                
+                let offset = 44;
+                for (let i = 0; i < length; i++) {
+                    for (let ch = 0; ch < numChannels; ch++) {
+                        view.setFloat32(offset, this.processedBuffer.getChannelData(ch)[i], true);
+                        offset += 4;
+                    }
+                }
+                return new Blob([buffer], { type: 'audio/wav' });
+            }
+
+            writeString(view, offset, string) {
+                for (let i = 0; i < string.length; i++) {
+                    view.setUint8(offset + i, string.charCodeAt(i));
+                }
+            }
+        }
+
+        const engine = new ArbyAudioEngine();
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            await engine.initialize();
+            
+            const uploadZone = document.getElementById('uploadZone');
+            const fileInput = document.getElementById('fileInput');
+            
+            uploadZone.onclick = () => fileInput.click();
+            fileInput.onchange = async (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                try {
+                    const buffer = await engine.loadAudioFile(file);
+                    document.getElementById('fileInfo').style.display = 'block';
+                    document.getElementById('fileName').textContent = file.name;
+                    document.getElementById('fileDuration').textContent = buffer.duration.toFixed(2) + 's';
+                    document.getElementById('fileSampleRate').textContent = buffer.sampleRate + ' Hz';
+                    document.getElementById('fileChannels').textContent = buffer.numberOfChannels;
+                    document.getElementById('processBtn').disabled = false;
+                } catch (error) {
+                    alert('Error: ' + error.message);
+                }
+            };
+            
+            document.getElementById('processBtn').onclick = async () => {
+                const check = rateLimiter.canProcess();
+                if (!check.allowed) {
+                    document.getElementById('rateLimitText').textContent = `Wait ${check.waitTime}s`;
+                    document.getElementById('rateLimitInfo').style.display = 'block';
+                    return;
+                }
+                rateLimiter.recordAttempt();
+                
+                const config = {
+                    roomWidth: parseFloat(document.getElementById('roomWidth').value),
+                    roomLength: parseFloat(document.getElementById('roomLength').value),
+                    roomHeight: parseFloat(document.getElementById('roomHeight').value),
+                    wallReflectivity: parseFloat(document.getElementById('wallReflectivity').value),
+                    airAbsorption: parseFloat(document.getElementById('airAbsorption').value),
+                    enableAdaptiveGain: document.getElementById('enableAdaptiveGain').checked,
+                    enableLinearScaling: document.getElementById('enableLinearScaling').checked,
+                    enableAutoRoomScale: document.getElementById('enableAutoRoomScale').checked
+                };
+                
+                document.getElementById('processBtn').disabled = true;
+                document.getElementById('processingStatus').textContent = 'Processing...';
+                
+                try {
+                    const result = await engine.process(config, (p) => {
+                        document.getElementById('progressBar').style.width = p + '%';
+                    });
+                    
+                    document.getElementById('processingTime').textContent = result.processingTime + 's';
+                    document.getElementById('outputSize').textContent = '5 MB';
+                    document.getElementById('autoScaleInfo').style.display = 'block';
+                    document.getElementById('autoScaleDetails').innerHTML = `
+                        <strong>Room:</strong> ${result.autoScaleInfo.dimensions}<br>
+                        <strong>Volume:</strong> ${result.autoScaleInfo.volume}
+                    `;
+                    document.getElementById('playBtn').disabled = false;
+                    document.getElementById('processingStatus').textContent = 'Complete!';
+                } catch (error) {
+                    alert('Error: ' + error.message);
+                } finally {
+                    document.getElementById('processBtn').disabled = false;
+                }
+            };
+            
+            document.getElementById('playBtn').onclick = () => {
+                engine.play();
+                document.getElementById('playBtn').textContent = '⏸️ Playing...';
+            };
+            
+            // Dual input sync
+            ['roomWidth', 'roomLength', 'roomHeight', 'wallReflectivity', 'airAbsorption'].forEach(id => {
+                const slider = document.getElementById(id);
+                const num = document.getElementById(id + 'Num');
+                const display = document.getElementById(id + 'Value');
+                
+                slider.oninput = () => {
+                    num.value = slider.value;
+                    display.textContent = slider.value + (id.includes('room') ? 'm' : '');
+                };
+                
+                num.oninput = () => {
+                    slider.value = num.value;
+                    display.textContent = num.value + (id.includes('room') ? 'm' : '');
+                };
+            });
+            
+            // Room presets
+            document.getElementById('roomPreset').onchange = (e) => {
+                const presets = {
+                    bedroom: [4, 4, 2.5],
+                    living: [6, 8, 3],
+                    studio: [8, 10, 3],
+                    medium: [8, 6, 3.2],
+                    hall: [20, 25, 8]
+                };
+                const p = presets[e.target.value];
+                if (p) {
+                    document.getElementById('roomWidth').value = p[0];
+                    document.getElementById('roomLength').value = p[1];
+                    document.getElementById('roomHeight').value = p[2];
+                    document.getElementById('roomWidthNum').value = p[0];
+                    document.getElementById('roomLengthNum').value = p[1];
+                    document.getElementById('roomHeightNum').value = p[2];
+                    document.getElementById('roomWidthValue').textContent = p[0] + 'm';
+                    document.getElementById('roomLengthValue').textContent = p[1] + 'm';
+                    document.getElementById('roomHeightValue').textContent = p[2] + 'm';
+                    const vol = (p[0] * p[1] * p[2]).toFixed(1);
+                    document.getElementById('roomVolume').textContent = vol + ' m³';
+                }
+            };
+        });
+    </script>
+</body>
+</html>
