@@ -104,6 +104,16 @@
             font-weight: 500;
             color: #f39c12;
         }
+       
+        #progressBarFill {
+    height: 100%;
+    background: linear-gradient(90deg, #e94560, #f39c12);
+    width: 0%;
+    transition: width 0.3s;
+    text-align: center;
+    color: white;
+    font-size: 0.8em;
+}
 
         .input-row {
             display: flex;
@@ -306,7 +316,8 @@
     <div class="container">
         <header>
             <div class="brand-logo">ARBY AUDIO</div>
-            <p class="brand-tagline">Physics-Based 3D Spatial Audio | 7.1.4 @ 96kHz 32-bit</p>
+            <p class="brand-tagline">-- Available at <a class="brand-logo" href="https://github.com/space-contributes/arby-audio_3d/">GitHub Project Link </a>, | Physics-Based 3D Spatial Audio | 7.1.4 @ 96kHz 32-bit |
+             </p>
         </header>
 
         <div class="main-grid">
@@ -315,7 +326,7 @@
                 <div class="upload-zone" id="uploadZone">
                     <div style="font-size: 3em;">🎧</div>
                     <p style="font-size: 1.2em;">Drop audio file or click</p>
-                    <p style="opacity: 0.7; font-size: 0.9em;">WAV, MP3, FLAC, OGG (Max 50MB)</p>
+                    <p style="opacity: 0.7; font-size: 0.9em;">WAV, MP3, FLAC, OGG, MP4, WEBM, AVI</p>
                 </div>
                 <input type="file" id="fileInput" accept=".wav,.mp3,.flac,.ogg,.m4a" />
                 <div class="info">
@@ -343,6 +354,27 @@
                         <option value="studio">Studio (8×10×3m)</option>
                         <option value="medium" selected>Medium Room (8×6×3.2m)</option>
                         <option value="hall">Concert Hall (20×25×8m)</option>
+                        <meta name="description" content="Arby Audio 3D  Cinematic Spatial Sound Engine   Experience living sound that adapts bounces and reacts without configuration  with advanced objectbased 714 spatial realismMade with  by Spacecode WITH 7 YEARS OF MAKINGVersionhttpsimgshieldsiobadgeversion22blueContributions WelcomehttpsimgshieldsiobadgecontributionswelcomebrightgreenPython Versionhttpsimgshieldsiobadgepython311blueBuild StatushttpsimgshieldsiobadgebuildpassingbrightgreenLast Commithttpsimgshieldsiogithublastcommitspacecontributesarbyaudio_3dStarshttpsimgshieldsiogithubstarsspacecontributesarbyaudio_3dstylesocialForkshttpsimgshieldsiogithubforksspacecontributesarbyaudio_3dstylesocialOpen Issueshttpsimgshieldsiogithubissuesspacecontributesarbyaudio_3dClosed Issueshttpsimgshieldsiogithubissuesclosedspacecontributesarbyaudio_3dDownloadshttpsimgshieldsiogithubdownloadsspacecontributesarbyaudio_3dtotalMaintenancehttpsimgshieldsiobadgemaintenanceactivebrightgreenSupported OShttpsimgshieldsiobadgeoswindows2020macOS2020LinuxlightgreyTop Languagehttpsimgshieldsiogithublanguagestopspacecontributesarbyaudio_3dRepo Sizehttpsimgshieldsiogithubreposizespacecontributesarbyaudio_3dCommitshttpsimgshieldsiogithubcommitactivitymspacecontributesarbyaudio_3dIssues Closedhttpsimgshieldsiogithubissuesprclosedspacecontributesarbyaudio_3dArby Audio Logohttpsrawgithubusercontentcomspacecontributesarbyaudio_3drefsheadsmainArby20Logo20Design20Proto11jpgArby Audio delivers cinematicgrade 3D sound with immersive 714 spatial audioEnjoy living sound that reacts in real time bringing games movies and music to life with natural reflections precise positioning and stunning binaural effects  Arby Audio vs the typical system  The typical system Maps sound objects as virtual waves with delays and reflections Provides 360 surround immersion Default quality 42kHz  24bit Adaptive spatial realism across devices Widely adopted in theaters and consumer hardware depends on system configuration  Arby AudioLiving sound that bounces adapts and reacts Not just heard but felt Smart room scaling brings audio to life  Reflections furniture occlusion immersive realismwithout any sensors cameras microphones Mind  blown Arby Audio pushes beyond traditional audio engines with realworld acoustic simulation Room geometry  reflections Distancebased and sound wave bouncing time delays Frequencydependent lowpass filtering if bounced sound wave if bounced less frequency  clipping for random high frequency audio Background noise reduction Speaker mapping to 714 layout 7 down 4 up 1 sub Binaural downmix for headphones Trajectorybased moving sound sources Furnitureenvironment scanning for realistic reflections Automatic normalization  highfrequency smoothing Highfidelity output 96kHz  32bit 4 industry standard Fully open source  customizable  Feature Breakdown Room Geometry  Reflections  Sound bounces naturally off virtual walls ceilings and objects Virtual Object Detection  Sounds interact with detected scene objects Realistic Delays  Travel  reflection delays modeled after real physics MaterialAware Filtering  Simulates absorption  air damping Speaker Mapping  True 714 Atmosstyle layout Binaural Downmix  Immersive stereo playback Background Noise Removal  Removes background noise Dynamic Trajectories  Moving sources with path realism Environment Scanning  Furnitureobjects intelligently shape reflections Clipping Protection  Autonormalization ensures stable output Room Geometry  Reflections  Sound bounces naturally off virtual walls ceilings and objects Detects Virtual Objects  Sound bounces off naturally over virtual objects detected in the scene Sound Bounces  with a delay for realism to reach the object and bounce off it DistanceBased Time Delays  Delays replicate realworld propagation for precise spatialization FrequencyDependent LowPass Filtering  Simulates material absorption and air damping StudioGrade Fidelity  96kHz  32bit audio 4 the industry standard  Who Is It For  Gamers  Game Developers  Audiophiles  Music Producers  VR  AR Developers  Film  Multimedia Editors  Educational  Research Labs  Setup  UsageClone or download the repo or download the releases the latest onebashgit clone httpsgithubcomspacecodearbyaudio_3dgitcd arbyaudio_3dOR DOWNLOAD FIELS INDUVISUALLY PYTHON OR HTML YOU CHOOSEHTMLOpen the file in a browserPythonRun the engine with your audio filebashpython PYTHONSCRIPTpy music_url httpsyourmusicurlcomfilewavOR DOWNLOAD THE FILES INDIVIDUALLY through the GitHub websitereplace with your own wav URL OR FOR WINDOWSStill requires cloning the repo or downloading files individually from the GitHub websiteRun the WOOBAT as administratorThen if it gets stuck restart itIf it is not processing the WAV try shortening the URL using tinyurlcom and try again with the updated link FOR MACOS AND LINUXor WOOsh for Linux OR MacOS file as rootsudosuFor shchmod x WOOsh  sudo WOOshThen if it gets stuck restart it If it were to be stuck on Python installation confirm Python is installed by a command and then restart WOOsh because sometimes it forgets that Python is done installing  Roadmap Google Drive integration Windows bat launcher doubleclick ready GUI frontend for nontechnical users Expanded VRAR SDK support  License  LegalBy downloading installing or using Arby Audio 3D you agree to the terms in LICENSEmdLICENSEmdThis project is for educational and ethical use only For educational and ethical testing only  unauthorized use is illegal Contributions welcome Fork the repo create a branch and submit a PR Disclaimer  Educational and Ethical Use OnlyThis project is created strictly for educational and ethical use only All product names trademarks and registered trademarks mentioned are the property of their respective ownersThis project is not affiliated with endorsed by or sponsored by any company brand or trademark holderThis service is provided on a asis basis with good faith and no obligations or warranties towards the same Not to DefameThis material is intended for informational research and educational purposes only It is not intended to disparage defame or negatively impact the reputation of any company brand or trademark holderThe authors intent is strictly educational and researchfocused Any misuse of this project or its materials is the sole responsibility of the user The author shall not be liable or responsible for such misuse as that was never the intent Independent DevelopmentArby Audio 3D is an independent opensource project While it draws inspiration from cinematicgrade audio technologies such as objectbased surround and spatial audio systems it has no official affiliation with any company brand or trademark holder Trademark NoticeAll names logos and brands mentioned in this project are the property of their respective owners References are made solely for descriptive educational and comparative purposes and even indirect references and other types of references that may cause INCIDENTAL SPECIAL CONSEQUENTIAL OR PUNITIVE DAMAGES INCLUDING WITHOUT LIMITATION regarding LOSS OF PROFITS LOSS OF DATA BUSINESS INTERRUPTION OR LOSS OF BUSINESS OPPORTUNITIES"> <meta name="keywords" content="3D Audio, Surround Sound, Spatial Engine, Arby Audio, 7.1.4, Binaural"> <meta name="description" content="3D Arby Audio Engine - Realistic 7.1.4 surround sound simulation with physical reflection modeling."> <!-- Core metadata -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="title" content="Arby Audio 3D - Cinematic Spatial Sound Engine">
+<meta name="description" content="Experience living sound that adapts, bounces, and reacts with advanced object-based 7.1.4 spatial realism. Made by Spacecode after 7 years of innovation.">
+<meta name="keywords" content="3D Audio, Spatial Sound, Surround Engine, Binaural, 7.1.4, Dolby Atmos, Cinematic Audio, Python, Arby Audio, Spacecode, Space-code, Space-code">
+<meta name="author" content="Spacecode">
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph (for social previews) -->
+<meta property="og:title" content="Arby Audio 3D - Cinematic Spatial Sound Engine">
+<meta property="og:description" content="Living sound that adapts and reacts — advanced 7.1.4 spatial realism. Experience audio that feels alive.">
+<meta property="og:image" content="https://raw.githubusercontent.com/spacecontributes/arbyaudio_3d/refs/heads/main/Arby%20Logo%20Design%20Proto11.jpg">
+<meta property="og:url" content="https://spacecontributes.github.io/arby-audio_3d/">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Arby Audio 3D - Cinematic Spatial Sound Engine">
+<meta name="twitter:description" content="Living sound that bounces, adapts, and reacts — true 7.1.4 spatial realism by Spacecode.">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/spacecontributes/arbyaudio_3d/refs/heads/main/Arby%20Logo%20Design%20Proto11.jpg">
                     </select>
                     <div style="margin-top: 10px;"><strong>📦 Volume:</strong> <span id="roomVolume">153.6 m³</span></div>
                 </div>
@@ -411,12 +443,14 @@
 
         <div class="panel">
             <h2>🎛️ Processing</h2>
-            <div>
-                <button id="processBtn" disabled>⚡ Process Audio</button>
-                <button id="playBtn" disabled>▶️ Play</button>
-                <button id="stopBtn" disabled>⏹️ Stop</button>
-                <button id="downloadBtn" disabled>💾 Download</button>
-            </div>
+               <div>
+    <button id="processBtn" disabled>⚡ Process Audio</button>
+    <button id="playBtn" disabled>▶️ Play</button>
+    <button id="stopBtn" disabled>⏹️ Stop</button>
+    <button id="downloadBtn" disabled>💾 Download Audio</button>
+    <button id="createVideoBtn" disabled>🎬 Create Video</button>
+</div>
+          
             <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
             <div class="status">
                 <div class="status-item"><span>Status:</span><span id="processingStatus">Ready</span></div>
@@ -449,23 +483,21 @@
     </div>
 
     <script>
-        const SECURITY_CONFIG = {
-            allowedMimeTypes: new Set(['audio/wav', 'audio/mpeg', 'audio/mp3', 'audio/x-m4a', 'audio/flac', 'audio/ogg']),
-            allowedExtensions: new Set(['.wav', '.mp3', '.flac', '.ogg', '.m4a']),
-            maxFileSize: 50 * 1024 * 1024,
-            maxDuration: 600,
-            maxSampleRate: 192000,
-            maxChannels: 8,
-            rateLimitWindow: 60000,
-            maxProcessingPerWindow: 5,
-            ranges: {
-                roomWidth: { min: 2, max: 20, step: 0.1 },
-                roomLength: { min: 2, max: 25, step: 0.1 },
-                roomHeight: { min: 2, max: 12, step: 0.05 },
-                wallReflectivity: { min: 0.1, max: 0.95, step: 0.01 },
-                airAbsorption: { min: 0.001, max: 0.05, step: 0.001 }
-            }
-        };
+       const SECURITY_CONFIG = {
+    allowedMimeTypes: new Set(['audio/wav', 'audio/mpeg', 'audio/mp3', 'audio/x-m4a', 'audio/flac', 'audio/ogg', 'video/mp4', 'video/webm', 'video/avi']),
+    allowedExtensions: new Set(['.wav', '.mp3', '.flac', '.ogg', '.m4a', '.mp4', '.webm', '.avi']),
+    maxSampleRate: 192000,
+    maxChannels: 8,
+    rateLimitWindow: 60000,
+    maxProcessingPerWindow: 5,
+    ranges: {
+        roomWidth: { min: 2, max: 20, step: 0.1 },
+        roomLength: { min: 2, max: 25, step: 0.1 },
+        roomHeight: { min: 2, max: 12, step: 0.05 },
+        wallReflectivity: { min: 0.1, max: 0.95, step: 0.01 },
+        airAbsorption: { min: 0.001, max: 0.05, step: 0.001 }
+    }
+};
 
         const rateLimiter = {
             attempts: [],
@@ -990,6 +1022,165 @@
                 }
             };
         });
+        // Video upload handling
+const videoUpload = document.getElementById('videoUpload');
+const videoUploadZone = document.getElementById('videoUploadZone');
+const videoPreview = document.getElementById('videoPreview');
+const createVideoBtn = document.getElementById('createVideoBtn');
+const canvas = document.getElementById('canvas');
+const progressBar = document.getElementById('progressBar');
+const progressBarFill = document.getElementById('progressBarFill');
+let videoFile, audioFile, mediaRecorder, recordedChunks = [];
+
+videoUploadZone.onclick = () => videoUpload.click();
+
+videoUpload.addEventListener('change', (event) => {
+    videoFile = event.target.files[0];
+    if (videoFile) {
+        const videoURL = URL.createObjectURL(videoFile);
+        videoPreview.src = videoURL;
+        videoPreview.style.display = 'block';
+        checkFiles();
+    }
+});
+
+fileInput.addEventListener('change', (event) => {
+    audioFile = event.target.files[0];
+    if (audioFile) {
+        checkFiles();
+        // Existing audio file handling
+        engine.loadAudioFile(audioFile).then(buffer => {
+            document.getElementById('fileInfo').style.display = 'block';
+            document.getElementById('fileName').textContent = audioFile.name;
+            document.getElementById('fileDuration').textContent = buffer.duration.toFixed(2) + 's';
+            document.getElementById('fileSampleRate').textContent = buffer.sampleRate + ' Hz';
+            document.getElementById('fileChannels').textContent = buffer.numberOfChannels;
+            document.getElementById('processBtn').disabled = false;
+        }).catch(error => alert('Error: ' + error.message));
+    }
+});
+
+function checkFiles() {
+    if (audioFile) {
+        document.getElementById('processBtn').disabled = false;
+        document.getElementById('downloadBtn').disabled = false;
+    }
+    if (videoFile && audioFile) {
+        createVideoBtn.disabled = false;
+    }
+}
+
+// Stop button functionality
+document.getElementById('stopBtn').onclick = () => {
+    engine.stop();
+    if (mediaRecorder && mediaRecorder.state === 'recording') {
+        mediaRecorder.stop();
+    }
+    document.getElementById('playBtn').textContent = '▶️ Play';
+    document.getElementById('stopBtn').disabled = true;
+};
+
+// Download button for audio
+document.getElementById('downloadBtn').onclick = () => {
+    const blob = engine.exportWAV();
+    if (blob) {
+        const url = URL.createObjectURL(blob);
+        const downloadLink = document.createElement('a');
+        downloadLink.href = url;
+        downloadLink.download = 'processed-audio.wav';
+        downloadLink.textContent = 'Download Processed Audio';
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+    }
+};
+
+// Video processing with audio merging
+createVideoBtn.addEventListener('click', () => {
+    createVideoBtn.disabled = true;
+    progressBar.style.display = 'block';
+    recordedChunks = [];
+
+    // Set canvas dimensions to match video
+    canvas.width = videoPreview.videoWidth;
+    canvas.height = videoPreview.videoHeight;
+    const context = canvas.getContext('2d');
+    videoPreview.play();
+
+    // Draw video frames onto canvas
+    function drawFrame() {
+        if (!videoPreview.paused && !videoPreview.ended) {
+            context.drawImage(videoPreview, 0, 0, canvas.width, canvas.height);
+            requestAnimationFrame(drawFrame);
+        }
+    }
+    drawFrame();
+
+    // Capture canvas stream and processed audio
+    const canvasStream = canvas.captureStream(30); // 30 FPS
+    const processedBlob = engine.exportWAV();
+    const audioURL = URL.createObjectURL(processedBlob);
+    const audioElement = new Audio(audioURL);
+    const audioContext = new AudioContext();
+    const audioStream = audioContext.createMediaElementSource(audioElement);
+    const destination = audioContext.createMediaStreamDestination();
+    audioStream.connect(destination);
+
+    const combinedStream = new MediaStream([
+        ...canvasStream.getVideoTracks(),
+        ...destination.stream.getAudioTracks()
+    ]);
+
+    // Record the merged stream
+    mediaRecorder = new MediaRecorder(combinedStream, { mimeType: 'video/webm' });
+
+    mediaRecorder.ondataavailable = event => {
+        if (event.data.size > 0) {
+            recordedChunks.push(event.data);
+        }
+    };
+
+    mediaRecorder.onstop = () => {
+        const blob = new Blob(recordedChunks, { type: 'video/webm' });
+        const url = URL.createObjectURL(blob);
+        const downloadLink = document.createElement('a');
+        downloadLink.href = url;
+        downloadLink.download = 'merged-video.webm';
+        downloadLink.textContent = 'Download Merged Video';
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+        progressBarFill.style.width = '100%';
+        progressBarFill.textContent = '100%';
+        createVideoBtn.disabled = false;
+    };
+
+    mediaRecorder.onstart = () => {
+        audioElement.play();
+        const duration = videoPreview.duration * 1000;
+        const interval = setInterval(() => {
+            const currentTime = videoPreview.currentTime * 1000;
+            const progress = (currentTime / duration) * 100;
+            progressBarFill.style.width = `${progress}%`;
+            progressBarFill.textContent = `${Math.floor(progress)}%`;
+            if (videoPreview.paused || videoPreview.ended) {
+                clearInterval(interval);
+            }
+        }, 100);
+    };
+
+    mediaRecorder.start();
+    setTimeout(() => {
+        mediaRecorder.stop();
+        audioElement.pause();
+    }, videoPreview.duration * 1000);
+});
     </script>
 </body>
+
 </html>
+
+
+
+
+
