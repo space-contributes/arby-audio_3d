@@ -104,6 +104,16 @@
             font-weight: 500;
             color: #f39c12;
         }
+       
+        #progressBarFill {
+    height: 100%;
+    background: linear-gradient(90deg, #e94560, #f39c12);
+    width: 0%;
+    transition: width 0.3s;
+    text-align: center;
+    color: white;
+    font-size: 0.8em;
+}
 
         .input-row {
             display: flex;
@@ -316,7 +326,7 @@
                 <div class="upload-zone" id="uploadZone">
                     <div style="font-size: 3em;">🎧</div>
                     <p style="font-size: 1.2em;">Drop audio file or click</p>
-                    <p style="opacity: 0.7; font-size: 0.9em;">WAV, MP3, FLAC, OGG (Max 50MB)</p>
+                    <p style="opacity: 0.7; font-size: 0.9em;">WAV, MP3, FLAC, OGG, MP4, WEBM, AVI</p>
                 </div>
                 <input type="file" id="fileInput" accept=".wav,.mp3,.flac,.ogg,.m4a" />
                 <div class="info">
@@ -433,12 +443,14 @@
 
         <div class="panel">
             <h2>🎛️ Processing</h2>
-            <div>
-                <button id="processBtn" disabled>⚡ Process Audio</button>
-                <button id="playBtn" disabled>▶️ Play</button>
-                <button id="stopBtn" disabled>⏹️ Stop</button>
-                <button id="downloadBtn" disabled>💾 Download</button>
-            </div>
+               <div>
+    <button id="processBtn" disabled>⚡ Process Audio</button>
+    <button id="playBtn" disabled>▶️ Play</button>
+    <button id="stopBtn" disabled>⏹️ Stop</button>
+    <button id="downloadBtn" disabled>💾 Download Audio</button>
+    <button id="createVideoBtn" disabled>🎬 Create Video</button>
+</div>
+          
             <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
             <div class="status">
                 <div class="status-item"><span>Status:</span><span id="processingStatus">Ready</span></div>
@@ -471,23 +483,21 @@
     </div>
 
     <script>
-        const SECURITY_CONFIG = {
-            allowedMimeTypes: new Set(['audio/wav', 'audio/mpeg', 'audio/mp3', 'audio/x-m4a', 'audio/flac', 'audio/ogg']),
-            allowedExtensions: new Set(['.wav', '.mp3', '.flac', '.ogg', '.m4a']),
-            maxFileSize: 50 * 1024 * 1024,
-            maxDuration: 600,
-            maxSampleRate: 192000,
-            maxChannels: 8,
-            rateLimitWindow: 60000,
-            maxProcessingPerWindow: 5,
-            ranges: {
-                roomWidth: { min: 2, max: 20, step: 0.1 },
-                roomLength: { min: 2, max: 25, step: 0.1 },
-                roomHeight: { min: 2, max: 12, step: 0.05 },
-                wallReflectivity: { min: 0.1, max: 0.95, step: 0.01 },
-                airAbsorption: { min: 0.001, max: 0.05, step: 0.001 }
-            }
-        };
+       const SECURITY_CONFIG = {
+    allowedMimeTypes: new Set(['audio/wav', 'audio/mpeg', 'audio/mp3', 'audio/x-m4a', 'audio/flac', 'audio/ogg', 'video/mp4', 'video/webm', 'video/avi']),
+    allowedExtensions: new Set(['.wav', '.mp3', '.flac', '.ogg', '.m4a', '.mp4', '.webm', '.avi']),
+    maxSampleRate: 192000,
+    maxChannels: 8,
+    rateLimitWindow: 60000,
+    maxProcessingPerWindow: 5,
+    ranges: {
+        roomWidth: { min: 2, max: 20, step: 0.1 },
+        roomLength: { min: 2, max: 25, step: 0.1 },
+        roomHeight: { min: 2, max: 12, step: 0.05 },
+        wallReflectivity: { min: 0.1, max: 0.95, step: 0.01 },
+        airAbsorption: { min: 0.001, max: 0.05, step: 0.001 }
+    }
+};
 
         const rateLimiter = {
             attempts: [],
@@ -1012,10 +1022,164 @@
                 }
             };
         });
+        // Video upload handling
+const videoUpload = document.getElementById('videoUpload');
+const videoUploadZone = document.getElementById('videoUploadZone');
+const videoPreview = document.getElementById('videoPreview');
+const createVideoBtn = document.getElementById('createVideoBtn');
+const canvas = document.getElementById('canvas');
+const progressBar = document.getElementById('progressBar');
+const progressBarFill = document.getElementById('progressBarFill');
+let videoFile, audioFile, mediaRecorder, recordedChunks = [];
+
+videoUploadZone.onclick = () => videoUpload.click();
+
+videoUpload.addEventListener('change', (event) => {
+    videoFile = event.target.files[0];
+    if (videoFile) {
+        const videoURL = URL.createObjectURL(videoFile);
+        videoPreview.src = videoURL;
+        videoPreview.style.display = 'block';
+        checkFiles();
+    }
+});
+
+fileInput.addEventListener('change', (event) => {
+    audioFile = event.target.files[0];
+    if (audioFile) {
+        checkFiles();
+        // Existing audio file handling
+        engine.loadAudioFile(audioFile).then(buffer => {
+            document.getElementById('fileInfo').style.display = 'block';
+            document.getElementById('fileName').textContent = audioFile.name;
+            document.getElementById('fileDuration').textContent = buffer.duration.toFixed(2) + 's';
+            document.getElementById('fileSampleRate').textContent = buffer.sampleRate + ' Hz';
+            document.getElementById('fileChannels').textContent = buffer.numberOfChannels;
+            document.getElementById('processBtn').disabled = false;
+        }).catch(error => alert('Error: ' + error.message));
+    }
+});
+
+function checkFiles() {
+    if (audioFile) {
+        document.getElementById('processBtn').disabled = false;
+        document.getElementById('downloadBtn').disabled = false;
+    }
+    if (videoFile && audioFile) {
+        createVideoBtn.disabled = false;
+    }
+}
+
+// Stop button functionality
+document.getElementById('stopBtn').onclick = () => {
+    engine.stop();
+    if (mediaRecorder && mediaRecorder.state === 'recording') {
+        mediaRecorder.stop();
+    }
+    document.getElementById('playBtn').textContent = '▶️ Play';
+    document.getElementById('stopBtn').disabled = true;
+};
+
+// Download button for audio
+document.getElementById('downloadBtn').onclick = () => {
+    const blob = engine.exportWAV();
+    if (blob) {
+        const url = URL.createObjectURL(blob);
+        const downloadLink = document.createElement('a');
+        downloadLink.href = url;
+        downloadLink.download = 'processed-audio.wav';
+        downloadLink.textContent = 'Download Processed Audio';
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+    }
+};
+
+// Video processing with audio merging
+createVideoBtn.addEventListener('click', () => {
+    createVideoBtn.disabled = true;
+    progressBar.style.display = 'block';
+    recordedChunks = [];
+
+    // Set canvas dimensions to match video
+    canvas.width = videoPreview.videoWidth;
+    canvas.height = videoPreview.videoHeight;
+    const context = canvas.getContext('2d');
+    videoPreview.play();
+
+    // Draw video frames onto canvas
+    function drawFrame() {
+        if (!videoPreview.paused && !videoPreview.ended) {
+            context.drawImage(videoPreview, 0, 0, canvas.width, canvas.height);
+            requestAnimationFrame(drawFrame);
+        }
+    }
+    drawFrame();
+
+    // Capture canvas stream and processed audio
+    const canvasStream = canvas.captureStream(30); // 30 FPS
+    const processedBlob = engine.exportWAV();
+    const audioURL = URL.createObjectURL(processedBlob);
+    const audioElement = new Audio(audioURL);
+    const audioContext = new AudioContext();
+    const audioStream = audioContext.createMediaElementSource(audioElement);
+    const destination = audioContext.createMediaStreamDestination();
+    audioStream.connect(destination);
+
+    const combinedStream = new MediaStream([
+        ...canvasStream.getVideoTracks(),
+        ...destination.stream.getAudioTracks()
+    ]);
+
+    // Record the merged stream
+    mediaRecorder = new MediaRecorder(combinedStream, { mimeType: 'video/webm' });
+
+    mediaRecorder.ondataavailable = event => {
+        if (event.data.size > 0) {
+            recordedChunks.push(event.data);
+        }
+    };
+
+    mediaRecorder.onstop = () => {
+        const blob = new Blob(recordedChunks, { type: 'video/webm' });
+        const url = URL.createObjectURL(blob);
+        const downloadLink = document.createElement('a');
+        downloadLink.href = url;
+        downloadLink.download = 'merged-video.webm';
+        downloadLink.textContent = 'Download Merged Video';
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+        progressBarFill.style.width = '100%';
+        progressBarFill.textContent = '100%';
+        createVideoBtn.disabled = false;
+    };
+
+    mediaRecorder.onstart = () => {
+        audioElement.play();
+        const duration = videoPreview.duration * 1000;
+        const interval = setInterval(() => {
+            const currentTime = videoPreview.currentTime * 1000;
+            const progress = (currentTime / duration) * 100;
+            progressBarFill.style.width = `${progress}%`;
+            progressBarFill.textContent = `${Math.floor(progress)}%`;
+            if (videoPreview.paused || videoPreview.ended) {
+                clearInterval(interval);
+            }
+        }, 100);
+    };
+
+    mediaRecorder.start();
+    setTimeout(() => {
+        mediaRecorder.stop();
+        audioElement.pause();
+    }, videoPreview.duration * 1000);
+});
     </script>
 </body>
 
 </html>
+
 
 
 
