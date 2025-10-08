@@ -7,7 +7,7 @@
 
 *Made with ❤️ by Space-code* WITH *7 YEARS OF MAKING*
 
-![Version](https://img.shields.io/badge/version-2.1-blue)
+![Version](https://img.shields.io/badge/version-2.2-green)
 ![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen)
 ![Python Version](https://img.shields.io/badge/python-3.11-blue)
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
@@ -106,7 +106,7 @@ Arby Audio pushes beyond traditional audio engines with **real-world acoustic si
 
 ## ⚙️ Setup & Usage
 
-Clone or download the repo:
+Clone or download the repo: or download the releases (the latest one)
 
 ```bash
 git clone https://github.com/space-code/arby-audio_3d.git
