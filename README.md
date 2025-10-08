@@ -112,13 +112,17 @@ Clone or download the repo:
 git clone https://github.com/space-code/arby-audio_3d.git
 cd arby-audio_3d
 ```
-
+OR: DOWNLOAD FIELS INDUVISUALLY (PYTHON OR HTML, YOU CHOOSE):
+HTML:
+Open the file in a browser.
+Python:
 Run the engine with your audio file:
 
 ```bash
 python "PYTHONSCRIPT.py" --music_url https://your-music-url.com/file.wav
 ```
 OR: DOWNLOAD THE FILES INDIVIDUALLY through the GitHub website
+
 
 *(replace with your own .wav URL)*
 
