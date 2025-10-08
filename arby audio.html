@@ -104,6 +104,16 @@
             font-weight: 500;
             color: #f39c12;
         }
+       
+        #progressBarFill {
+    height: 100%;
+    background: linear-gradient(90deg, #e94560, #f39c12);
+    width: 0%;
+    transition: width 0.3s;
+    text-align: center;
+    color: white;
+    font-size: 0.8em;
+}
 
         .input-row {
             display: flex;
@@ -306,7 +316,8 @@
     <div class="container">
         <header>
             <div class="brand-logo">ARBY AUDIO</div>
-            <p class="brand-tagline">Physics-Based 3D Spatial Audio | 7.1.4 @ 96kHz 32-bit</p>
+            <p class="brand-tagline">-- Available at <a class="brand-logo" href="https://github.com/space-contributes/arby-audio_3d/">GitHub Project Link </a>, | Physics-Based 3D Spatial Audio | 7.1.4 @ 96kHz 32-bit |
+             </p>
         </header>
 
         <div class="main-grid">
@@ -315,7 +326,7 @@
                 <div class="upload-zone" id="uploadZone">
                     <div style="font-size: 3em;">🎧</div>
                     <p style="font-size: 1.2em;">Drop audio file or click</p>
-                    <p style="opacity: 0.7; font-size: 0.9em;">WAV, MP3, FLAC, OGG (Max 50MB)</p>
+                    <p style="opacity: 0.7; font-size: 0.9em;">WAV, MP3, FLAC, OGG, MP4, WEBM, AVI</p>
                 </div>
                 <input type="file" id="fileInput" accept=".wav,.mp3,.flac,.ogg,.m4a" />
                 <div class="info">
@@ -331,7 +342,21 @@
                     <div class="status-item"><span>🔊 Channels:</span><span id="fileChannels">-</span></div>
                 </div>
             </div>
-
+<!-- Insert Video Input Panel Here -->
+    <div class="panel">
+        <h2>🎥 Video Input</h2>
+        <div class="upload-zone" id="videoUploadZone">
+            <div style="font-size: 3em;">🎬</div>
+            <p style="font-size: 1.2em;">Drop video file or click</p>
+            <p style="opacity: 0.7; font-size: 0.9em;">MP4, WEBM, AVI</p>
+        </div>
+        <input type="file" id="videoUpload" accept=".mp4,.webm,.avi" />
+        <video id="videoPreview" controls style="display: none; width: 100%; max-height: 300px; margin-top: 10px;"></video>
+        <canvas id="canvas" style="display: none;"></canvas>
+        <div class="progress" id="progressBar" style="display: none;">
+            <div class="progress-bar" id="progressBarFill"></div>
+        </div>
+    </div>
             <div class="panel">
                 <h2>🎚️ Room Configuration</h2>
                 <div style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; margin-bottom: 20px;">
@@ -343,6 +368,27 @@
                         <option value="studio">Studio (8×10×3m)</option>
                         <option value="medium" selected>Medium Room (8×6×3.2m)</option>
                         <option value="hall">Concert Hall (20×25×8m)</option>
+                        <meta name="description" content="Arby Audio 3D  Cinematic Spatial Sound Engine   Experience living sound that adapts bounces and reacts without configuration  with advanced objectbased 714 spatial realismMade with  by Spacecode WITH 7 YEARS OF MAKINGVersionhttpsimgshieldsiobadgeversion22blueContributions WelcomehttpsimgshieldsiobadgecontributionswelcomebrightgreenPython Versionhttpsimgshieldsiobadgepython311blueBuild StatushttpsimgshieldsiobadgebuildpassingbrightgreenLast Commithttpsimgshieldsiogithublastcommitspacecontributesarbyaudio_3dStarshttpsimgshieldsiogithubstarsspacecontributesarbyaudio_3dstylesocialForkshttpsimgshieldsiogithubforksspacecontributesarbyaudio_3dstylesocialOpen Issueshttpsimgshieldsiogithubissuesspacecontributesarbyaudio_3dClosed Issueshttpsimgshieldsiogithubissuesclosedspacecontributesarbyaudio_3dDownloadshttpsimgshieldsiogithubdownloadsspacecontributesarbyaudio_3dtotalMaintenancehttpsimgshieldsiobadgemaintenanceactivebrightgreenSupported OShttpsimgshieldsiobadgeoswindows2020macOS2020LinuxlightgreyTop Languagehttpsimgshieldsiogithublanguagestopspacecontributesarbyaudio_3dRepo Sizehttpsimgshieldsiogithubreposizespacecontributesarbyaudio_3dCommitshttpsimgshieldsiogithubcommitactivitymspacecontributesarbyaudio_3dIssues Closedhttpsimgshieldsiogithubissuesprclosedspacecontributesarbyaudio_3dArby Audio Logohttpsrawgithubusercontentcomspacecontributesarbyaudio_3drefsheadsmainArby20Logo20Design20Proto11jpgArby Audio delivers cinematicgrade 3D sound with immersive 714 spatial audioEnjoy living sound that reacts in real time bringing games movies and music to life with natural reflections precise positioning and stunning binaural effects  Arby Audio vs the typical system  The typical system Maps sound objects as virtual waves with delays and reflections Provides 360 surround immersion Default quality 42kHz  24bit Adaptive spatial realism across devices Widely adopted in theaters and consumer hardware depends on system configuration  Arby AudioLiving sound that bounces adapts and reacts Not just heard but felt Smart room scaling brings audio to life  Reflections furniture occlusion immersive realismwithout any sensors cameras microphones Mind  blown Arby Audio pushes beyond traditional audio engines with realworld acoustic simulation Room geometry  reflections Distancebased and sound wave bouncing time delays Frequencydependent lowpass filtering if bounced sound wave if bounced less frequency  clipping for random high frequency audio Background noise reduction Speaker mapping to 714 layout 7 down 4 up 1 sub Binaural downmix for headphones Trajectorybased moving sound sources Furnitureenvironment scanning for realistic reflections Automatic normalization  highfrequency smoothing Highfidelity output 96kHz  32bit 4 industry standard Fully open source  customizable  Feature Breakdown Room Geometry  Reflections  Sound bounces naturally off virtual walls ceilings and objects Virtual Object Detection  Sounds interact with detected scene objects Realistic Delays  Travel  reflection delays modeled after real physics MaterialAware Filtering  Simulates absorption  air damping Speaker Mapping  True 714 Atmosstyle layout Binaural Downmix  Immersive stereo playback Background Noise Removal  Removes background noise Dynamic Trajectories  Moving sources with path realism Environment Scanning  Furnitureobjects intelligently shape reflections Clipping Protection  Autonormalization ensures stable output Room Geometry  Reflections  Sound bounces naturally off virtual walls ceilings and objects Detects Virtual Objects  Sound bounces off naturally over virtual objects detected in the scene Sound Bounces  with a delay for realism to reach the object and bounce off it DistanceBased Time Delays  Delays replicate realworld propagation for precise spatialization FrequencyDependent LowPass Filtering  Simulates material absorption and air damping StudioGrade Fidelity  96kHz  32bit audio 4 the industry standard  Who Is It For  Gamers  Game Developers  Audiophiles  Music Producers  VR  AR Developers  Film  Multimedia Editors  Educational  Research Labs  Setup  UsageClone or download the repo or download the releases the latest onebashgit clone httpsgithubcomspacecodearbyaudio_3dgitcd arbyaudio_3dOR DOWNLOAD FIELS INDUVISUALLY PYTHON OR HTML YOU CHOOSEHTMLOpen the file in a browserPythonRun the engine with your audio filebashpython PYTHONSCRIPTpy music_url httpsyourmusicurlcomfilewavOR DOWNLOAD THE FILES INDIVIDUALLY through the GitHub websitereplace with your own wav URL OR FOR WINDOWSStill requires cloning the repo or downloading files individually from the GitHub websiteRun the WOOBAT as administratorThen if it gets stuck restart itIf it is not processing the WAV try shortening the URL using tinyurlcom and try again with the updated link FOR MACOS AND LINUXor WOOsh for Linux OR MacOS file as rootsudosuFor shchmod x WOOsh  sudo WOOshThen if it gets stuck restart it If it were to be stuck on Python installation confirm Python is installed by a command and then restart WOOsh because sometimes it forgets that Python is done installing  Roadmap Google Drive integration Windows bat launcher doubleclick ready GUI frontend for nontechnical users Expanded VRAR SDK support  License  LegalBy downloading installing or using Arby Audio 3D you agree to the terms in LICENSEmdLICENSEmdThis project is for educational and ethical use only For educational and ethical testing only  unauthorized use is illegal Contributions welcome Fork the repo create a branch and submit a PR Disclaimer  Educational and Ethical Use OnlyThis project is created strictly for educational and ethical use only All product names trademarks and registered trademarks mentioned are the property of their respective ownersThis project is not affiliated with endorsed by or sponsored by any company brand or trademark holderThis service is provided on a asis basis with good faith and no obligations or warranties towards the same Not to DefameThis material is intended for informational research and educational purposes only It is not intended to disparage defame or negatively impact the reputation of any company brand or trademark holderThe authors intent is strictly educational and researchfocused Any misuse of this project or its materials is the sole responsibility of the user The author shall not be liable or responsible for such misuse as that was never the intent Independent DevelopmentArby Audio 3D is an independent opensource project While it draws inspiration from cinematicgrade audio technologies such as objectbased surround and spatial audio systems it has no official affiliation with any company brand or trademark holder Trademark NoticeAll names logos and brands mentioned in this project are the property of their respective owners References are made solely for descriptive educational and comparative purposes and even indirect references and other types of references that may cause INCIDENTAL SPECIAL CONSEQUENTIAL OR PUNITIVE DAMAGES INCLUDING WITHOUT LIMITATION regarding LOSS OF PROFITS LOSS OF DATA BUSINESS INTERRUPTION OR LOSS OF BUSINESS OPPORTUNITIES"> <meta name="keywords" content="3D Audio, Surround Sound, Spatial Engine, Arby Audio, 7.1.4, Binaural"> <meta name="description" content="3D Arby Audio Engine - Realistic 7.1.4 surround sound simulation with physical reflection modeling."> <!-- Core metadata -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="title" content="Arby Audio 3D - Cinematic Spatial Sound Engine">
+<meta name="description" content="Experience living sound that adapts, bounces, and reacts with advanced object-based 7.1.4 spatial realism. Made by Spacecode after 7 years of innovation.">
+<meta name="keywords" content="3D Audio, Spatial Sound, Surround Engine, Binaural, 7.1.4, Dolby Atmos, Cinematic Audio, Python, Arby Audio, Spacecode, Space-code, Space-code">
+<meta name="author" content="Spacecode">
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph (for social previews) -->
+<meta property="og:title" content="Arby Audio 3D - Cinematic Spatial Sound Engine">
+<meta property="og:description" content="Living sound that adapts and reacts — advanced 7.1.4 spatial realism. Experience audio that feels alive.">
+<meta property="og:image" content="https://raw.githubusercontent.com/spacecontributes/arbyaudio_3d/refs/heads/main/Arby%20Logo%20Design%20Proto11.jpg">
+<meta property="og:url" content="https://spacecontributes.github.io/arby-audio_3d/">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Arby Audio 3D - Cinematic Spatial Sound Engine">
+<meta name="twitter:description" content="Living sound that bounces, adapts, and reacts — true 7.1.4 spatial realism by Spacecode.">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/spacecontributes/arbyaudio_3d/refs/heads/main/Arby%20Logo%20Design%20Proto11.jpg">
                     </select>
                     <div style="margin-top: 10px;"><strong>📦 Volume:</strong> <span id="roomVolume">153.6 m³</span></div>
                 </div>
@@ -411,12 +457,14 @@
 
         <div class="panel">
             <h2>🎛️ Processing</h2>
-            <div>
-                <button id="processBtn" disabled>⚡ Process Audio</button>
-                <button id="playBtn" disabled>▶️ Play</button>
-                <button id="stopBtn" disabled>⏹️ Stop</button>
-                <button id="downloadBtn" disabled>💾 Download</button>
-            </div>
+               <div>
+    <button id="processBtn" disabled>⚡ Process Audio</button>
+    <button id="playBtn" disabled>▶️ Play</button>
+    <button id="stopBtn" disabled>⏹️ Stop</button>
+    <button id="downloadBtn" disabled>💾 Download Audio</button>
+    <button id="createVideoBtn" disabled>🎬 Create Video</button>
+</div>
+          
             <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
             <div class="status">
                 <div class="status-item"><span>Status:</span><span id="processingStatus">Ready</span></div>
@@ -449,547 +497,688 @@
     </div>
 
     <script>
-        const SECURITY_CONFIG = {
-            allowedMimeTypes: new Set(['audio/wav', 'audio/mpeg', 'audio/mp3', 'audio/x-m4a', 'audio/flac', 'audio/ogg']),
-            allowedExtensions: new Set(['.wav', '.mp3', '.flac', '.ogg', '.m4a']),
-            maxFileSize: 50 * 1024 * 1024,
-            maxDuration: 600,
-            maxSampleRate: 192000,
-            maxChannels: 8,
-            rateLimitWindow: 60000,
-            maxProcessingPerWindow: 5,
-            ranges: {
-                roomWidth: { min: 2, max: 20, step: 0.1 },
-                roomLength: { min: 2, max: 25, step: 0.1 },
-                roomHeight: { min: 2, max: 12, step: 0.05 },
-                wallReflectivity: { min: 0.1, max: 0.95, step: 0.01 },
-                airAbsorption: { min: 0.001, max: 0.05, step: 0.001 }
-            }
-        };
+// Security configuration
+const SECURITY_CONFIG = {
+    allowedMimeTypes: new Set(['audio/wav', 'audio/mpeg', 'audio/mp3', 'audio/x-m4a', 'audio/flac', 'audio/ogg', 'video/mp4', 'video/webm', 'video/avi']),
+    allowedExtensions: new Set(['.wav', '.mp3', '.flac', '.ogg', '.m4a', '.mp4', '.webm', '.avi']),
+    maxSampleRate: 192000,
+    maxChannels: 8,
+    rateLimitWindow: 60000,
+    maxProcessingPerWindow: 5,
+    ranges: {
+        roomWidth: { min: 2, max: 20, step: 0.1 },
+        roomLength: { min: 2, max: 25, step: 0.1 },
+        roomHeight: { min: 2, max: 12, step: 0.05 },
+        wallReflectivity: { min: 0.1, max: 0.95, step: 0.01 },
+        airAbsorption: { min: 0.001, max: 0.05, step: 0.001 }
+    }
+};
 
-        const rateLimiter = {
-            attempts: [],
-            canProcess() {
-                const now = Date.now();
-                this.attempts = this.attempts.filter(t => now - t < SECURITY_CONFIG.rateLimitWindow);
-                if (this.attempts.length >= SECURITY_CONFIG.maxProcessingPerWindow) {
-                    const oldestAttempt = Math.min(...this.attempts);
-                    const waitTime = Math.ceil((SECURITY_CONFIG.rateLimitWindow - (now - oldestAttempt)) / 1000);
-                    return { allowed: false, waitTime };
-                }
-                return { allowed: true };
-            },
-            recordAttempt() {
-                this.attempts.push(Date.now());
-            }
-        };
-
-        function validateNumericInput(value, paramName) {
-            const range = SECURITY_CONFIG.ranges[paramName];
-            if (!range) return parseFloat(value);
-            const num = parseFloat(value);
-            if (isNaN(num) || num < range.min || num > range.max) {
-                throw new Error(`Invalid ${paramName}`);
-            }
-            return Math.round(num / range.step) * range.step;
+// Rate limiter
+const rateLimiter = {
+    attempts: [],
+    canProcess() {
+        const now = Date.now();
+        this.attempts = this.attempts.filter(t => now - t < SECURITY_CONFIG.rateLimitWindow);
+        if (this.attempts.length >= SECURITY_CONFIG.maxProcessingPerWindow) {
+            const oldestAttempt = Math.min(...this.attempts);
+            const waitTime = Math.ceil((SECURITY_CONFIG.rateLimitWindow - (now - oldestAttempt)) / 1000);
+            return { allowed: false, waitTime };
         }
+        return { allowed: true };
+    },
+    recordAttempt() {
+        this.attempts.push(Date.now());
+    }
+};
 
-        class ArbyAudioEngine {
-            constructor() {
-                this.audioContext = null;
-                this.sourceBuffer = null;
-                this.processedBuffer = null;
-                this.isPlaying = false;
-                this.sourceNode = null;
-                
-                this.speakerPositions = [
-                    { name: 'L', az: -30, el: 0 },
-                    { name: 'R', az: 30, el: 0 },
-                    { name: 'C', az: 0, el: 0 },
-                    { name: 'LFE', az: 0, el: -90 },
-                    { name: 'SL', az: -110, el: 0 },
-                    { name: 'SR', az: 110, el: 0 },
-                    { name: 'BL', az: -150, el: 0 },
-                    { name: 'BR', az: 150, el: 0 },
-                    { name: 'TFL', az: -30, el: 45 },
-                    { name: 'TFR', az: 30, el: 45 },
-                    { name: 'TBL', az: -150, el: 45 },
-                    { name: 'TBR', az: 150, el: 45 }
-                ];
+// Numeric input validation
+function validateNumericInput(value, paramName) {
+    const range = SECURITY_CONFIG.ranges[paramName];
+    if (!range) return parseFloat(value);
+    const num = parseFloat(value);
+    if (isNaN(num) || num < range.min || num > range.max) {
+        throw new Error(`Invalid ${paramName}`);
+    }
+    return Math.round(num / range.step) * range.step;
+}
+
+// ArbyAudioEngine class
+class ArbyAudioEngine {
+    constructor() {
+        this.audioContext = null;
+        this.sourceBuffer = null;
+        this.processedBuffer = null;
+        this.isPlaying = false;
+        this.sourceNode = null;
+        
+        this.speakerPositions = [
+            { name: 'L', az: -30, el: 0 },
+            { name: 'R', az: 30, el: 0 },
+            { name: 'C', az: 0, el: 0 },
+            { name: 'LFE', az: 0, el: -90 },
+            { name: 'SL', az: -110, el: 0 },
+            { name: 'SR', az: 110, el: 0 },
+            { name: 'BL', az: -150, el: 0 },
+            { name: 'BR', az: 150, el: 0 },
+            { name: 'TFL', az: -30, el: 45 },
+            { name: 'TFR', az: 30, el: 45 },
+            { name: 'TBL', az: -150, el: 45 },
+            { name: 'TBR', az: 150, el: 45 }
+        ];
+    }
+
+    async initialize() {
+        this.audioContext = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 96000 });
+    }
+
+    async loadAudioFile(file) {
+        const arrayBuffer = await file.arrayBuffer();
+        const audioBuffer = await this.audioContext.decodeAudioData(arrayBuffer);
+        this.sourceBuffer = audioBuffer;
+        return audioBuffer;
+    }
+
+    getMonoData(buffer) {
+        const channels = buffer.numberOfChannels;
+        const length = buffer.length;
+        const monoData = new Float32Array(length);
+        
+        for (let ch = 0; ch < channels; ch++) {
+            const channelData = buffer.getChannelData(ch);
+            for (let i = 0; i < length; i++) {
+                monoData[i] += channelData[i] / channels;
             }
+        }
+        return monoData;
+    }
 
-            async initialize() {
-                this.audioContext = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 96000 });
+    createLowPassFilter(sampleRate, cutoffFreq) {
+        const rc = 1.0 / (2.0 * Math.PI * cutoffFreq);
+        const dt = 1.0 / sampleRate;
+        const alpha = dt / (rc + dt);
+        return {
+            alpha,
+            process(input, prevOutput) {
+                return prevOutput + alpha * (input - prevOutput);
             }
+        };
+    }
 
-            async loadAudioFile(file) {
-                const arrayBuffer = await file.arrayBuffer();
-                const audioBuffer = await this.audioContext.decodeAudioData(arrayBuffer);
-                this.sourceBuffer = audioBuffer;
-                return audioBuffer;
-            }
+    async upsample(data, fromRate, toRate) {
+        if (fromRate === toRate) return data;
+        const ratio = toRate / fromRate;
+        const newLength = Math.floor(data.length * ratio);
+        const upsampled = new Float32Array(newLength);
+        for (let i = 0; i < newLength; i++) {
+            const srcIndex = i / ratio;
+            const srcIndexFloor = Math.floor(srcIndex);
+            const srcIndexCeil = Math.min(srcIndexFloor + 1, data.length - 1);
+            const frac = srcIndex - srcIndexFloor;
+            upsampled[i] = data[srcIndexFloor] * (1 - frac) + data[srcIndexCeil] * frac;
+        }
+        return upsampled;
+    }
 
-            getMonoData(buffer) {
-                const channels = buffer.numberOfChannels;
-                const length = buffer.length;
-                const monoData = new Float32Array(length);
-                
-                for (let ch = 0; ch < channels; ch++) {
-                    const channelData = buffer.getChannelData(ch);
-                    for (let i = 0; i < length; i++) {
-                        monoData[i] += channelData[i] / channels;
+    async process(config, onProgress) {
+        const startTime = performance.now();
+        const validatedConfig = {
+            wallReflectivity: validateNumericInput(config.wallReflectivity, 'wallReflectivity'),
+            roomWidth: validateNumericInput(config.roomWidth, 'roomWidth'),
+            roomLength: validateNumericInput(config.roomLength, 'roomLength'),
+            roomHeight: validateNumericInput(config.roomHeight, 'roomHeight'),
+            airAbsorption: validateNumericInput(config.airAbsorption, 'airAbsorption'),
+            enableAdaptiveGain: !!config.enableAdaptiveGain,
+            enableLinearScaling: !!config.enableLinearScaling,
+            enableAutoRoomScale: !!config.enableAutoRoomScale
+        };
+        
+        const sourceSampleRate = this.sourceBuffer.sampleRate;
+        const targetSampleRate = 96000;
+        const monoData = this.getMonoData(this.sourceBuffer);
+        
+        let rms = 0;
+        for (let i = 0; i < monoData.length; i++) {
+            rms += monoData[i] * monoData[i];
+        }
+        rms = Math.sqrt(rms / monoData.length);
+        
+        if (validatedConfig.enableAutoRoomScale && rms > 0.1) {
+            const scaleFactor = 1 + (rms - 0.1) * 2;
+            validatedConfig.roomWidth = Math.min(validatedConfig.roomWidth * scaleFactor, 20);
+            validatedConfig.roomLength = Math.min(validatedConfig.roomLength * scaleFactor, 25);
+            validatedConfig.roomHeight = Math.min(validatedConfig.roomHeight * scaleFactor, 12);
+        }
+        
+        const upsampled = await this.upsample(monoData, sourceSampleRate, targetSampleRate);
+        onProgress(20);
+        
+        const processed = await this.processSpatialReflections(upsampled, targetSampleRate, validatedConfig, rms, onProgress);
+        onProgress(100);
+        
+        return {
+            buffer: processed,
+            processingTime: ((performance.now() - startTime) / 1000).toFixed(2),
+            autoScaleInfo: this.getAutoScaleInfo(validatedConfig, rms)
+        };
+    }
+
+    getAutoScaleInfo(config, rms) {
+        const avgRoomSize = (config.roomWidth + config.roomLength + config.roomHeight) / 3;
+        const maxReflectionDist = Math.sqrt(config.roomWidth ** 2 + config.roomLength ** 2 + config.roomHeight ** 2);
+        const maxDelay = (maxReflectionDist / 343 * 1000).toFixed(1);
+        
+        let k, p;
+        if (config.enableLinearScaling) {
+            k = 0.3 + (avgRoomSize / 15) * 0.4;
+            p = 1.0 + (avgRoomSize / 15) * 0.5;
+        } else {
+            k = 0.5;
+            p = 1.2;
+        }
+        
+        const volume = config.roomWidth * config.roomLength * config.roomHeight;
+        return {
+            k: k.toFixed(3),
+            p: p.toFixed(3),
+            maxReflectionDelay: maxDelay + 'ms',
+            airAbsorptionRate: (config.airAbsorption * 100).toFixed(2) + '%/m',
+            wallReflectivity: (config.wallReflectivity * 100).toFixed(0) + '%',
+            volume: volume.toFixed(1) + ' m³',
+            dimensions: `${config.roomWidth.toFixed(1)}×${config.roomLength.toFixed(1)}×${config.roomHeight.toFixed(2)}m`,
+            scalingMode: config.enableLinearScaling ? 'Linear Auto' : 'Fixed',
+            soundPressureLevel: (rms * 100).toFixed(1) + '% RMS',
+            autoRoomScaled: config.enableAutoRoomScale
+        };
+    }
+
+    async processSpatialReflections(audioData, sampleRate, config, rms, onProgress) {
+        const numChannels = 12;
+        const numSamples = audioData.length;
+        const output = Array.from({ length: numChannels }, () => new Float32Array(numSamples));
+        
+        const c = 343;
+        const fs = sampleRate;
+        const avgRoomSize = (config.roomWidth + config.roomLength + config.roomHeight) / 3;
+        
+        let k_base, p_exponent;
+        if (config.enableLinearScaling) {
+            k_base = 0.3 + (avgRoomSize / 15) * 0.4;
+            p_exponent = 1.0 + (avgRoomSize / 15) * 0.5;
+        } else {
+            k_base = 0.5;
+            p_exponent = 1.2;
+        }
+        
+        let alpha = config.airAbsorption;
+        if (config.enableAutoRoomScale) {
+            alpha *= (1 + rms * 0.5);
+        }
+        
+        const walls = [
+            { name: 'front', normal: [0, 0, 1], pos: [0, 0, config.roomLength/2] },
+            { name: 'back', normal: [0, 0, -1], pos: [0, 0, -config.roomLength/2] },
+            { name: 'left', normal: [1, 0, 0], pos: [-config.roomWidth/2, 0, 0] },
+            { name: 'right', normal: [-1, 0, 0], pos: [config.roomWidth/2, 0, 0] },
+            { name: 'ceiling', normal: [0, -1, 0], pos: [0, config.roomHeight/2, 0] },
+            { name: 'floor', normal: [0, 1, 0], pos: [0, -config.roomHeight/2, 0] }
+        ];
+        
+        const listenerPos = [0, 0, 0];
+        let currentReflGain = config.wallReflectivity;
+        
+        if (config.enableAutoRoomScale) {
+            const softnessEffect = (1 - config.wallReflectivity) * rms;
+            currentReflGain *= (1 - softnessEffect * 0.3);
+        }
+        
+        const chunkSize = 4096;
+        const numChunks = Math.ceil(numSamples / chunkSize);
+        const filterStates = walls.map(() => Array(numChannels).fill(0));
+        
+        for (let chunk = 0; chunk < numChunks; chunk++) {
+            const start = chunk * chunkSize;
+            const end = Math.min(start + chunkSize, numSamples);
+            
+            const sourcePos = [2, 0, 0];
+            const directDist = Math.sqrt(sourcePos.reduce((sum, v) => sum + v*v, 0));
+            const directDelay = Math.floor(directDist / c * fs);
+            const directGain = 1 / (1 + k_base * Math.pow(directDist, p_exponent));
+            const directGains = this.calculateSpeakerGains(0, 0);
+            
+            for (let i = start; i < end; i++) {
+                const srcIdx = i - directDelay;
+                if (srcIdx >= 0 && srcIdx < audioData.length) {
+                    const sample = audioData[srcIdx] * directGain;
+                    for (let ch = 0; ch < numChannels; ch++) {
+                        output[ch][i] += sample * directGains[ch];
                     }
                 }
-                return monoData;
             }
-
-            createLowPassFilter(sampleRate, cutoffFreq) {
-                const rc = 1.0 / (2.0 * Math.PI * cutoffFreq);
-                const dt = 1.0 / sampleRate;
-                const alpha = dt / (rc + dt);
-                return {
-                    alpha,
-                    process(input, prevOutput) {
-                        return prevOutput + alpha * (input - prevOutput);
-                    }
-                };
-            }
-
-            async upsample(data, fromRate, toRate) {
-                if (fromRate === toRate) return data;
-                const ratio = toRate / fromRate;
-                const newLength = Math.floor(data.length * ratio);
-                const upsampled = new Float32Array(newLength);
-                for (let i = 0; i < newLength; i++) {
-                    const srcIndex = i / ratio;
-                    const srcIndexFloor = Math.floor(srcIndex);
-                    const srcIndexCeil = Math.min(srcIndexFloor + 1, data.length - 1);
-                    const frac = srcIndex - srcIndexFloor;
-                    upsampled[i] = data[srcIndexFloor] * (1 - frac) + data[srcIndexCeil] * frac;
-                }
-                return upsampled;
-            }
-
-            async process(config, onProgress) {
-                const startTime = performance.now();
-                const validatedConfig = {
-                    wallReflectivity: validateNumericInput(config.wallReflectivity, 'wallReflectivity'),
-                    roomWidth: validateNumericInput(config.roomWidth, 'roomWidth'),
-                    roomLength: validateNumericInput(config.roomLength, 'roomLength'),
-                    roomHeight: validateNumericInput(config.roomHeight, 'roomHeight'),
-                    airAbsorption: validateNumericInput(config.airAbsorption, 'airAbsorption'),
-                    enableAdaptiveGain: !!config.enableAdaptiveGain,
-                    enableLinearScaling: !!config.enableLinearScaling,
-                    enableAutoRoomScale: !!config.enableAutoRoomScale
-                };
+            
+            walls.forEach((wall, wallIdx) => {
+                const reflectedPos = this.reflectPoint(sourcePos, wall.pos, wall.normal);
+                const reflectionPath = this.vectorSubtract(reflectedPos, listenerPos);
+                const reflectionDist = Math.sqrt(reflectionPath.reduce((sum, v) => sum + v*v, 0));
+                const reflectionAz = Math.atan2(reflectionPath[0], reflectionPath[2]) * 180 / Math.PI;
+                const reflectionEl = Math.asin(reflectionPath[1] / reflectionDist) * 180 / Math.PI;
+                const reflectionDelay = Math.floor(reflectionDist / c * fs);
+                const distAttenuation = 1 / (1 + k_base * Math.pow(reflectionDist, p_exponent));
+                const airAbsorption = Math.exp(-alpha * reflectionDist);
+                const Rw = currentReflGain * distAttenuation * airAbsorption;
                 
-                const sourceSampleRate = this.sourceBuffer.sampleRate;
-                const targetSampleRate = 96000;
-                const monoData = this.getMonoData(this.sourceBuffer);
+                const maxRoomDist = Math.sqrt(config.roomWidth ** 2 + config.roomLength ** 2 + config.roomHeight ** 2);
+                const normDist = Math.min(reflectionDist / maxRoomDist, 1);
+                const cutoffFreq = fs * (0.45 - 0.35 * normDist);
+                const lpFilter = this.createLowPassFilter(fs, cutoffFreq);
+                const reflectionGains = this.calculateSpeakerGains(reflectionAz, reflectionEl);
                 
-                let rms = 0;
-                for (let i = 0; i < monoData.length; i++) {
-                    rms += monoData[i] * monoData[i];
-                }
-                rms = Math.sqrt(rms / monoData.length);
-                
-                if (validatedConfig.enableAutoRoomScale && rms > 0.1) {
-                    const scaleFactor = 1 + (rms - 0.1) * 2;
-                    validatedConfig.roomWidth = Math.min(validatedConfig.roomWidth * scaleFactor, 20);
-                    validatedConfig.roomLength = Math.min(validatedConfig.roomLength * scaleFactor, 25);
-                    validatedConfig.roomHeight = Math.min(validatedConfig.roomHeight * scaleFactor, 12);
-                }
-                
-                const upsampled = await this.upsample(monoData, sourceSampleRate, targetSampleRate);
-                onProgress(20);
-                
-                const processed = await this.processSpatialReflections(upsampled, targetSampleRate, validatedConfig, rms, onProgress);
-                onProgress(100);
-                
-                return {
-                    buffer: processed,
-                    processingTime: ((performance.now() - startTime) / 1000).toFixed(2),
-                    autoScaleInfo: this.getAutoScaleInfo(validatedConfig, rms)
-                };
-            }
-
-            getAutoScaleInfo(config, rms) {
-                const avgRoomSize = (config.roomWidth + config.roomLength + config.roomHeight) / 3;
-                const maxReflectionDist = Math.sqrt(config.roomWidth ** 2 + config.roomLength ** 2 + config.roomHeight ** 2);
-                const maxDelay = (maxReflectionDist / 343 * 1000).toFixed(1);
-                
-                let k, p;
-                if (config.enableLinearScaling) {
-                    k = 0.3 + (avgRoomSize / 15) * 0.4;
-                    p = 1.0 + (avgRoomSize / 15) * 0.5;
-                } else {
-                    k = 0.5;
-                    p = 1.2;
-                }
-                
-                const volume = config.roomWidth * config.roomLength * config.roomHeight;
-                return {
-                    k: k.toFixed(3),
-                    p: p.toFixed(3),
-                    maxReflectionDelay: maxDelay + 'ms',
-                    airAbsorptionRate: (config.airAbsorption * 100).toFixed(2) + '%/m',
-                    wallReflectivity: (config.wallReflectivity * 100).toFixed(0) + '%',
-                    volume: volume.toFixed(1) + ' m³',
-                    dimensions: `${config.roomWidth.toFixed(1)}×${config.roomLength.toFixed(1)}×${config.roomHeight.toFixed(2)}m`,
-                    scalingMode: config.enableLinearScaling ? 'Linear Auto' : 'Fixed',
-                    soundPressureLevel: (rms * 100).toFixed(1) + '% RMS',
-                    autoRoomScaled: config.enableAutoRoomScale
-                };
-            }
-
-            async processSpatialReflections(audioData, sampleRate, config, rms, onProgress) {
-                const numChannels = 12;
-                const numSamples = audioData.length;
-                const output = Array.from({ length: numChannels }, () => new Float32Array(numSamples));
-                
-                const c = 343;
-                const fs = sampleRate;
-                const avgRoomSize = (config.roomWidth + config.roomLength + config.roomHeight) / 3;
-                
-                let k_base, p_exponent;
-                if (config.enableLinearScaling) {
-                    k_base = 0.3 + (avgRoomSize / 15) * 0.4;
-                    p_exponent = 1.0 + (avgRoomSize / 15) * 0.5;
-                } else {
-                    k_base = 0.5;
-                    p_exponent = 1.2;
-                }
-                
-                let alpha = config.airAbsorption;
-                if (config.enableAutoRoomScale) {
-                    alpha *= (1 + rms * 0.5);
-                }
-                
-                const walls = [
-                    { name: 'front', normal: [0, 0, 1], pos: [0, 0, config.roomLength/2] },
-                    { name: 'back', normal: [0, 0, -1], pos: [0, 0, -config.roomLength/2] },
-                    { name: 'left', normal: [1, 0, 0], pos: [-config.roomWidth/2, 0, 0] },
-                    { name: 'right', normal: [-1, 0, 0], pos: [config.roomWidth/2, 0, 0] },
-                    { name: 'ceiling', normal: [0, -1, 0], pos: [0, config.roomHeight/2, 0] },
-                    { name: 'floor', normal: [0, 1, 0], pos: [0, -config.roomHeight/2, 0] }
-                ];
-                
-                const listenerPos = [0, 0, 0];
-                let currentReflGain = config.wallReflectivity;
-                
-                if (config.enableAutoRoomScale) {
-                    const softnessEffect = (1 - config.wallReflectivity) * rms;
-                    currentReflGain *= (1 - softnessEffect * 0.3);
-                }
-                
-                const chunkSize = 4096;
-                const numChunks = Math.ceil(numSamples / chunkSize);
-                const filterStates = walls.map(() => Array(numChannels).fill(0));
-                
-                for (let chunk = 0; chunk < numChunks; chunk++) {
-                    const start = chunk * chunkSize;
-                    const end = Math.min(start + chunkSize, numSamples);
-                    
-                    const sourcePos = [2, 0, 0];
-                    const directDist = Math.sqrt(sourcePos.reduce((sum, v) => sum + v*v, 0));
-                    const directDelay = Math.floor(directDist / c * fs);
-                    const directGain = 1 / (1 + k_base * Math.pow(directDist, p_exponent));
-                    const directGains = this.calculateSpeakerGains(0, 0);
-                    
-                    for (let i = start; i < end; i++) {
-                        const srcIdx = i - directDelay;
-                        if (srcIdx >= 0 && srcIdx < audioData.length) {
-                            const sample = audioData[srcIdx] * directGain;
-                            for (let ch = 0; ch < numChannels; ch++) {
-                                output[ch][i] += sample * directGains[ch];
-                            }
-                        }
-                    }
-                    
-                    walls.forEach((wall, wallIdx) => {
-                        const reflectedPos = this.reflectPoint(sourcePos, wall.pos, wall.normal);
-                        const reflectionPath = this.vectorSubtract(reflectedPos, listenerPos);
-                        const reflectionDist = Math.sqrt(reflectionPath.reduce((sum, v) => sum + v*v, 0));
-                        const reflectionAz = Math.atan2(reflectionPath[0], reflectionPath[2]) * 180 / Math.PI;
-                        const reflectionEl = Math.asin(reflectionPath[1] / reflectionDist) * 180 / Math.PI;
-                        const reflectionDelay = Math.floor(reflectionDist / c * fs);
-                        const distAttenuation = 1 / (1 + k_base * Math.pow(reflectionDist, p_exponent));
-                        const airAbsorption = Math.exp(-alpha * reflectionDist);
-                        const Rw = currentReflGain * distAttenuation * airAbsorption;
-                        
-                        const maxRoomDist = Math.sqrt(config.roomWidth ** 2 + config.roomLength ** 2 + config.roomHeight ** 2);
-                        const normDist = Math.min(reflectionDist / maxRoomDist, 1);
-                        const cutoffFreq = fs * (0.45 - 0.35 * normDist);
-                        const lpFilter = this.createLowPassFilter(fs, cutoffFreq);
-                        const reflectionGains = this.calculateSpeakerGains(reflectionAz, reflectionEl);
-                        
-                        for (let i = start; i < end; i++) {
-                            const srcIdx = i - reflectionDelay;
-                            if (srcIdx >= 0 && srcIdx < audioData.length) {
-                                const sample = audioData[srcIdx];
-                                for (let ch = 0; ch < numChannels; ch++) {
-                                    const filteredSample = lpFilter.process(sample, filterStates[wallIdx][ch]);
-                                    filterStates[wallIdx][ch] = filteredSample;
-                                    output[ch][i] += filteredSample * Rw * reflectionGains[ch];
-                                }
-                            }
-                        }
-                    });
-                    
-                    if (config.enableAdaptiveGain) {
-                        let chunkPeak = 0;
+                for (let i = start; i < end; i++) {
+                    const srcIdx = i - reflectionDelay;
+                    if (srcIdx >= 0 && srcIdx < audioData.length) {
+                        const sample = audioData[srcIdx];
                         for (let ch = 0; ch < numChannels; ch++) {
-                            for (let i = start; i < end; i++) {
-                                chunkPeak = Math.max(chunkPeak, Math.abs(output[ch][i]));
-                            }
-                        }
-                        if (chunkPeak > 0.8) {
-                            currentReflGain *= 0.95;
-                        } else if (chunkPeak < 0.5 && currentReflGain < config.wallReflectivity) {
-                            currentReflGain *= 1.02;
-                        }
-                    }
-                    
-                    if (chunk % 10 === 0) {
-                        onProgress(20 + Math.floor((chunk / numChunks) * 80));
-                    }
-                }
-                
-                let maxSample = 0;
-                for (let ch = 0; ch < numChannels; ch++) {
-                    for (let i = 0; i < numSamples; i++) {
-                        maxSample = Math.max(maxSample, Math.abs(output[ch][i]));
-                    }
-                }
-                
-                if (maxSample > 0.95) {
-                    const normFactor = 0.95 / maxSample;
-                    for (let ch = 0; ch < numChannels; ch++) {
-                        for (let i = 0; i < numSamples; i++) {
-                            output[ch][i] *= normFactor;
+                            const filteredSample = lpFilter.process(sample, filterStates[wallIdx][ch]);
+                            filterStates[wallIdx][ch] = filteredSample;
+                            output[ch][i] += filteredSample * Rw * reflectionGains[ch];
                         }
                     }
                 }
-                
-                const buffer = this.audioContext.createBuffer(numChannels, numSamples, sampleRate);
-                for (let ch = 0; ch < numChannels; ch++) {
-                    buffer.copyToChannel(output[ch], ch);
-                }
-                
-                this.processedBuffer = buffer;
-                return buffer;
-            }
-
-            reflectPoint(point, planePoint, planeNormal) {
-                const d = this.vectorDot(this.vectorSubtract(point, planePoint), planeNormal);
-                return [
-                    point[0] - 2 * d * planeNormal[0],
-                    point[1] - 2 * d * planeNormal[1],
-                    point[2] - 2 * d * planeNormal[2]
-                ];
-            }
-
-            vectorSubtract(a, b) {
-                return [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
-            }
-
-            vectorDot(a, b) {
-                return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
-            }
-
-            calculateSpeakerGains(azimuth, elevation) {
-                const gains = new Float32Array(12);
-                for (let i = 0; i < this.speakerPositions.length; i++) {
-                    const sp = this.speakerPositions[i];
-                    const azDiff = Math.abs(azimuth - sp.az);
-                    const elDiff = Math.abs(elevation - sp.el);
-                    const angularDist = Math.sqrt(azDiff * azDiff + elDiff * elDiff);
-                    gains[i] = 1 / (1 + angularDist / 45);
-                }
-                const sumGains = gains.reduce((sum, g) => sum + g * g, 0);
-                const normFactor = sumGains > 0 ? 1 / Math.sqrt(sumGains) : 0;
-                for (let i = 0; i < gains.length; i++) {
-                    gains[i] *= normFactor;
-                }
-                return gains;
-            }
-
-            async play() {
-                if (!this.processedBuffer || this.isPlaying) return;
-                this.sourceNode = this.audioContext.createBufferSource();
-                this.sourceNode.buffer = this.processedBuffer;
-                this.sourceNode.connect(this.audioContext.destination);
-                this.sourceNode.onended = () => {
-                    this.isPlaying = false;
-                    document.getElementById('playBtn').textContent = '▶️ Play';
-                    document.getElementById('stopBtn').disabled = true;
-                };
-                this.sourceNode.start();
-                this.isPlaying = true;
-            }
-
-            stop() {
-                if (this.sourceNode && this.isPlaying) {
-                    this.sourceNode.stop();
-                    this.isPlaying = false;
-                }
-            }
-
-            exportWAV() {
-                if (!this.processedBuffer) return null;
-                const numChannels = this.processedBuffer.numberOfChannels;
-                const length = this.processedBuffer.length;
-                const sampleRate = this.processedBuffer.sampleRate;
-                const buffer = new ArrayBuffer(44 + length * numChannels * 4);
-                const view = new DataView(buffer);
-                
-                this.writeString(view, 0, 'RIFF');
-                view.setUint32(4, 36 + length * numChannels * 4, true);
-                this.writeString(view, 8, 'WAVE');
-                this.writeString(view, 12, 'fmt ');
-                view.setUint32(16, 16, true);
-                view.setUint16(20, 3, true);
-                view.setUint16(22, numChannels, true);
-                view.setUint32(24, sampleRate, true);
-                view.setUint32(28, sampleRate * numChannels * 4, true);
-                view.setUint16(32, numChannels * 4, true);
-                view.setUint16(34, 32, true);
-                this.writeString(view, 36, 'data');
-                view.setUint32(40, length * numChannels * 4, true);
-                
-                let offset = 44;
-                for (let i = 0; i < length; i++) {
-                    for (let ch = 0; ch < numChannels; ch++) {
-                        view.setFloat32(offset, this.processedBuffer.getChannelData(ch)[i], true);
-                        offset += 4;
-                    }
-                }
-                return new Blob([buffer], { type: 'audio/wav' });
-            }
-
-            writeString(view, offset, string) {
-                for (let i = 0; i < string.length; i++) {
-                    view.setUint8(offset + i, string.charCodeAt(i));
-                }
-            }
-        }
-
-        const engine = new ArbyAudioEngine();
-
-        document.addEventListener('DOMContentLoaded', async () => {
-            await engine.initialize();
-            
-            const uploadZone = document.getElementById('uploadZone');
-            const fileInput = document.getElementById('fileInput');
-            
-            uploadZone.onclick = () => fileInput.click();
-            fileInput.onchange = async (e) => {
-                const file = e.target.files[0];
-                if (!file) return;
-                try {
-                    const buffer = await engine.loadAudioFile(file);
-                    document.getElementById('fileInfo').style.display = 'block';
-                    document.getElementById('fileName').textContent = file.name;
-                    document.getElementById('fileDuration').textContent = buffer.duration.toFixed(2) + 's';
-                    document.getElementById('fileSampleRate').textContent = buffer.sampleRate + ' Hz';
-                    document.getElementById('fileChannels').textContent = buffer.numberOfChannels;
-                    document.getElementById('processBtn').disabled = false;
-                } catch (error) {
-                    alert('Error: ' + error.message);
-                }
-            };
-            
-            document.getElementById('processBtn').onclick = async () => {
-                const check = rateLimiter.canProcess();
-                if (!check.allowed) {
-                    document.getElementById('rateLimitText').textContent = `Wait ${check.waitTime}s`;
-                    document.getElementById('rateLimitInfo').style.display = 'block';
-                    return;
-                }
-                rateLimiter.recordAttempt();
-                
-                const config = {
-                    roomWidth: parseFloat(document.getElementById('roomWidth').value),
-                    roomLength: parseFloat(document.getElementById('roomLength').value),
-                    roomHeight: parseFloat(document.getElementById('roomHeight').value),
-                    wallReflectivity: parseFloat(document.getElementById('wallReflectivity').value),
-                    airAbsorption: parseFloat(document.getElementById('airAbsorption').value),
-                    enableAdaptiveGain: document.getElementById('enableAdaptiveGain').checked,
-                    enableLinearScaling: document.getElementById('enableLinearScaling').checked,
-                    enableAutoRoomScale: document.getElementById('enableAutoRoomScale').checked
-                };
-                
-                document.getElementById('processBtn').disabled = true;
-                document.getElementById('processingStatus').textContent = 'Processing...';
-                
-                try {
-                    const result = await engine.process(config, (p) => {
-                        document.getElementById('progressBar').style.width = p + '%';
-                    });
-                    
-                    document.getElementById('processingTime').textContent = result.processingTime + 's';
-                    document.getElementById('outputSize').textContent = '5 MB';
-                    document.getElementById('autoScaleInfo').style.display = 'block';
-                    document.getElementById('autoScaleDetails').innerHTML = `
-                        <strong>Room:</strong> ${result.autoScaleInfo.dimensions}<br>
-                        <strong>Volume:</strong> ${result.autoScaleInfo.volume}
-                    `;
-                    document.getElementById('playBtn').disabled = false;
-                    document.getElementById('processingStatus').textContent = 'Complete!';
-                } catch (error) {
-                    alert('Error: ' + error.message);
-                } finally {
-                    document.getElementById('processBtn').disabled = false;
-                }
-            };
-            
-            document.getElementById('playBtn').onclick = () => {
-                engine.play();
-                document.getElementById('playBtn').textContent = '⏸️ Playing...';
-            };
-            
-            // Dual input sync
-            ['roomWidth', 'roomLength', 'roomHeight', 'wallReflectivity', 'airAbsorption'].forEach(id => {
-                const slider = document.getElementById(id);
-                const num = document.getElementById(id + 'Num');
-                const display = document.getElementById(id + 'Value');
-                
-                slider.oninput = () => {
-                    num.value = slider.value;
-                    display.textContent = slider.value + (id.includes('room') ? 'm' : '');
-                };
-                
-                num.oninput = () => {
-                    slider.value = num.value;
-                    display.textContent = num.value + (id.includes('room') ? 'm' : '');
-                };
             });
             
-            // Room presets
-            document.getElementById('roomPreset').onchange = (e) => {
-                const presets = {
-                    bedroom: [4, 4, 2.5],
-                    living: [6, 8, 3],
-                    studio: [8, 10, 3],
-                    medium: [8, 6, 3.2],
-                    hall: [20, 25, 8]
-                };
-                const p = presets[e.target.value];
-                if (p) {
-                    document.getElementById('roomWidth').value = p[0];
-                    document.getElementById('roomLength').value = p[1];
-                    document.getElementById('roomHeight').value = p[2];
-                    document.getElementById('roomWidthNum').value = p[0];
-                    document.getElementById('roomLengthNum').value = p[1];
-                    document.getElementById('roomHeightNum').value = p[2];
-                    document.getElementById('roomWidthValue').textContent = p[0] + 'm';
-                    document.getElementById('roomLengthValue').textContent = p[1] + 'm';
-                    document.getElementById('roomHeightValue').textContent = p[2] + 'm';
-                    const vol = (p[0] * p[1] * p[2]).toFixed(1);
-                    document.getElementById('roomVolume').textContent = vol + ' m³';
+            if (config.enableAdaptiveGain) {
+                let chunkPeak = 0;
+                for (let ch = 0; ch < numChannels; ch++) {
+                    for (let i = start; i < end; i++) {
+                        chunkPeak = Math.max(chunkPeak, Math.abs(output[ch][i]));
+                    }
                 }
-            };
-        });
-    </script>
-</body>
-</html>
+                if (chunkPeak > 0.8) {
+                    currentReflGain *= 0.95;
+                } else if (chunkPeak < 0.5 && currentReflGain < config.wallReflectivity) {
+                    currentReflGain *= 1.02;
+                }
+            }
+            
+            if (chunk % 10 === 0) {
+                onProgress(20 + Math.floor((chunk / numChunks) * 80));
+            }
+        }
+        
+        let maxSample = 0;
+        for (let ch = 0; ch < numChannels; ch++) {
+            for (let i = 0; i < numSamples; i++) {
+                maxSample = Math.max(maxSample, Math.abs(output[ch][i]));
+            }
+        }
+        
+        if (maxSample > 0.95) {
+            const normFactor = 0.95 / maxSample;
+            for (let ch = 0; ch < numChannels; ch++) {
+                for (let i = 0; i < numSamples; i++) {
+                    output[ch][i] *= normFactor;
+                }
+            }
+        }
+        
+        const buffer = this.audioContext.createBuffer(numChannels, numSamples, sampleRate);
+        for (let ch = 0; ch < numChannels; ch++) {
+            buffer.copyToChannel(output[ch], ch);
+        }
+        
+        this.processedBuffer = buffer;
+        return buffer;
+    }
+
+    reflectPoint(point, planePoint, planeNormal) {
+        const d = this.vectorDot(this.vectorSubtract(point, planePoint), planeNormal);
+        return [
+            point[0] - 2 * d * planeNormal[0],
+            point[1] - 2 * d * planeNormal[1],
+            point[2] - 2 * d * planeNormal[2]
+        ];
+    }
+
+    vectorSubtract(a, b) {
+        return [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
+    }
+
+    vectorDot(a, b) {
+        return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+    }
+
+    calculateSpeakerGains(azimuth, elevation) {
+        const gains = new Float32Array(12);
+        for (let i = 0; i < this.speakerPositions.length; i++) {
+            const sp = this.speakerPositions[i];
+            const azDiff = Math.abs(azimuth - sp.az);
+            const elDiff = Math.abs(elevation - sp.el);
+            const angularDist = Math.sqrt(azDiff * azDiff + elDiff * elDiff);
+            gains[i] = 1 / (1 + angularDist / 45);
+        }
+        const sumGains = gains.reduce((sum, g) => sum + g * g, 0);
+        const normFactor = sumGains > 0 ? 1 / Math.sqrt(sumGains) : 0;
+        for (let i = 0; i < gains.length; i++) {
+            gains[i] *= normFactor;
+        }
+        return gains;
+    }
+
+    async play() {
+        if (!this.processedBuffer || this.isPlaying) return;
+        this.sourceNode = this.audioContext.createBufferSource();
+        this.sourceNode.buffer = this.processedBuffer;
+        this.sourceNode.connect(this.audioContext.destination);
+        this.sourceNode.onended = () => {
+            this.isPlaying = false;
+            document.getElementById('playBtn').textContent = '▶️ Play';
+            document.getElementById('stopBtn').disabled = true;
+        };
+        this.sourceNode.start();
+        this.isPlaying = true;
+    }
+
+    stop() {
+        if (this.sourceNode && this.isPlaying) {
+            this.sourceNode.stop();
+            this.isPlaying = false;
+        }
+    }
+
+    exportWAV() {
+        if (!this.processedBuffer) return null;
+        const numChannels = this.processedBuffer.numberOfChannels;
+        const length = this.processedBuffer.length;
+        const sampleRate = this.processedBuffer.sampleRate;
+        const buffer = new ArrayBuffer(44 + length * numChannels * 4);
+        const view = new DataView(buffer);
+        
+        this.writeString(view, 0, 'RIFF');
+        view.setUint32(4, 36 + length * numChannels * 4, true);
+        this.writeString(view, 8, 'WAVE');
+        this.writeString(view, 12, 'fmt ');
+        view.setUint32(16, 16, true);
+        view.setUint16(20, 3, true);
+        view.setUint16(22, numChannels, true);
+        view.setUint32(24, sampleRate, true);
+        view.setUint32(28, sampleRate * numChannels * 4, true);
+        view.setUint16(32, numChannels * 4, true);
+        view.setUint16(34, 32, true);
+        this.writeString(view, 36, 'data');
+        view.setUint32(40, length * numChannels * 4, true);
+        
+        let offset = 44;
+        for (let i = 0; i < length; i++) {
+            for (let ch = 0; ch < numChannels; ch++) {
+                view.setFloat32(offset, this.processedBuffer.getChannelData(ch)[i], true);
+                offset += 4;
+            }
+        }
+        return new Blob([buffer], { type: 'audio/wav' });
+    }
+
+    writeString(view, offset, string) {
+        for (let i = 0; i < string.length; i++) {
+            view.setUint8(offset + i, string.charCodeAt(i));
+        }
+    }
+}
+
+const engine = new ArbyAudioEngine();
+
+document.addEventListener('DOMContentLoaded', async () => {
+    await engine.initialize();
+
+    const uploadZone = document.getElementById('uploadZone');
+    const fileInput = document.getElementById('fileInput');
+    const videoUpload = document.getElementById('videoUpload');
+    const videoUploadZone = document.getElementById('videoUploadZone');
+    const videoPreview = document.getElementById('videoPreview');
+    const createVideoBtn = document.getElementById('createVideoBtn');
+    const canvas = document.getElementById('canvas');
+    const progressBar = document.getElementById('progressBar');
+    const progressBarFill = document.getElementById('progressBarFill');
+    let videoFile, audioFile, mediaRecorder, recordedChunks = [];
+
+    if (!videoUploadZone) {
+        console.error('Element with id="videoUploadZone" not found in the DOM');
+        return;
+    }
+
+    uploadZone.onclick = () => fileInput.click();
+    videoUploadZone.onclick = () => videoUpload.click();
+
+    fileInput.addEventListener('change', async (e) => {
+        audioFile = e.target.files[0];
+        if (!audioFile) return;
+        try {
+            const buffer = await engine.loadAudioFile(audioFile);
+            document.getElementById('fileInfo').style.display = 'block';
+            document.getElementById('fileName').textContent = audioFile.name;
+            document.getElementById('fileDuration').textContent = buffer.duration.toFixed(2) + 's';
+            document.getElementById('fileSampleRate').textContent = buffer.sampleRate + ' Hz';
+            document.getElementById('fileChannels').textContent = buffer.numberOfChannels;
+            document.getElementById('processBtn').disabled = false;
+            checkFiles();
+        } catch (error) {
+            alert('Error: ' + error.message);
+        }
+    });
+
+    videoUpload.addEventListener('change', (event) => {
+        videoFile = event.target.files[0];
+        if (videoFile) {
+            const videoURL = URL.createObjectURL(videoFile);
+            videoPreview.src = videoURL;
+            videoPreview.style.display = 'block';
+            checkFiles();
+        }
+    });
+
+    function checkFiles() {
+        if (audioFile) {
+            document.getElementById('processBtn').disabled = false;
+            document.getElementById('downloadBtn').disabled = false;
+        }
+        if (videoFile && audioFile) {
+            createVideoBtn.disabled = false;
+        }
+    }
+
+    document.getElementById('processBtn').onclick = async () => {
+        const check = rateLimiter.canProcess();
+        if (!check.allowed) {
+            document.getElementById('rateLimitText').textContent = `Wait ${check.waitTime}s`;
+            document.getElementById('rateLimitInfo').style.display = 'block';
+            return;
+        }
+        rateLimiter.recordAttempt();
+
+        const config = {
+            roomWidth: parseFloat(document.getElementById('roomWidth').value),
+            roomLength: parseFloat(document.getElementById('roomLength').value),
+            roomHeight: parseFloat(document.getElementById('roomHeight').value),
+            wallReflectivity: parseFloat(document.getElementById('wallReflectivity').value),
+            airAbsorption: parseFloat(document.getElementById('airAbsorption').value),
+            enableAdaptiveGain: document.getElementById('enableAdaptiveGain').checked,
+            enableLinearScaling: document.getElementById('enableLinearScaling').checked,
+            enableAutoRoomScale: document.getElementById('enableAutoRoomScale').checked
+        };
+
+        document.getElementById('processBtn').disabled = true;
+        document.getElementById('processingStatus').textContent = 'Processing...';
+
+        try {
+            const result = await engine.process(config, (p) => {
+                document.getElementById('progressBar').style.width = p + '%';
+            });
+
+            document.getElementById('processingTime').textContent = result.processingTime + 's';
+            document.getElementById('outputSize').textContent = '5 MB';
+            document.getElementById('autoScaleInfo').style.display = 'block';
+            document.getElementById('autoScaleDetails').innerHTML = `
+                <strong>Room:</strong> ${result.autoScaleInfo.dimensions}<br>
+                <strong>Volume:</strong> ${result.autoScaleInfo.volume}
+            `;
+            document.getElementById('playBtn').disabled = false;
+            document.getElementById('downloadBtn').disabled = false;
+            document.getElementById('processingStatus').textContent = 'Complete!';
+        } catch (error) {
+            alert('Error: ' + error.message);
+        } finally {
+            document.getElementById('processBtn').disabled = false;
+        }
+    };
+
+    document.getElementById('playBtn').onclick = () => {
+        engine.play();
+        document.getElementById('playBtn').textContent = '⏸️ Playing...';
+        document.getElementById('stopBtn').disabled = false;
+    };
+
+    document.getElementById('stopBtn').onclick = () => {
+        engine.stop();
+        if (mediaRecorder && mediaRecorder.state === 'recording') {
+            mediaRecorder.stop();
+        }
+        document.getElementById('playBtn').textContent = '▶️ Play';
+        document.getElementById('stopBtn').disabled = true;
+    };
+
+    document.getElementById('downloadBtn').onclick = () => {
+        const blob = engine.exportWAV();
+        if (blob) {
+            const url = URL.createObjectURL(blob);
+            const downloadLink = document.createElement('a');
+            downloadLink.href = url;
+            downloadLink.download = 'processed-audio.wav';
+            downloadLink.textContent = 'Download Processed Audio';
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+        }
+    };
+
+    createVideoBtn.addEventListener('click', () => {
+        if (!engine.processedBuffer) {
+            alert('Please process audio first.');
+            return;
+        }
+        createVideoBtn.disabled = true;
+        progressBar.style.display = 'block';
+        recordedChunks = [];
+
+        canvas.width = videoPreview.videoWidth;
+        canvas.height = videoPreview.videoHeight;
+        const context = canvas.getContext('2d');
+        videoPreview.play();
+
+        function drawFrame() {
+            if (!videoPreview.paused && !videoPreview.ended) {
+                context.drawImage(videoPreview, 0, 0, canvas.width, canvas.height);
+                requestAnimationFrame(drawFrame);
+            }
+        }
+        drawFrame();
+
+        const canvasStream = canvas.captureStream(30);
+        const processedBlob = engine.exportWAV();
+        const audioURL = URL.createObjectURL(processedBlob);
+        const audioElement = new Audio(audioURL);
+        const audioContext = new AudioContext();
+        const audioStream = audioContext.createMediaElementSource(audioElement);
+        const destination = audioContext.createMediaStreamDestination();
+        audioStream.connect(destination);
+
+        const combinedStream = new MediaStream([
+            ...canvasStream.getVideoTracks(),
+            ...destination.stream.getAudioTracks()
+        ]);
+
+        mediaRecorder = new MediaRecorder(combinedStream, { mimeType: 'video/webm' });
+
+        mediaRecorder.ondataavailable = event => {
+            if (event.data.size > 0) {
+                recordedChunks.push(event.data);
+            }
+        };
+
+        mediaRecorder.onstop = () => {
+            const blob = new Blob(recordedChunks, { type: 'video/webm' });
+            const url = URL.createObjectURL(blob);
+            const downloadLink = document.createElement('a');
+            downloadLink.href = url;
+            downloadLink.download = 'merged-video.webm';
+            document.getElementById('downloadBtn').disabled = false;
+            downloadLink.textContent = 'Download Merged Video';
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+            progressBarFill.style.width = '100%';
+            progressBarFill.textContent = '100%';
+            createVideoBtn.disabled = false;
+            progressBar.style.display = 'none';
+        };
+
+        mediaRecorder.onstart = () => {
+            audioElement.play();
+            const duration = videoPreview.duration * 1000;
+            const interval = setInterval(() => {
+                const currentTime = videoPreview.currentTime * 1000;
+                const progress = (currentTime / duration) * 100;
+                progressBarFill.style.width = `${progress}%`;
+                progressBarFill.textContent = `${Math.floor(progress)}%`;
+                if (videoPreview.paused || videoPreview.ended) {
+                    clearInterval(interval);
+                }
+            }, 100);
+        };
+
+        mediaRecorder.start();
+        setTimeout(() => {
+            mediaRecorder.stop();
+            audioElement.pause();
+        }, videoPreview.duration * 1000);
+    });
+
+    document.getElementById('roomPreset').onchange = (e) => {
+        const presets = {
+            bedroom: [4, 4, 2.5],
+            living: [6, 8, 3],
+            studio: [8, 10, 3],
+            medium: [8, 6, 3.2],
+            hall: [20, 25, 8]
+        };
+        const p = presets[e.target.value];
+        if (p) {
+            document.getElementById('roomWidth').value = p[0];
+            document.getElementById('roomLength').value = p[1];
+            document.getElementById('roomHeight').value = p[2];
+            document.getElementById('roomWidthNum').value = p[0];
+            document.getElementById('roomLengthNum').value = p[1];
+            document.getElementById('roomHeightNum').value = p[2];
+            document.getElementById('roomWidthValue').textContent = p[0] + 'm';
+            document.getElementById('roomLengthValue').textContent = p[1] + 'm';
+            document.getElementById('roomHeightValue').textContent = p[2] + 'm';
+            const vol = (p[0] * p[1] * p[2]).toFixed(1);
+            document.getElementById('roomVolume').textContent = vol + ' m³';
+        }
+    };
+
+    ['roomWidth', 'roomLength', 'roomHeight', 'wallReflectivity', 'airAbsorption'].forEach(id => {
+        const slider = document.getElementById(id);
+        const num = document.getElementById(id + 'Num');
+        const display = document.getElementById(id + 'Value');
+
+        slider.oninput = () => {
+            num.value = slider.value;
+            display.textContent = slider.value + (id.includes('room') ? 'm' : '');
+        };
+
+        num.oninput = () => {
+            slider.value = num.value;
+            display.textContent = num.value + (id.includes('room') ? 'm' : '');
+        };
+    });
+});
+    
