@@ -143,7 +143,6 @@ Then, if it gets stuck, restart it. If it were to be stuck on Python installatio
 ## 🔮 Roadmap
 
 * Google Drive integration
-* Windows `.bat` launcher (double-click ready)
 * GUI front-end for non-technical users
 * Expanded VR/AR SDK support
 
