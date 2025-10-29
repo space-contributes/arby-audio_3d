@@ -105,6 +105,11 @@ Arby Audio pushes beyond traditional audio engines with **real-world acoustic si
 
 ## ⚙️ Setup & Usage
 
+# Convert Live Audio from Windows to Arby Audio - Download .exe
+Yes! Or download from Releases!
+
+
+
 Clone or download the repo: or download the releases (the latest one)
 
 ```bash
@@ -113,7 +118,7 @@ cd arby-audio_3d
 ```
 OR: DOWNLOAD FIELS INDUVISUALLY (PYTHON OR HTML, YOU CHOOSE):
 HTML:
-Open the file in a browser.
+Open the file in a browser. Or visit the GitHub Pages:
 Python:
 Run the engine with your audio file:
 
