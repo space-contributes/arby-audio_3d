@@ -107,6 +107,7 @@ Arby Audio pushes beyond traditional audio engines with **real-world acoustic si
 
 # Convert Live Audio from Windows to Arby Audio - Download .exe
 Yes! Or download from Releases!
+# New .exe works for Windows to convert live audio into Arby Audio. Make sure to go to the Windows Control Panel and go to "Sound" and set your playback speaker to 96khz 24bit (32bit....if supported) (automatic upsample to 32bit will happen anyway)
 
 
 
@@ -130,7 +131,7 @@ OR: DOWNLOAD THE FILES INDIVIDUALLY through the GitHub website
 
 *(replace with your own .wav URL)*
 
-## OR, FOR WINDOWS:
+## OR, FOR WINDOWS: Without converting to live audio?
 Still requires cloning the repo or downloading files individually from the GitHub website.
 Run the WOO.BAT as administrator.
 Then, if it gets stuck, restart it.
