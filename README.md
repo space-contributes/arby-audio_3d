@@ -106,7 +106,7 @@ Arby Audio pushes beyond traditional audio engines with **real-world acoustic si
 ## ⚙️ Setup & Usage
 
 # Convert Live Audio from Windows to Arby Audio - Download .exe
-Yes! Or download from Releases!
+Yes! Or download from Releases! Do not download individually, and if so please download DLLs in the same folder where Arby Audios' .exe is!
 # New .exe works for Windows to convert live audio into Arby Audio. Make sure to go to the Windows Control Panel and go to "Sound" and set your playback speaker to 96khz 24bit (32bit....if supported) (automatic upsample to 32bit will happen anyway)
 
 
