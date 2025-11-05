@@ -68,6 +68,7 @@ Arby Audio pushes beyond traditional audio engines with **real-world acoustic si
 * Automatic normalization & high-frequency smoothing
 * **High-fidelity output**: 96kHz / 32-bit (≈4× industry standard)
 * Fully **open source & customizable**
+  # Real-time SINC RESAMPLING IF source audio NOT 96KHZ / 32BIT
 
 
 ---
@@ -102,31 +103,55 @@ Arby Audio pushes beyond traditional audio engines with **real-world acoustic si
 * 🧪 Educational & Research Labs
 
 ---
-
 ## ⚙️ Setup & Usage
 
-# Convert Live Audio from Windows to Arby Audio - Download .exe
-Yes! Or download from Releases! Do not download individually, and if so please download DLLs in the same folder where Arby Audios' .exe is!
-# New .exe works for Windows to convert live audio into Arby Audio. Make sure to go to the Windows Control Panel and go to "Sound" and set your playback speaker to 96khz 24bit (32bit....if supported) (automatic upsample to 32bit will happen anyway)
+### 🎧 Convert Live Windows Audio to Arby Audio (.exe)
 
+Yes! You can now download the **Windows executable** to convert your system’s **live audio** directly into **Arby Audio**.
+⚠️ **Important:** If downloading manually, ensure **all DLL files** are in the **same folder** as the Arby Audio `.exe`.
 
+Before running, open **Control Panel → Sound → Playback Device Properties**, and set your output format to:
+**96 kHz, 24-bit** (or **32-bit** if supported — the app will automatically upsample to 32-bit anyway).
 
-Clone or download the repo: or download the releases (the latest one)
+Works using C++, with the speed of Zig using multi threading. How? Each memory address change is governed and compiled with our special C++ Compiler. Works best if you use the best pre-compilied .exe.
+
+---
+
+### 💾 Download Options
+
+You can either **clone the repository** or **download the latest release**:
 
 ```bash
 git clone https://github.com/space-code/arby-audio_3d.git
 cd arby-audio_3d
 ```
-OR: DOWNLOAD FIELS INDUVISUALLY (PYTHON OR HTML, YOU CHOOSE):
-HTML:
-Open the file in a browser. Or visit the GitHub Pages:
-Python:
-Run the engine with your audio file:
+
+Alternatively, visit the **Releases** section on GitHub to get the compiled version.
+
+---
+
+### 🧩 Using Individual Files
+
+If you prefer, you can **download individual files** (Python or HTML version):
+
+#### 🌐 HTML Version
+
+* Simply open the `.html` file in your browser
+* Or visit the **GitHub Pages** link directly to run it online
+
+#### 🐍 Python Version
+
+Run the engine locally with your own audio file or a URL:
 
 ```bash
 python "PYTHONSCRIPT.py" --music_url https://your-music-url.com/file.wav
 ```
-OR: DOWNLOAD THE FILES INDIVIDUALLY through the GitHub website
+
+---
+
+### 📥 Manual Download
+
+You can also manually **download files individually** from the GitHub repository’s main page if you don’t want to use Git.
 
 
 *(replace with your own .wav URL)*
