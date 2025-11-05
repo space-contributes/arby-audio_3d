@@ -123,7 +123,7 @@ Works using C++, with the speed of Zig using multi threading. How? Each memory a
 You can either **clone the repository** or **download the latest release**:
 
 ```bash
-git clone https://github.com/space-code/arby-audio_3d.git
+git clone https://github.com/space-code/arby-audio_3d
 cd arby-audio_3d
 ```
 
