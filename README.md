@@ -64,6 +64,7 @@ Arby Audio pushes beyond traditional audio engines with **real-world acoustic si
 * Speaker mapping to **7.1.4 layout** (7 down, 4 up, 1 sub)
 * Binaural downmix for headphones
 * Trajectory-based moving sound sources
+* Distance and air attentuation - Complies with the INTERNATIONAL STANDARD - ISO 9613-1
 * Furniture/environment scanning for realistic reflections
 * Automatic normalization & high-frequency smoothing
 * **High-fidelity output**: 96kHz / 32-bit (≈4× industry standard)
@@ -174,8 +175,8 @@ Then, if it gets stuck, restart it. If it were to be stuck on Python installatio
 ## 🔮 Roadmap
 
 * Google Drive integration
-* GUI front-end for non-technical users
 * Expanded VR/AR SDK support
+* Ease of use - Arby Audio Audio Recorder - record in the Arby Audio format exported as a .wav - C++
 
 ---
 
