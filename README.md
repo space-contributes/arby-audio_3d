@@ -160,7 +160,7 @@ You can also manually **download files individually** from the GitHub repository
 ## OR, FOR WINDOWS: Without converting to live audio?
 Still requires cloning the repo or downloading files individually from the GitHub website.
 Run the WOO.BAT as administrator.
-Then, if it gets stuck, restart it.
+If the process freezes, simply restart it.
 If it is not processing the .WAV, try shortening the URL using tinyurl.com and try again with the updated link.
 
 # FOR MACOS AND LINUX:
