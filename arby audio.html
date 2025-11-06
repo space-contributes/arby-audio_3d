@@ -1120,6 +1120,49 @@ document.addEventListener('DOMContentLoaded', async () => {
             progressBar.style.display = 'none';
         };
 
+            }
+        }
+        drawFrame();
+
+        const canvasStream = canvas.captureStream(30);
+        const processedBlob = engine.exportWAV();
+        const audioURL = URL.createObjectURL(processedBlob);
+        const audioElement = new Audio(audioURL);
+        const audioContext = new AudioContext();
+        const audioStream = audioContext.createMediaElementSource(audioElement);
+        const destination = audioContext.createMediaStreamDestination();
+        audioStream.connect(destination);
+
+        const combinedStream = new MediaStream([
+            ...canvasStream.getVideoTracks(),
+            ...destination.stream.getAudioTracks()
+        ]);
+
+        mediaRecorder = new MediaRecorder(combinedStream, { mimeType: 'video/webm' });
+
+        mediaRecorder.ondataavailable = event => {
+            if (event.data.size > 0) {
+                recordedChunks.push(event.data);
+            }
+        };
+
+        mediaRecorder.onstop = () => {
+            const blob = new Blob(recordedChunks, { type: 'video/webm' });
+            const url = URL.createObjectURL(blob);
+            const downloadLink = document.createElement('a');
+            downloadLink.href = url;
+            downloadLink.download = 'merged-video.webm';
+            document.getElementById('downloadBtn').disabled = false;
+            downloadLink.textContent = 'Download Merged Video';
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+            progressBarFill.style.width = '100%';
+            progressBarFill.textContent = '100%';
+            createVideoBtn.disabled = false;
+            progressBar.style.display = 'none';
+        };
+
         mediaRecorder.onstart = () => {
             audioElement.play();
             const duration = videoPreview.duration * 1000;
@@ -1183,3 +1226,5 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
     
 
+        
+    
