@@ -1,4 +1,4 @@
-# Arby Audio 3D — Cinematic Spatial Sound Engine
+# Arby Audio 3D — Cinematic Spatial Sound Engine - C++
 
 ### **Live 96 kHz / 32-bit Spatial Audio Conversion. GPU-Accelerated. Physically Accurate.**
 
