@@ -133,7 +133,7 @@ Most audio frameworks rely on middleware layers, SDKs, and abstraction — which
 
 ## 📜 License
 
-Open-source. Free to use, modify, and redistribute. All code executes locally and respects user privacy.
+Open-source. Free to use, modify, and redistribute with i) permission or ii) credit aside from forming the repo, as long as you keep CLEAR credit under the relevant copyright laws. All code executes locally and respects user privacy.
 LICENSE.md only valid in Main Branch.
 All references to brand names and trademarks are for educational and research purposes only.
 
