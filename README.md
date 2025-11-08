@@ -1,15 +1,16 @@
 # Arby Audio 3D — Cinematic Spatial Sound Engine - C++ - HTML - Python - Cross-platform
 
 ### **Live 96 kHz / 32-bit Spatial Audio Conversion. GPU-Accelerated. Physically Accurate.**
+#### Android TV Code made - to compile and release by 11th November*
 
-##### **Arby Audio 3D** is a **next-generation, GPU-accelerated spatial sound engine** that delivers **live 96 kHz / 32-bit, ISO 9613-1–compliant, HRTF-accurate, multi-threaded, and privacy-safe 7.1.4 audio conversion** with **real-time reflections, sinc resampling, furniture-aware acoustics, and cross-platform AR/VR-ready performance** — all **optimized at the assembly level for true cinematic realism.**
+##### **Arby Audio 3D** is a **next-generation*, GPU-accelerated spatial sound engine** that delivers **live 96 kHz / 32-bit, ISO 9613-1–compliant, HRTF-accurate, multi-threaded, and privacy-safe 7.1.4 audio conversion** with **real-time reflections, sinc resampling, furniture-aware acoustics, and cross-platform AR/VR-ready performance** — all **optimized at the assembly level for true cinematic realism.**
 
 *Made with ❤️ by Space-code* WITH *7 YEARS OF MAKING*!
 
 ![Version](https://img.shields.io/badge/version-3.2.1-blue) ![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen) ![Python Version](https://img.shields.io/badge/python-3.11-blue) ![Build Status](https://img.shields.io/badge/build-passing-brightgreen) ![Last Commit](https://img.shields.io/github/last-commit/space-contributes/arby-audio_3d) ![Stars](https://img.shields.io/github/stars/space-contributes/arby-audio_3d?style=social) ![Forks](https://img.shields.io/github/forks/space-contributes/arby-audio_3d?style=social) ![Open Issues](https://img.shields.io/github/issues/space-contributes/arby-audio_3d) ![Closed Issues](https://img.shields.io/github/issues-closed/space-contributes/arby-audio_3d) ![Downloads](https://img.shields.io/github/downloads/space-contributes/arby-audio_3d/total) ![Maintenance](https://img.shields.io/badge/maintenance-active-brightgreen) ![Supported OS](https://img.shields.io/badge/os-windows%20|%20macOS%20|%20Linux-lightgrey) ![Top Language](https://img.shields.io/github/languages/top/space-contributes/arby-audio_3d) ![Repo Size](https://img.shields.io/github/repo-size/space-contributes/arby-audio_3d) ![Commits](https://img.shields.io/github/commit-activity/m/space-contributes/arby-audio_3d) ![Issues Closed](https://img.shields.io/github/issues-pr-closed/space-contributes/arby-audio_3d)
 ![Arby Audio Logo](https://raw.githubusercontent.com/space-contributes/arby-audio_3d/refs/heads/main/Arby%20Logo%20Design%20Proto.1\(1\).jpg)
 
-Arby Audio is a next-generation 3D spatial sound engine designed for **live, real-time, and file-based audio and video conversion**. It's engineered from the ground up for **precision, performance, and realism** — using **sinc resampling, ISO 9613-1–compliant attenuation**, and **HRTF-based spatial rendering** that simulates how sound truly behaves in the real world.
+Arby Audio is a next-generation* 3D spatial sound engine designed for **live, real-time, and file-based audio and video conversion**. It's engineered from the ground up for **precision, performance, and realism** — using **sinc resampling, ISO 9613-1–compliant attenuation**, and **HRTF-based spatial rendering** that simulates how sound truly behaves in the real world.
 And yes — it sounds **AMAZING.**
 
 ---
@@ -133,8 +134,12 @@ Most audio frameworks rely on middleware layers, SDKs, and abstraction — which
 
 ## 📜 License
 
-Open-source. Free to use, modify, and redistribute with i) permission or ii) credit aside from forming the repo, as long as you keep CLEAR credit under the relevant copyright laws. All code executes locally and respects user privacy.
+Open-source. Free to use*, modify, and redistribute with i) permission or ii) credit aside from forming the repo, as long as you keep CLEAR credit under the relevant copyright laws. All code executes locally and respects user privacy.
 LICENSE.md only valid in Main Branch.
 All references to brand names and trademarks are for educational and research purposes only.
 
 ---
+
+Legal Markers -
+
+*: Subject to change
