@@ -1172,7 +1172,11 @@ return true;
 
 void start() {
 running = true;
-stats = Stats();
+stats.framesProcessed.store(0);
+stats.cvFramesProcessed.store(0);
+stats.peakLevel.store(0.0f);
+stats.activeObjects.store(0);
+stats.surroundDetected.store(false);
 
 printf("\n[ENGINE] Starting audio processing...\n");
 
@@ -1470,7 +1474,7 @@ enableCV = (choice != 2);
 printf("\n═══════════════════════════════════════════════════════\n");
 printf("Configuration Summary:\n");
 printf("═══════════════════════════════════════════════════════\n");
-printf(" • Mode: %s\", useDolbyAtmos ? "Dolby Atmos 7.1.4" : "Circular 360°");
+printf(" • Mode: %s\n", useDolbyAtmos ? "Dolby Atmos 7.1.4" : "Circular 360°");
 if (!useDolbyAtmos) {
 printf(" • Speakers: %d\n", circularSpeakers);
 }
