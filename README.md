@@ -1,4 +1,4 @@
-# Arby Audio 3D — Cinematic Spatial Sound Engine - C++ - HTML - Python - Cross-platform
+# Arby Audio 3D — Cinematic Spatial Sound Engine - C++ - HTML - Python - Cross-platform - Computer Vision enabled
 
 ### **Live 96 kHz / 32-bit Spatial Audio Conversion. GPU-Accelerated. Physically Accurate.**
 #### Android TV Code made - to compile and release by 11th November*
@@ -57,6 +57,7 @@ Open the HTML file in your browser — or visit the hosted version on GitHub Pag
 
 ## 🧩 Features
 
+* **Computer Vision** For live conversion .exe, Linux/MacOS/HTML not yet there! Same for Sinc-based stuff.
 * **Sinc-based resampling** up to 96 kHz / 32-bit for unmatched clarity.
 * **HRTF spatialization** with full 360° azimuth and elevation coverage.
 * **Real-time reflections** up to 3rd order with per-wall frequency damping.
