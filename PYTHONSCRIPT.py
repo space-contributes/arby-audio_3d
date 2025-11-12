@@ -4,14 +4,13 @@ import requests
 import base64
 from scipy.io.wavfile import write, read
 from pydub import AudioSegment
-from scipy.signal import butter, lfilter, resample_poly
-from IPython.display import Audio, HTML, display
+from scipy.signal import butter, lfilter
+from IPython.display import Audio, display
 import math
 import subprocess
 import sys
 import platform
 import shutil
-from fractions import Fraction
 
 try:
     import py7zr
@@ -24,6 +23,12 @@ try:
 except ImportError:
     subprocess.run([sys.executable, "-m", "pip", "install", "ffmpeg-python"], check=True)
     import ffmpeg
+
+try:
+    import cv2
+except ImportError:
+    subprocess.run([sys.executable, "-m", "pip", "install", "opencv-python"], check=True)
+    import cv2
 
 # -----------------------
 # FFmpeg installer
@@ -67,7 +72,7 @@ def ensure_ffmpeg():
 fs = 96000
 mc = 12
 REFLECTION_GAIN_START = 0.9
-c = 343.0
+c = 343.0  # speed of sound m/s
 
 # -----------------------
 # Filters & reflection helpers
@@ -107,7 +112,7 @@ def process_reflections(frame, s_pos, listener, planes, out_mc, fs, idx, room_di
         if d_ref_norm > 1e-6:
             vec_ref /= d_ref_norm
             az_r = math.atan2(vec_ref[1], vec_ref[0])
-            el_r = math.asin(np.clip(vec_ref[2],-1,1))
+            el_r = np.arcsin(np.clip(vec_ref[2],-1,1))
             gains_r = speaker_gains_7_1_4(az_r, el_r)
         else:
             gains_r = np.zeros(mc)
@@ -147,8 +152,6 @@ video_file = input("Enter the path or URL of the video file (leave blank if none
 music_file = "music.wav"
 processed_music_file = "processed_music.wav"
 wav_file = "music_96k.wav"
-multichannel_wav = "3d_music_7_1_4_reflections.wav"
-binaural_wav = "3d_music_binaural_reflections.wav"
 
 if not os.path.exists(music_file) or os.path.getsize(music_file)==0:
     with requests.get(music_url,stream=True,timeout=30) as r:
@@ -163,6 +166,7 @@ ffmpeg_path = ensure_ffmpeg()
     .output(processed_music_file, acodec='pcm_s16le', ar=str(fs), ac=1)
     .run(capture_stdout=True, capture_stderr=True, overwrite_output=True)
 )
+
 music = AudioSegment.from_file(processed_music_file).set_frame_rate(fs).set_channels(1)
 music.export(wav_file,'wav')
 sr,samples = read(wav_file)
@@ -191,12 +195,11 @@ listener = np.array([0.0,0.0,0.15])
 room_diag = np.linalg.norm([room['x'],room['y'],room['z']])
 
 # -----------------------
-# Linear scaling helpers
+# Trajectory helpers
 # -----------------------
 def generate_trajectory(samples, room_size=(8,6,3.2)):
     t = np.linspace(0,1,samples)
-    # Linearly increasing offset from listener
-    offset_scale = 0.5 + 0.5*t  # 0.5 m start, grows to 1 m
+    offset_scale = 0.5 + 0.5*t
     x = np.sin(2*np.pi*0.05*t)*room_size[0]*0.3*offset_scale
     y = np.cos(2*np.pi*0.03*t)*room_size[1]*0.3*offset_scale
     z = np.sin(2*np.pi*0.04*t)*room_size[2]*0.2*offset_scale + room_size[2]*0.1
@@ -204,7 +207,6 @@ def generate_trajectory(samples, room_size=(8,6,3.2)):
 
 traj = generate_trajectory(total_samples)
 
-# Linearly scaling frame window and hop
 window_size_min, window_size_max = 2048,8192
 hop_min, hop_max = 512,2048
 def get_window_hop(i,total_samples):
@@ -214,27 +216,81 @@ def get_window_hop(i,total_samples):
     return window, hop
 
 # -----------------------
+# Video CV setup
+# -----------------------
+use_video = bool(video_file)
+if use_video:
+    cap = cv2.VideoCapture(video_file)
+    ret, prev_frame = cap.read()
+    if not ret:
+        raise RuntimeError("Cannot read video source")
+    prev_gray = cv2.cvtColor(prev_frame, cv2.COLOR_BGR2GRAY)
+    motion_history = None
+    alpha = 0.5
+
+# -----------------------
 # Process frames
 # -----------------------
 current_refl_gain = REFLECTION_GAIN_START
-print("Processing audio frames...")
+print("Processing audio frames with optional CV tracking...")
+
 i = 0
-while i<total_samples:
+frame_counter = 0
+while i < total_samples:
     window, hop = get_window_hop(i,total_samples)
     frame = samples[i:i+window]
     if len(frame)==0: break
 
+    # Default trajectory position
     s_pos = traj[i]
+
+    # -----------------------
+    # CV motion detection
+    # -----------------------
+    if use_video:
+        ret, video_frame = cap.read()
+        if not ret:
+            break
+        gray = cv2.cvtColor(video_frame, cv2.COLOR_BGR2GRAY)
+        diff = cv2.absdiff(prev_gray, gray)
+        _, thresh = cv2.threshold(diff, 25, 255, cv2.THRESH_BINARY)
+        kernel = np.ones((5,5), np.uint8)
+        thresh = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, kernel)
+        thresh = cv2.morphologyEx(thresh, cv2.MORPH_DILATE, kernel)
+
+        contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        motion_boxes = []
+        for cnt in contours:
+            if cv2.contourArea(cnt) < 500:
+                continue
+            x, y, w, h = cv2.boundingRect(cnt)
+            motion_boxes.append((x, y, w, h))
+        # Compute centroids for audio source mapping
+        if motion_boxes:
+            height, width = gray.shape
+            # Take the largest moving object if multiple
+            x,y,w,h = max(motion_boxes, key=lambda b: b[2]*b[3])
+            cx, cy = x + w//2, y + h//2
+            # Map video centroid to room coordinates
+            s_pos = np.array([
+                (cx/width)*room['x'] - room['x']/2,
+                (cy/height)*room['y'] - room['y']/2,
+                0.15
+            ])
+        prev_gray = gray.copy()
+
+    # Compute direction to listener
     d = dist(listener, s_pos)+1e-6
     vec = listener - s_pos
     vec_norm = vec/d
-    az = math.atan2(vec_norm[1],vec_norm[0])
+    az = math.atan2(vec_norm[1], vec_norm[0])
     el = math.asin(np.clip(vec_norm[2],-1,1))
     gains = speaker_gains_7_1_4(az,el)
-    att = max(0.1,min(1.0,1.0/(1.0+0.1+*d)))
-    end_idx = min(i+len(frame),total_samples)
+    att = max(0.1, min(1.0, 1.0/(1.0+0.1*d)))
+    end_idx = min(i+len(frame), total_samples)
     out_mc[i:end_idx,:] += frame[:end_idx-i,None]*gains*att
 
+    # Reflections
     out_mc = process_reflections(frame, s_pos, listener, planes, out_mc, fs, i, room_diag, current_refl_gain)
 
     # Adaptive gain
@@ -242,18 +298,21 @@ while i<total_samples:
     if current_peak>0.8:
         current_refl_gain *= 0.95
         current_refl_gain = max(current_refl_gain,0.1)
-    i+=hop
+
+    i += hop
+    frame_counter += 1
+
+if use_video:
+    cap.release()
+cv2.destroyAllWindows()
 
 # -----------------------
-# Normalize early and full audio
+# Normalize and write
 # -----------------------
 max_peak = np.max(np.abs(out_mc))
 if max_peak>0:
     out_mc = out_mc/max_peak*0.9
 
-# -----------------------
-# Resample and output
-# -----------------------
 TARGET_FS = 96000
 BIT_DEPTH = np.float32
 mc_filename = f"3d_music_7_1_4_reflections_{TARGET_FS//1000}k_32bit.wav"
@@ -271,6 +330,5 @@ if peak_stereo>0:
 stereo_filename = f"3d_music_binaural_reflections_{TARGET_FS//1000}k_32bit.wav"
 write(stereo_filename,TARGET_FS,stereo.astype(BIT_DEPTH))
 
-print(f"✅ Multichannel saved as an audio file to be attached to your video file, please note that your use is subject to the terms and conditions of this software at https://github.com/space-contributes/arby-audio_3d/blob/main/LICENSE.md: {mc_filename}")
+print(f"✅ Multichannel saved: {mc_filename}")
 print(f"✅ Stereo saved: {stereo_filename}")
-
