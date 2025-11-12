@@ -320,6 +320,20 @@ if peak_stereo>0:
     stereo = stereo/peak_stereo*0.9
 stereo_filename = f"3d_music_binaural_reflections_{TARGET_FS//1000}k_32bit.wav"
 write(stereo_filename,TARGET_FS,stereo.astype(BIT_DEPTH))
+# -----------------------
+# Merge audio with video if video provided
+# -----------------------
+if use_video:
+    output_video_file = f"3d_video_with_3d_audio.mp4"
+    print(f"🎬 Merging processed audio with video into {output_video_file} ...")
+    (
+        ffmpeg
+        .input(video_file)
+        .output(stereo_filename, output_video_file, c:v='copy', c:a='aac', strict='experimental')
+        .run(overwrite_output=True)
+    )
+    print(f"✅ Video with 3D audio saved: {output_video_file}")
 
 print(f"✅ Multichannel saved: {mc_filename}")
 print(f"✅ Stereo saved: {stereo_filename}")
+
