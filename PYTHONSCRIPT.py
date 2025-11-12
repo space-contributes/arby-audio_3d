@@ -1,11 +1,9 @@
 import os
 import numpy as np
 import requests
-import base64
 from scipy.io.wavfile import write, read
 from pydub import AudioSegment
 from scipy.signal import butter, lfilter
-from IPython.display import Audio, display
 import math
 import subprocess
 import sys
@@ -112,8 +110,8 @@ def process_reflections(frame, s_pos, listener, planes, out_mc, fs, idx, room_di
         if d_ref_norm > 1e-6:
             vec_ref /= d_ref_norm
             az_r = math.atan2(vec_ref[1], vec_ref[0])
-            el_r = np.arcsin(np.clip(vec_ref[2],-1,1))
-            gains_r = speaker_gains_7_1_4(az_r, el_r)
+            el_r = math.asin(np.clip(vec_ref[2],-1,1))
+            gains_r = speaker_gains_7_1_4(az_r,el_r)
         else:
             gains_r = np.zeros(mc)
         start_idx = idx + delay_samples
@@ -174,7 +172,6 @@ samples = samples.astype(np.float32)
 if samples.dtype.kind=='i':
     samples/=float(2**(samples.dtype.itemsize*8-1))
 samples *= 0.2
-
 total_samples = len(samples)
 out_mc = np.zeros((total_samples, mc), dtype=np.float32)
 
@@ -206,7 +203,6 @@ def generate_trajectory(samples, room_size=(8,6,3.2)):
     return np.stack([x,y,z],axis=1)
 
 traj = generate_trajectory(total_samples)
-
 window_size_min, window_size_max = 2048,8192
 hop_min, hop_max = 512,2048
 def get_window_hop(i,total_samples):
@@ -229,24 +225,21 @@ if use_video:
     alpha = 0.5
 
 # -----------------------
-# Process frames
+# Process frames with multiple objects
 # -----------------------
 current_refl_gain = REFLECTION_GAIN_START
-print("Processing audio frames with optional CV tracking...")
+print("Processing audio frames with multi-object CV tracking...")
 
 i = 0
-frame_counter = 0
 while i < total_samples:
     window, hop = get_window_hop(i,total_samples)
     frame = samples[i:i+window]
     if len(frame)==0: break
 
-    # Default trajectory position
-    s_pos = traj[i]
+    # Default trajectory
+    s_positions = [traj[i]]  # list of source positions
 
-    # -----------------------
     # CV motion detection
-    # -----------------------
     if use_video:
         ret, video_frame = cap.read()
         if not ret:
@@ -259,39 +252,38 @@ while i < total_samples:
         thresh = cv2.morphologyEx(thresh, cv2.MORPH_DILATE, kernel)
 
         contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-        motion_boxes = []
+        centroids = []
+        height, width = gray.shape
         for cnt in contours:
             if cv2.contourArea(cnt) < 500:
                 continue
-            x, y, w, h = cv2.boundingRect(cnt)
-            motion_boxes.append((x, y, w, h))
-        # Compute centroids for audio source mapping
-        if motion_boxes:
-            height, width = gray.shape
-            # Take the largest moving object if multiple
-            x,y,w,h = max(motion_boxes, key=lambda b: b[2]*b[3])
+            x,y,w,h = cv2.boundingRect(cnt)
             cx, cy = x + w//2, y + h//2
-            # Map video centroid to room coordinates
-            s_pos = np.array([
+            # Map to room coordinates
+            pos = np.array([
                 (cx/width)*room['x'] - room['x']/2,
                 (cy/height)*room['y'] - room['y']/2,
                 0.15
             ])
+            centroids.append(pos)
+        if centroids:
+            s_positions = centroids  # multiple audio sources
         prev_gray = gray.copy()
 
-    # Compute direction to listener
-    d = dist(listener, s_pos)+1e-6
-    vec = listener - s_pos
-    vec_norm = vec/d
-    az = math.atan2(vec_norm[1], vec_norm[0])
-    el = math.asin(np.clip(vec_norm[2],-1,1))
-    gains = speaker_gains_7_1_4(az,el)
-    att = max(0.1, min(1.0, 1.0/(1.0+0.1*d)))
-    end_idx = min(i+len(frame), total_samples)
-    out_mc[i:end_idx,:] += frame[:end_idx-i,None]*gains*att
+    # Mix all sources
+    for s_pos in s_positions:
+        d = dist(listener, s_pos)+1e-6
+        vec = listener - s_pos
+        vec_norm = vec/d
+        az = math.atan2(vec_norm[1], vec_norm[0])
+        el = math.asin(np.clip(vec_norm[2],-1,1))
+        gains = speaker_gains_7_1_4(az,el)
+        att = max(0.1, min(1.0, 1.0/(1.0+0.1*d)))
+        end_idx = min(i+len(frame), total_samples)
+        out_mc[i:end_idx,:] += frame[:end_idx-i,None]*gains*att
 
-    # Reflections
-    out_mc = process_reflections(frame, s_pos, listener, planes, out_mc, fs, i, room_diag, current_refl_gain)
+        # Reflections
+        out_mc = process_reflections(frame, s_pos, listener, planes, out_mc, fs, i, room_diag, current_refl_gain)
 
     # Adaptive gain
     current_peak = np.max(np.abs(out_mc[i:end_idx,:]))
@@ -300,14 +292,13 @@ while i < total_samples:
         current_refl_gain = max(current_refl_gain,0.1)
 
     i += hop
-    frame_counter += 1
 
 if use_video:
     cap.release()
 cv2.destroyAllWindows()
 
 # -----------------------
-# Normalize and write
+# Normalize and output
 # -----------------------
 max_peak = np.max(np.abs(out_mc))
 if max_peak>0:
