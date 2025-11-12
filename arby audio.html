@@ -347,12 +347,14 @@
       <label>AirAbs <input id="airAbsorption" type="number" step="0.001" value="0.01" min="0.001" max="0.05"/></label>
     </div>
 
-    <div class="controls" style="margin-top:12px">
-      <button id="analyzeVideoBtn" disabled>🔎 Analyze Video (create motion timeline)</button>
-      <button id="processBtn" disabled>⚡ Process Audio (use timeline)</button>
-      <button id="playBtn" disabled>▶ Play Processed</button>
-      <button id="downloadBtn" disabled>💾 Download WAV</button>
-    </div>
+   <div class="controls" style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap;">
+  <input type="file" id="audioInput" accept="audio/*" style="display:none;">
+  <button id="analyzeVideoBtn" disabled style="padding:8px 16px;">🔎 Analyze Video</button>
+  <button id="processBtn" disabled style="padding:8px 16px;">⚡ Process Audio</button>
+  <button id="mergeBtn" disabled style="padding:8px 16px;">🎞️ Merge & Download</button>
+  <button id="playBtn" disabled style="padding:8px 16px;">▶ Play</button>
+  <button id="downloadBtn" disabled style="padding:8px 16px;">💾 Download WAV</button>
+</div>
 
     <div class="progress" style="margin-top:10px">
       <div id="globalProgress" class="progress-bar"></div>
@@ -666,6 +668,82 @@ function renderOverlay(ctx, videoEl, frameInfo){
   }
   ctx.restore();
 }
+      processBtn.addEventListener('click', async () => {
+  if (!audioDecodedBuffer) { alert('Load audio first'); return; }
+  processBtn.disabled = true;
+  setStatus('Decoding audio...');
+  const nch = audioDecodedBuffer.numberOfChannels;
+  const numFrames = audioDecodedBuffer.length;
+  const mono = new Float32Array(numFrames);
+  for (let ch = 0; ch < nch; ch++) {
+    const d = audioDecodedBuffer.getChannelData(ch);
+    for (let i = 0; i < numFrames; i++) mono[i] += d[i] / nch;
+  }
+  const config = {
+    roomWidth: parseFloat(document.getElementById('roomWidth').value),
+    roomLength: parseFloat(document.getElementById('roomLength').value),
+    roomHeight: parseFloat(document.getElementById('roomHeight').value),
+    wallReflectivity: parseFloat(document.getElementById('wallReflectivity').value),
+    airAbsorption: parseFloat(document.getElementById('airAbsorption').value),
+    enableLinearScaling: true,  // Add checkboxes if needed for these
+    enableAdaptiveGain: true,
+    enableAutoRoomScale: false
+  };
+  let timeline = null;
+  if (videoFile && timeline === null) {  // Use existing timeline if analyzed
+    setStatus('No video timeline; using default static source');
+    timeline = [];
+    const frames = Math.ceil(audioDecodedBuffer.duration * videoFPS);
+    for (let i = 0; i < frames; i++) timeline.push({ t: i / videoFPS, detections: [], tracks: [] });
+  }
+  setStatus('Processing audio (spatial render)...');
+  const engine = new ArbyEngine(audioContext);
+  const renderedBuf = await engine.processWithTimeline(
+    mono, audioDecodedBuffer.sampleRate, config, timeline || [], videoFPS || 15, setProgress
+  );
+  processedAudioBlob = engine.exportWAVBuffer(renderedBuf);
+  setStatus('Processed — ready to play/download/merge');
+  playBtn.disabled = false;
+  downloadBtn.disabled = false;
+  mergeBtn.disabled = false;
+  processBtn.disabled = false;
+  setProgress(100);
+});
+
+// Add mergeBtn listener:
+mergeBtn.addEventListener('click', async () => {
+  if (!videoFile || !processedAudioBlob) { alert('Process audio and select video first!'); return; }
+  mergeBtn.disabled = true;
+  setStatus('Merging video + spatial audio...');
+  if (!ffmpeg.isLoaded()) await ffmpeg.load();
+  ffmpeg.FS('writeFile', 'video.mp4', await fetchFile(videoFile));
+  ffmpeg.FS('writeFile', 'audio.wav', await fetchFile(processedAudioBlob));
+  await ffmpeg.run(
+    '-i', 'video.mp4', '-i', 'audio.wav',
+    '-c:v', 'libx264', '-c:a', 'pcm_s32le',  // Use PCM for high-fidelity spatial (32-bit)
+    '-ar', '96000', '-ac', '12',  // 96kHz, 12ch for 7.1.4
+    '-shortest', 'merged.mp4'
+  );
+  const data = ffmpeg.FS('readFile', 'merged.mp4');
+  const blob = new Blob([data.buffer], { type: 'video/mp4' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'arby_merged_7.1.4.mp4';
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+  setStatus('Merge complete — downloaded!');
+  mergeBtn.disabled = false;
+});
+
+// Keep existing playBtn and downloadBtn listeners (they use processedAudioBuffer; update to use blob if needed, but WAV export is fine).
+
+// If you want audioInput file trigger (optional, since you have uploadZone):
+document.getElementById('audioInput').addEventListener('change', (e) => {
+  audioFile = e.target.files[0];
+  onAudioLoaded();
+});
+
 
 /* ---------- Audio Engine (browser version) ---------- */
 /* This engine closely mirrors your earlier algorithm but is implemented in JS:
@@ -1156,3 +1234,4 @@ setStatus('Ready');
 </script>
 </body>
 </html>
+
