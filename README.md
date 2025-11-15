@@ -140,7 +140,9 @@ Most audio frameworks rely on middleware layers, SDKs, and abstraction — which
 ## Known Bugs
 
 - 1. Android App:- Android 9 - Samsung Crash - even when compatible with Android 7+ - even after SIGNIFICANT changes from the old implementation 
--2. Android App:- Any Phone - Is it Working? - We are not sure. Some say there is a difference and some don't. Although, it could be from the placebo effect! - Significant changes have been made and the same result!
+
+
+- 2. Android App:- Any Phone - Is it Working? - We are not sure. Some say there is a difference and some don't. Although, it could be from the placebo effect! - Significant changes have been made and the same result!
 
 Clarification :- Usually Arby Audio makes a big difference in headphones, the HTML/Python version, and the Windows version. Therefore, Bug 2 - we are sure it is a bug now!
 
