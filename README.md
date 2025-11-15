@@ -148,8 +148,8 @@ Clarification :- Usually Arby Audio makes a big difference in headphones, the HT
 
 ## 📜 License
 
-Open-source. Free to use*, modify, and redistribute with i) permission or ii) credit aside from forming the repo, as long as you keep CLEAR credit under the relevant copyright laws. All code executes locally and respects user privacy.
-LICENSE.md only valid in Main Branch.
+Open-source. Free to use*, modify*, and redistribute* with i) permission or ii) credit aside from forming the repo, as long as you keep CLEAR credit under the relevant copyright laws. All code executes locally and respects user privacy.
+LICENSE.md only valid in the Main Branch and void in RELEASES' .ZIP for WINDOWS.
 All references to brand names and trademarks are for educational and research purposes only.
 
 ---
