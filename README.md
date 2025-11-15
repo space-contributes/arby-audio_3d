@@ -28,7 +28,7 @@ cd arby-audio_3d
 
 Or download the files individually from GitHub.
 
-##### For RELEASES - Windows.zip contains all files, including: Python versions, HTML versions, and the Live Conversion .exe:
+### > For RELEASES - Windows.zip contains all files, including: Python versions, HTML versions, and the Live Conversion .exe:
 
 ### 🪟 Windows Live Audio Conversion
 
