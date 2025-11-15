@@ -28,6 +28,8 @@ cd arby-audio_3d
 
 Or download the files individually from GitHub.
 
+##### For RELEASES - Windows.zip contains all files, including: Python versions, HTML versions, and the Live Conversion .exe:
+
 ### 🪟 Windows Live Audio Conversion
 
 The Windows `.exe` allows you to **convert live audio** directly into Arby Audio's spatial format.
