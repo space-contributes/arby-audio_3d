@@ -924,6 +924,252 @@ class ArbyAudioEngine {
     }
 }
 
+// ============================================
+// Advanced Multi-Object Tracking System
+// ============================================
+class TrackedObject {
+    constructor(bbox, trackId) {
+        this.bbox = bbox; // {x, y, w, h}
+        this.trackId = trackId;
+        this.positionHistory = []; // Last 30 frames
+        this.velocity = {x: 0, y: 0};
+        this.framesTracked = 0;
+        this.isActive = true;
+        this.audioCorrelation = 0.0;
+        this.depthEstimate = 1.0; // meters
+    }
+    
+    update(bbox) {
+        const cx = bbox.x + bbox.w / 2;
+        const cy = bbox.y + bbox.h / 2;
+        
+        if (this.positionHistory.length > 0) {
+            const last = this.positionHistory[this.positionHistory.length - 1];
+            this.velocity.x = cx - last.cx;
+            this.velocity.y = cy - last.cy;
+        }
+        
+        this.positionHistory.push({cx, cy, w: bbox.w, h: bbox.h});
+        if (this.positionHistory.length > 30) {
+            this.positionHistory.shift();
+        }
+        
+        this.bbox = bbox;
+        this.framesTracked++;
+        this.isActive = true;
+        
+        // Depth from bounding box size (perspective scale)
+        const boxScale = Math.sqrt(bbox.w * bbox.h);
+        this.depthEstimate = Math.max(0.5, 5.0 / (boxScale / 100.0 + 0.1));
+        
+        // Depth from motion parallax
+        if (this.positionHistory.length >= 5) {
+            const recentMotion = Math.sqrt(this.velocity.x ** 2 + this.velocity.y ** 2);
+            const parallaxDepth = Math.max(0.5, 3.0 / (recentMotion + 0.1));
+            // Weighted fusion
+            this.depthEstimate = 0.6 * this.depthEstimate + 0.4 * parallaxDepth;
+        }
+    }
+}
+
+class MultiObjectTracker {
+    constructor(maxObjects = 16) {
+        this.maxObjects = maxObjects;
+        this.trackedObjects = [];
+        this.nextId = 0;
+        this.maxDistanceThreshold = 50; // pixels
+    }
+    
+    update(detections) {
+        // Mark all as inactive
+        this.trackedObjects.forEach(obj => obj.isActive = false);
+        
+        const usedDetections = new Set();
+        
+        // Data association: match detections to existing tracks
+        for (const obj of this.trackedObjects) {
+            if (obj.positionHistory.length === 0) continue;
+            
+            const last = obj.positionHistory[obj.positionHistory.length - 1];
+            const predictedX = last.cx + obj.velocity.x;
+            const predictedY = last.cy + obj.velocity.y;
+            
+            let bestMatchIdx = -1;
+            let bestDistance = this.maxDistanceThreshold;
+            
+            for (let i = 0; i < detections.length; i++) {
+                if (usedDetections.has(i)) continue;
+                
+                const bbox = detections[i];
+                const cx = bbox.x + bbox.w / 2;
+                const cy = bbox.y + bbox.h / 2;
+                const dist = Math.sqrt((predictedX - cx) ** 2 + (predictedY - cy) ** 2);
+                
+                if (dist < bestDistance) {
+                    bestDistance = dist;
+                    bestMatchIdx = i;
+                }
+            }
+            
+            if (bestMatchIdx >= 0) {
+                obj.update(detections[bestMatchIdx]);
+                usedDetections.add(bestMatchIdx);
+            }
+        }
+        
+        // Create new tracks for unmatched detections
+        for (let i = 0; i < detections.length; i++) {
+            if (!usedDetections.has(i) && this.trackedObjects.length < this.maxObjects) {
+                const newObj = new TrackedObject(detections[i], this.nextId++);
+                newObj.update(detections[i]);
+                this.trackedObjects.push(newObj);
+            }
+        }
+        
+        // Prune stale tracks (inactive for >10 frames)
+        this.trackedObjects = this.trackedObjects.filter(
+            obj => obj.isActive || obj.framesTracked < 10
+        );
+        
+        return this.trackedObjects;
+    }
+}
+
+// Audio-motion correlation system
+const audioEnergyHistory = [];
+const motionEnergyHistory = [];
+const CORRELATION_WINDOW = 5;
+
+function calculateAudioMotionCorrelation(audioEnergy, motionEnergy) {
+    audioEnergyHistory.push(audioEnergy);
+    motionEnergyHistory.push(motionEnergy);
+    
+    if (audioEnergyHistory.length > 30) {
+        audioEnergyHistory.shift();
+        motionEnergyHistory.shift();
+    }
+    
+    if (audioEnergyHistory.length < 10) return 0.0;
+    
+    const recent = 10;
+    const audioArr = audioEnergyHistory.slice(-recent);
+    const motionArr = motionEnergyHistory.slice(-recent);
+    
+    // Zero-lag correlation
+    const audioMean = audioArr.reduce((a, b) => a + b) / recent;
+    const motionMean = motionArr.reduce((a, b) => a + b) / recent;
+    
+    let numerator = 0;
+    let audioDenom = 0;
+    let motionDenom = 0;
+    
+    for (let i = 0; i < recent; i++) {
+        const audioDiff = audioArr[i] - audioMean;
+        const motionDiff = motionArr[i] - motionMean;
+        numerator += audioDiff * motionDiff;
+        audioDenom += audioDiff ** 2;
+        motionDenom += motionDiff ** 2;
+    }
+    
+    const corr = numerator / Math.sqrt(audioDenom * motionDenom + 1e-9);
+    return Math.abs(isNaN(corr) ? 0 : corr);
+function detectMotionBlobs(currentFrame, prevFrame, width, height) {
+    const detections = [];
+    const threshold = 15; // Lower threshold for better sensitivity
+    const gridSize = 20;  // Larger grid for better object grouping
+    const cols = Math.floor(width / gridSize);
+    const rows = Math.floor(height / gridSize);
+    
+    // First pass: detect motion in grid cells
+    const motionGrid = [];
+    for (let gy = 0; gy < rows; gy++) {
+        motionGrid[gy] = [];
+        for (let gx = 0; gx < cols; gx++) {
+            let diff = 0;
+            let count = 0;
+            
+            for (let dy = 0; dy < gridSize; dy++) {
+                for (let dx = 0; dx < gridSize; dx++) {
+                    const x = gx * gridSize + dx;
+                    const y = gy * gridSize + dy;
+                    if (x >= width || y >= height) continue;
+                    
+                    const idx = (y * width + x) * 4;
+                    
+                    const currGray = (currentFrame.data[idx] + 
+                                     currentFrame.data[idx + 1] + 
+                                     currentFrame.data[idx + 2]) / 3;
+                    const prevGray = (prevFrame.data[idx] + 
+                                     prevFrame.data[idx + 1] + 
+                                     prevFrame.data[idx + 2]) / 3;
+                    
+                    diff += Math.abs(currGray - prevGray);
+                    count++;
+                }
+            }
+            
+            motionGrid[gy][gx] = (diff / count) > threshold ? 1 : 0;
+        }
+    }
+    
+    // Second pass: group connected components
+    const visited = Array(rows).fill(0).map(() => Array(cols).fill(false));
+    
+    function floodFill(startY, startX) {
+        const stack = [{y: startY, x: startX}];
+        let minX = startX, maxX = startX;
+        let minY = startY, maxY = startY;
+        let cellCount = 0;
+        
+        while (stack.length > 0) {
+            const {y, x} = stack.pop();
+            
+            if (y < 0 || y >= rows || x < 0 || x >= cols) continue;
+            if (visited[y][x] || motionGrid[y][x] === 0) continue;
+            
+            visited[y][x] = true;
+            cellCount++;
+            
+            minX = Math.min(minX, x);
+            maxX = Math.max(maxX, x);
+            minY = Math.min(minY, y);
+            maxY = Math.max(maxY, y);
+            
+            // 8-connected neighborhood
+            stack.push({y: y-1, x: x-1}, {y: y-1, x: x}, {y: y-1, x: x+1});
+            stack.push({y: y, x: x-1}, {y: y, x: x+1});
+            stack.push({y: y+1, x: x-1}, {y: y+1, x: x}, {y: y+1, x: x+1});
+        }
+        
+        // Minimum blob size (at least 2x2 grid cells)
+        if (cellCount >= 4) {
+            return {
+                x: minX * gridSize,
+                y: minY * gridSize,
+                w: (maxX - minX + 1) * gridSize,
+                h: (maxY - minY + 1) * gridSize
+            };
+        }
+        return null;
+    }
+    
+    // Find all connected components
+    for (let gy = 0; gy < rows; gy++) {
+        for (let gx = 0; gx < cols; gx++) {
+            if (motionGrid[gy][gx] === 1 && !visited[gy][gx]) {
+                const blob = floodFill(gy, gx);
+                if (blob) {
+                    detections.push(blob);
+                }
+            }
+        }
+    }
+    
+    return detections;
+}
+
+const engine = new ArbyAudioEngine();
+        
 const engine = new ArbyAudioEngine();
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -1059,7 +1305,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     };
 
-    createVideoBtn.addEventListener('click', () => {
+ createVideoBtn.addEventListener('click', () => {
         if (!engine.processedBuffer) {
             alert('Please process audio first.');
             return;
@@ -1071,12 +1317,130 @@ document.addEventListener('DOMContentLoaded', async () => {
         canvas.width = videoPreview.videoWidth;
         canvas.height = videoPreview.videoHeight;
         const context = canvas.getContext('2d');
+        
+        // Initialize tracker and CV processing
+        const tracker = new MultiObjectTracker(16);
+        const cvCanvas = document.createElement('canvas');
+        cvCanvas.width = 320;
+        cvCanvas.height = 240;
+        const cvCtx = cvCanvas.getContext('2d');
+        let prevFrameData = null;
+        let trackingStats = {maxObjects: 0, totalFrames: 0};
+        
         videoPreview.play();
 
         function drawFrame() {
             if (!videoPreview.paused && !videoPreview.ended) {
+                // Draw full-res video
                 context.drawImage(videoPreview, 0, 0, canvas.width, canvas.height);
+                
+                // CV processing on downsampled frame
+                cvCtx.drawImage(videoPreview, 0, 0, cvCanvas.width, cvCanvas.height);
+                const currentFrameData = cvCtx.getImageData(0, 0, cvCanvas.width, cvCanvas.height);
+                
+               if (prevFrameData) {
+    const detections = detectMotionBlobs(
+        currentFrameData, 
+        prevFrameData, 
+        cvCanvas.width, 
+        cvCanvas.height
+    );
+    
+    const trackedObjects = tracker.update(detections);
+    trackingStats.maxObjects = Math.max(trackingStats.maxObjects, trackedObjects.length);
+    trackingStats.totalFrames++;
+    
+    // ✅ SPATIAL AUDIO MAPPING (MANDATORY)
+    if (trackedObjects.length > 0 && engine.processedBuffer) {
+        const roomConfig = {
+            x: parseFloat(document.getElementById('roomWidth').value),
+            y: parseFloat(document.getElementById('roomLength').value),
+            z: parseFloat(document.getElementById('roomHeight').value)
+        };
+        
+        trackedObjects.forEach(obj => {
+            if (obj.positionHistory.length > 0) {
+                const {cx, cy} = obj.positionHistory[obj.positionHistory.length - 1];
+                
+                const normX = (cx / cvCanvas.width) * 2 - 1;
+                const normY = (cy / cvCanvas.height) * 2 - 1;
+                
+                const azimuth = normX * 90;
+                const elevation = -normY * 45;
+                
+                const posX = normX * roomConfig.x * 0.5 * obj.depthEstimate;
+                const posY = normY * roomConfig.y * 0.5 * obj.depthEstimate;
+                const posZ = 0.15 + (obj.depthEstimate - 1.0) * 0.3;
+                
+                obj.spatialPosition = {x: posX, y: posY, z: posZ};
+                obj.azimuth = azimuth;
+                obj.elevation = elevation;
+            }
+        });
+    }
+    
+    // ✅ OPTIONAL: LIVE STATS (FIX THE TYPO!)
+    if (document.getElementById('cvStats')) {
+        const avgDepth = trackedObjects.reduce((sum, obj) => sum + obj.depthEstimate, 0) / (trackedObjects.length || 1);
+        const audioEnergy = 0.5;
+        const motionEnergy = detections.length / 100.0;
+        const correlation = calculateAudioMotionCorrelation(audioEnergy, motionEnergy);
+        
+        document.getElementById('cvStats').style.display = 'block';
+        document.getElementById('trackedCount').textContent = trackedObjects.length;
+        document.getElementById('cvFrames').textContent = trackingStats.totalFrames;
+        document.getElementById('audioCorr').textContent = correlation.toFixed(2);
+        document.getElementById('avgDepth').textContent = avgDepth.toFixed(2) + 'm';
+    }
+    
+    // ❌ NO BOUNDING BOX DRAWING (YOU SKIPPED THIS - CORRECT!)
+}
+
+prevFrameData = currentFrameData;
+                    
+                    
+                    const trackedObjects = tracker.update(detections);
+                    trackingStats.maxObjects = Math.max(trackingStats.maxObjects, trackedObjects.length);
+                    trackingStats.totalFrames++;
+                    
+                    // Optional: Draw tracking boxes on main canvas
+                    const scaleX = canvas.width / cvCanvas.width;
+                    const scaleY = canvas.height / cvCanvas.height;
+                    context.strokeStyle = '#00ff00';
+                    context.lineWidth = 2;
+                    
+                    trackedObjects.forEach(obj => {
+                        if (obj.positionHistory.length > 0) {
+                            const {cx, cy, w, h} = obj.positionHistory[obj.positionHistory.length - 1];
+                            context.strokeRect(
+                                (cx - w/2) * scaleX,
+                                (cy - h/2) * scaleY,
+                                w * scaleX,
+                                h * scaleY
+                            );
+                            
+                            // Draw object ID
+                            context.fillStyle = '#00ff00';
+                            context.font = '12px monospace';
+                            context.fillText(
+                                `ID:${obj.trackId} D:${obj.depthEstimate.toFixed(1)}m`,
+                                cx * scaleX,
+                                cy * scaleY - 5
+                            );
+                        }
+                    });
+                }
+                
+                prevFrameData = currentFrameData;
                 requestAnimationFrame(drawFrame);
+            } else {
+                // Display final statistics
+                console.log('╔═══════════════════════════════════════════╗');
+                console.log('║ CV TRACKING STATISTICS                    ║');
+                console.log('╠═══════════════════════════════════════════╣');
+                console.log(`║ Max tracked objects: ${trackingStats.maxObjects.toString().padEnd(22)}║`);
+                console.log(`║ Total frames: ${trackingStats.totalFrames.toString().padEnd(28)}║`);
+                console.log('╚═══════════════════════════════════════════╝');
             }
         }
         drawFrame();
@@ -1182,3 +1546,4 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 });
     
+
