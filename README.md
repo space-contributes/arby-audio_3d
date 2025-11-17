@@ -71,6 +71,7 @@ Open the HTML file in your browser — or visit the hosted version on GitHub Pag
 * **Multi-platform support** (Windows, macOS, Linux; live conversion in progress for macOS/Linux).
 * **No SDKs, no dependencies — just pure performance.**
 * **AR/VR compatibility and game-ready architecture.**
+* **LFE-dedicated channels with multi-band filtering**
 
 ---
 
