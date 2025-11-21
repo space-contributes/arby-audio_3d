@@ -37,7 +37,7 @@ The Windows `.exe` allows you to **convert live audio** directly into Arby Audio
 > ⚠️ Make sure your playback device is set to **96 kHz, 24-bit (or 32-bit if supported)** in your Windows Sound Control Panel.
 > Place all `.dll` files in the same folder as the `.exe`.
 
-# Video merging is experiemental in HTML!
+
 
 ### 🐍 Python Version
 
