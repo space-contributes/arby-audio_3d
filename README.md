@@ -1,7 +1,7 @@
 # Arby Audio 3D — Cinematic Spatial Sound Engine - C++ - HTML - Python - Cross-platform - Computer Vision enabled
 
 ### **Live 96 kHz / 32-bit Spatial Audio Conversion. GPU-Accelerated. Physically Accurate.**
-#### Android TV 9* - Tested to TV-11 - Android 14 compatible
+#### Android TV 9* - Tested to TV-11 - Android 7+ compatible*
 
 ##### **Arby Audio 3D** is a **next-generation*, GPU-accelerated spatial sound engine** that delivers **live 96 kHz / 32-bit, ISO 9613-1–compliant, HRTF-accurate, multi-threaded, and privacy-safe 7.1.4 audio conversion** with **real-time reflections, sinc resampling, furniture-aware acoustics, and cross-platform AR/VR-ready performance** — all **optimized at the assembly level for true cinematic realism.**
 ##### No camera/microphone/sensors needed!
@@ -153,5 +153,6 @@ Open-source. Free to use*, modify*, and redistribute* with i) permission or ii) 
 LICENSE.md only valid in the Main Branch and void in RELEASES' .ZIP for WINDOWS.
 - All elements are subject to change without notice!
 - All elements can be a tagline and may not represent its true nature!
+- * - May have bugs and subject to change and may be a tagline and may not represent its true nature!
 
 All references to brand names and trademarks are for educational and research purposes only.
