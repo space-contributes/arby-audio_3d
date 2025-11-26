@@ -59,7 +59,7 @@ Open the HTML file in your browser — or visit the hosted version on GitHub Pag
 
 ## 🧩 Features
 
-* **Computer Vision** For live conversion .exe, Linux/MacOS/HTML not yet there! Same for Sinc-based stuff.
+* **Computer Vision** For live conversion .exe!
 * **Sinc-based resampling** up to 96 kHz / 32-bit for unmatched clarity.
 * **HRTF spatialization** with full 360° azimuth and elevation coverage.
 * **Real-time reflections** up to 3rd order with per-wall frequency damping.
