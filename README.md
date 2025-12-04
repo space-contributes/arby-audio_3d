@@ -1,10 +1,10 @@
 # Arby Audio 3D — Cinematic Spatial Sound Engine - C++ - HTML - Python - Cross-platform - Computer Vision enabled
 
 ### **Live 96 kHz / 32-bit Spatial Audio Conversion. GPU-Accelerated. Physically Accurate.**
-#### Android TV 9* - Tested to TV-11 - Android 14 compatible
+#### Android TV 9* - Tested to TV-11 - Android 7+ compatible*
 
 ##### **Arby Audio 3D** is a **next-generation*, GPU-accelerated spatial sound engine** that delivers **live 96 kHz / 32-bit, ISO 9613-1–compliant, HRTF-accurate, multi-threaded, and privacy-safe 7.1.4 audio conversion** with **real-time reflections, sinc resampling, furniture-aware acoustics, and cross-platform AR/VR-ready performance** — all **optimized at the assembly level for true cinematic realism.**
-####### No camera/microphone/sensors needed!
+##### No camera/microphone/sensors needed!
 *Made with ❤️ by Space-code* WITH *7 YEARS OF MAKING*!
 
 ![Version](https://img.shields.io/badge/version-3.2.2-blue) ![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen) ![Python Version](https://img.shields.io/badge/python-3.11-blue) ![Build Status](https://img.shields.io/badge/build-passing-brightgreen) ![Last Commit](https://img.shields.io/github/last-commit/space-contributes/arby-audio_3d) ![Stars](https://img.shields.io/github/stars/space-contributes/arby-audio_3d?style=social) ![Forks](https://img.shields.io/github/forks/space-contributes/arby-audio_3d?style=social) ![Open Issues](https://img.shields.io/github/issues/space-contributes/arby-audio_3d) ![Closed Issues](https://img.shields.io/github/issues-closed/space-contributes/arby-audio_3d) ![Downloads](https://img.shields.io/github/downloads/space-contributes/arby-audio_3d/total) ![Maintenance](https://img.shields.io/badge/maintenance-active-brightgreen) ![Supported OS](https://img.shields.io/badge/os-windows%20|%20macOS%20|%20Linux-lightgrey) ![Top Language](https://img.shields.io/github/languages/top/space-contributes/arby-audio_3d) ![Repo Size](https://img.shields.io/github/repo-size/space-contributes/arby-audio_3d) ![Commits](https://img.shields.io/github/commit-activity/m/space-contributes/arby-audio_3d) ![Issues Closed](https://img.shields.io/github/issues-pr-closed/space-contributes/arby-audio_3d)
@@ -28,6 +28,8 @@ cd arby-audio_3d
 
 Or download the files individually from GitHub.
 
+> ⚠️🚨 For RELEASES - Windows.zip contains all files, including: Python versions, HTML versions, and the Live Conversion .exe:
+
 ### 🪟 Windows Live Audio Conversion
 
 The Windows `.exe` allows you to **convert live audio** directly into Arby Audio's spatial format.
@@ -35,7 +37,7 @@ The Windows `.exe` allows you to **convert live audio** directly into Arby Audio
 > ⚠️ Make sure your playback device is set to **96 kHz, 24-bit (or 32-bit if supported)** in your Windows Sound Control Panel.
 > Place all `.dll` files in the same folder as the `.exe`.
 
-# Python script and HTML one does not support Computer Vision! And, Video merging is experiemental in HTML!
+
 
 ### 🐍 Python Version
 
@@ -57,7 +59,7 @@ Open the HTML file in your browser — or visit the hosted version on GitHub Pag
 
 ## 🧩 Features
 
-* **Computer Vision** For live conversion .exe, Linux/MacOS/HTML not yet there! Same for Sinc-based stuff.
+* **Computer Vision** For live conversion .exe!
 * **Sinc-based resampling** up to 96 kHz / 32-bit for unmatched clarity.
 * **HRTF spatialization** with full 360° azimuth and elevation coverage.
 * **Real-time reflections** up to 3rd order with per-wall frequency damping.
@@ -69,6 +71,7 @@ Open the HTML file in your browser — or visit the hosted version on GitHub Pag
 * **Multi-platform support** (Windows, macOS, Linux; live conversion in progress for macOS/Linux).
 * **No SDKs, no dependencies — just pure performance.**
 * **AR/VR compatibility and game-ready architecture.**
+* **LFE-dedicated channels with multi-band filtering**
 
 ---
 
@@ -135,14 +138,21 @@ Most audio frameworks rely on middleware layers, SDKs, and abstraction — which
 
 ---
 
+## Known Bugs
+
+- 1. Android App:- Android 9 - Samsung Crash - even when compatible with Android 7+ - even after SIGNIFICANT changes from the old implementation 
+
+
+- 2. Android App:- Any Phone - Is it Working? - We are not sure. Some say there is a difference and some don't. Although, it could be from the placebo effect! - Significant changes have been made and the same result!
+
+Clarification :- Usually Arby Audio makes a big difference in headphones, the HTML/Python version, and the Windows version. Therefore, Bug 2 - we are sure it is a bug now!
+
 ## 📜 License
 
-Open-source. Free to use*, modify, and redistribute with i) permission or ii) credit aside from forming the repo, as long as you keep CLEAR credit under the relevant copyright laws. All code executes locally and respects user privacy.
-LICENSE.md only valid in Main Branch.
+Open-source. Free to use*, modify*, and redistribute* with i) permission or ii) credit aside from forming the repo, as long as you keep CLEAR credit under the relevant copyright laws. All code executes locally and respects user privacy.
+LICENSE.md only valid in the Main Branch and void in RELEASES' .ZIP for WINDOWS.
+- All elements are subject to change without notice!
+- All elements can be a tagline and may not represent its true nature!
+- * - May have bugs and subject to change and may be a tagline and may not represent its true nature!
+
 All references to brand names and trademarks are for educational and research purposes only.
-
----
-
-Legal Markers -
-
-*: Subject to change

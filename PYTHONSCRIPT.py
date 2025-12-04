@@ -212,7 +212,141 @@ def get_window_hop(i,total_samples):
     return window, hop
 
 # -----------------------
-# Video CV setup
+# Advanced Multi-Object Tracking System
+# -----------------------
+class TrackedObject:
+    def __init__(self, bbox, track_id):
+        self.bbox = bbox  # (x, y, w, h)
+        self.track_id = track_id
+        self.position_history = []  # Last 30 frames
+        self.velocity = np.array([0.0, 0.0])
+        self.frames_tracked = 0
+        self.is_active = True
+        self.audio_correlation = 0.0
+        self.depth_estimate = 1.0  # meters
+        
+    def update(self, bbox):
+        x, y, w, h = bbox
+        cx, cy = x + w//2, y + h//2
+        
+        if len(self.position_history) > 0:
+            last_pos = self.position_history[-1]
+            self.velocity = np.array([cx - last_pos[0], cy - last_pos[1]])
+        
+        self.position_history.append((cx, cy, w, h))
+        if len(self.position_history) > 30:
+            self.position_history.pop(0)
+        
+        self.bbox = bbox
+        self.frames_tracked += 1
+        self.is_active = True
+        
+        # Depth from bounding box size (perspective scale)
+        box_scale = np.sqrt(w * h)
+        self.depth_estimate = max(0.5, 5.0 / (box_scale / 100.0 + 0.1))
+        
+        # Depth from motion parallax
+        if len(self.position_history) >= 5:
+            recent_motion = np.linalg.norm(self.velocity)
+            parallax_depth = max(0.5, 3.0 / (recent_motion + 0.1))
+            # Weighted fusion
+            self.depth_estimate = 0.6 * self.depth_estimate + 0.4 * parallax_depth
+
+class MultiObjectTracker:
+    def __init__(self, max_objects=16):
+        self.max_objects = max_objects
+        self.tracked_objects = []
+        self.next_id = 0
+        self.max_distance_threshold = 50  # pixels
+        
+    def update(self, detections):
+        """
+        detections: list of (x, y, w, h) bounding boxes
+        """
+        # Mark all as inactive
+        for obj in self.tracked_objects:
+            obj.is_active = False
+        
+        # Data association: match detections to tracks
+        used_detections = set()
+        
+        for obj in self.tracked_objects:
+            if not obj.position_history:
+                continue
+            
+            last_cx, last_cy, _, _ = obj.position_history[-1]
+            predicted_pos = np.array([last_cx, last_cy]) + obj.velocity
+            
+            best_match_idx = -1
+            best_distance = self.max_distance_threshold
+            
+            for i, bbox in enumerate(detections):
+                if i in used_detections:
+                    continue
+                x, y, w, h = bbox
+                cx, cy = x + w//2, y + h//2
+                dist = np.linalg.norm(predicted_pos - np.array([cx, cy]))
+                
+                if dist < best_distance:
+                    best_distance = dist
+                    best_match_idx = i
+            
+            if best_match_idx >= 0:
+                obj.update(detections[best_match_idx])
+                used_detections.add(best_match_idx)
+        
+        # Create new tracks for unmatched detections
+        for i, bbox in enumerate(detections):
+            if i not in used_detections and len(self.tracked_objects) < self.max_objects:
+                new_obj = TrackedObject(bbox, self.next_id)
+                self.next_id += 1
+                new_obj.update(bbox)
+                self.tracked_objects.append(new_obj)
+        
+        # Prune stale tracks (inactive for >10 frames)
+        self.tracked_objects = [obj for obj in self.tracked_objects 
+                               if obj.is_active or obj.frames_tracked < 10]
+        
+        return self.tracked_objects
+
+# Audio-motion correlation buffer
+# Audio-motion correlation buffer
+audio_energy_history = []
+motion_energy_history = []
+CORRELATION_WINDOW = 5  # frames
+
+def calculate_audio_motion_correlation(audio_energy, motion_energy):
+    """Cross-correlation with lag compensation"""
+    audio_energy_history.append(audio_energy)
+    motion_energy_history.append(motion_energy)
+    
+    if len(audio_energy_history) > 30:
+        audio_energy_history.pop(0)
+        motion_energy_history.pop(0)
+    
+    if len(audio_energy_history) < 10:
+        return 0.0
+    
+    # Lag-based correlation (-5 to +5 frames)
+    max_corr = 0.0
+    audio_arr = np.array(audio_energy_history[-10:])
+    motion_arr = np.array(motion_energy_history[-10:])
+    
+    for lag in range(-CORRELATION_WINDOW, CORRELATION_WINDOW + 1):
+        if lag < 0:
+            corr = np.corrcoef(audio_arr[:lag], motion_arr[-lag:])[0, 1]
+        elif lag > 0:
+            corr = np.corrcoef(audio_arr[lag:], motion_arr[:-lag])[0, 1]
+        else:
+            corr = np.corrcoef(audio_arr, motion_arr)[0, 1]
+        
+        if not np.isnan(corr):
+            max_corr = max(max_corr, abs(corr))
+    
+    return max_corr
+
+# -----------------------
+# Video CV setup with Advanced Tracking
 # -----------------------
 use_video = bool(video_file)
 if use_video:
@@ -221,9 +355,7 @@ if use_video:
     if not ret:
         raise RuntimeError("Cannot read video source")
     prev_gray = cv2.cvtColor(prev_frame, cv2.COLOR_BGR2GRAY)
-    motion_history = None
-    alpha = 0.5
-
+    tracker = MultiObjectTracker(max_objects=16)  # Initialize tracker HERE
 # -----------------------
 # Process frames with multiple objects
 # -----------------------
@@ -240,6 +372,7 @@ while i < total_samples:
     s_positions = [traj[i]]  # list of source positions
 
     # CV motion detection
+    # CV motion detection with advanced tracking
     if use_video:
         ret, video_frame = cap.read()
         if not ret:
@@ -252,24 +385,56 @@ while i < total_samples:
         thresh = cv2.morphologyEx(thresh, cv2.MORPH_DILATE, kernel)
 
         contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-        centroids = []
-        height, width = gray.shape
+        
+        # Extract bounding boxes for tracker
+        detections = []
         for cnt in contours:
             if cv2.contourArea(cnt) < 500:
                 continue
-            x,y,w,h = cv2.boundingRect(cnt)
-            cx, cy = x + w//2, y + h//2
-            # Map to room coordinates
-            pos = np.array([
-                (cx/width)*room['x'] - room['x']/2,
-                (cy/height)*room['y'] - room['y']/2,
-                0.15
-            ])
-            centroids.append(pos)
-        if centroids:
-            s_positions = centroids  # multiple audio sources
+            x, y, w, h = cv2.boundingRect(cnt)
+            detections.append((x, y, w, h))
+        
+        # Update tracker with detections
+        tracked_objects = tracker.update(detections)
+        
+        # Calculate motion energy for correlation
+        motion_energy = np.sum(thresh) / (thresh.size + 1e-6)
+        
+        # Calculate audio energy from current frame
+        frame_energy = np.mean(np.abs(frame)) if len(frame) > 0 else 0.0
+        
+        # Compute audio-motion correlation
+        global_correlation = calculate_audio_motion_correlation(frame_energy, motion_energy)
+        
+        # Convert tracked objects to 3D positions with depth fusion
+        s_positions = []
+        height_px, width_px = gray.shape
+        
+        for obj in tracked_objects:
+            if not obj.position_history:
+                continue
+            
+            cx, cy, w, h = obj.position_history[-1]
+            
+            # Update object's audio correlation
+            obj.audio_correlation = global_correlation * (1.0 / (1.0 + obj.depth_estimate))
+            
+            # Multi-modal depth fusion: scale + parallax + acoustic
+            acoustic_depth = 2.0 / (frame_energy * global_correlation + 0.1)
+            fused_depth = (0.5 * obj.depth_estimate +      # Visual scale
+                          0.3 * acoustic_depth +            # Audio ranging
+                          0.2 * (3.0 - obj.depth_estimate * 0.5))  # Prior
+            fused_depth = np.clip(fused_depth, 0.3, 5.0)
+            
+            # Map to 3D room coordinates with depth scaling
+            pos_x = ((cx / width_px) * 2.0 - 1.0) * room['x'] * 0.5 * fused_depth
+            pos_y = ((cy / height_px) * 2.0 - 1.0) * room['y'] * 0.5 * fused_depth
+            pos_z = 0.15 + (fused_depth - 1.0) * 0.3  # Elevation from depth
+            
+            pos = np.array([pos_x, pos_y, pos_z])
+            s_positions.append(pos)
+        
         prev_gray = gray.copy()
-
     # Mix all sources
     for s_pos in s_positions:
         d = dist(listener, s_pos)+1e-6
@@ -323,17 +488,21 @@ write(stereo_filename,TARGET_FS,stereo.astype(BIT_DEPTH))
 # -----------------------
 # Merge audio with video if video provided
 # -----------------------
+# -----------------------
+# Merge audio with video if video provided
+# -----------------------
 if use_video:
     output_video_file = f"3d_video_with_3d_audio.mp4"
     print(f"🎬 Merging processed audio with video into {output_video_file} ...")
     (
         ffmpeg
         .input(video_file)
-        .output(stereo_filename, output_video_file, c:v='copy', c:a='aac', strict='experimental')
+        .output(output_video_file, **{'c:v': 'copy', 'c:a': 'aac', 'strict': 'experimental'}) # <--- CORRECTED LINE 
         .run(overwrite_output=True)
     )
     print(f"✅ Video with 3D audio saved: {output_video_file}")
 
-print(f"✅ Multichannel saved: {mc_filename}")
+print(f"✅ Multichannel saved: {mc_filename}")
 print(f"✅ Stereo saved: {stereo_filename}")
+
 
