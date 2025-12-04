@@ -1,4 +1,5 @@
 # No License Declared
+"I" refers to the representative of all services.
 
 This project currently operates without an explicit open-source license. Consequently, the default provisions of copyright law apply to all its contents
 
@@ -52,7 +53,7 @@ Section X.2 - CONTRIBUTION
     SECTION X.3 - LIMITATION OF LIABILITY
 You are solely and exclusively responsible for all User and User(s) ("Content") that you create or submit. You represent and warrant that you own or have the necessary licenses, rights, consents, and permissions to publish the user and User(s) ("Content") you submit. The Company does not endorse any User and User(s) ("Content") or any opinion, recommendation, or advice expressed therein.
 
-You are exclusively and solely responsible for your use of the Tool and for ensuring that all your activities comply with all local, state, national, and international laws and regulations. You agree not to use the Tool for any illegal purposes, including, but not limited to, unauthorized access to computer systems, data theft, or any other malicious activity. The developer and distributor of the Tool are not liable for any illegal or unauthorized use of the Tool by you or any third party. You assume all risk and legal responsibility for any consequences resulting from your use of the Tool.
+You are exclusively and solely responsible for your use of the Tool and for ensuring that all your activities comply with all local, state, national, and international laws and regulations. You agree not to use the Tool for any illegal purposes, including, but not limited to, unauthorized access to computer systems, data theft, or any other malicious activity. The developer and distributor of the Tool are not liable for any illegal or unauthorized use of the Tool by you or any third party. You assume all risk and legal responsibility for any consequences resulting from your use of the Tool unless the Tool has itself caused the trouble WITHOUT user intervention, although this doesn't take in account for human mistakes which you shall be liable for or the software you are running the software with. This clause applies to all programs.
 
 The author, provider, and distributor are not liable for any damages, losses, or legal consequences resulting from your use, misuse, or inability to use this Tool.
 
@@ -60,7 +61,7 @@ You acknowledge that the Tool may contain vulnerabilities; all risks associated 
 
 The Service and the author disclaim any liability for security breaches, vulnerabilities, or weaknesses/bad code/bad features/more quality/more features in terms of need or even if in public interest of the same, as well as for any data loss, unauthorized access, or operational disruption. The author is also not responsible for any consequences arising from user-generated content or analytics results. Users agree to defend, indemnify, and hold harmless the author from any claims, damages, or liabilities arising from the use or misuse of the Tool, violation of this Agreement, or infringement of third-party rights. 
 
-Any analytics, insights, or recommendations derived from the Tool or from contributed data are provided strictly “as-is.” The author makes no guarantees regarding their accuracy, completeness, timeliness, or suitability for decision-making. Users assume all risk associated with relying on such data and are solely responsible for any decisions or actions taken based on it.
+Any analytics, insights, or recommendations derived from the Tool or from contributed data are provided strictly “as-is.” The author makes no guarantees regarding their accuracy, completeness, timeliness, or suitability for decision-making and you shall be responsible for your human mistake that may arise from the same.
 
 
 This project is created strictly for **educational and ethical use only**. All product names, trademarks, and registered trademarks mentioned are the property of their respective owners.
@@ -107,7 +108,9 @@ Illegal activities are strictly prohibited.
 
  You are using this tool at your own risk, and it is assumed by the author that you have permission to conduct the sole activities that were intended to be conducted, and the user will be held liable if they had malicious intent or if unlawful actions were taken, as that malicious intent was not of the creator of this ("Service"). The person who has illegal activity should be considered solely liable.
 
-I shall not be held liable for any security vulnerabilities, weaknesses, or related issues that may arise in connection with the use, deployment, or implementation of the product, service, or material provided. While reasonable efforts may be made to ensure quality and security, no guarantees are given, either express or implied, regarding the absence of vulnerabilities. Any risk arising from the presence or exploitation of such vulnerabilities remains entirely with the user or recipient. I expressly disclaim responsibility for damages, losses, or disruptions caused by security flaws, whether known or unknown at the time of delivery. I express the same for any breach regarding digital and non-digital security. 
+The ("Service") shall not be held liable for any security vulnerabilities, weaknesses, or related issues that may arise in connection with the use, deployment, or implementation of the product, service, or material provided. While reasonable efforts may be made to ensure quality and security, no guarantees are given, either express or implied, regarding the absence of vulnerabilities. Any risk arising from the presence or exploitation of such vulnerabilities remains entirely with the user or recipient.
+
+Below, I refers to the representative of the Service: I expressly disclaim responsibility for damages, losses, or disruptions caused by security flaws, whether known or unknown at the time of delivery. I express the same for any breach regarding digital and non-digital security. 
 This project is provided ‘as-is’. You assume all responsibility for use. Unauthorized use is illegal. Contributions are subject to the contributor agreement below.
 
 This is not to threaten, and it is not phrased as threatening and this applies to all programs created by this user.
