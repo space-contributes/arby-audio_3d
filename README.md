@@ -153,6 +153,6 @@ Open-source. Free to use*, modify*, and redistribute* with i) permission or ii) 
 LICENSE.md only valid in the Main Branch and void in RELEASES' .ZIP for WINDOWS.
 - All elements are subject to change without notice!
 - All elements can be a tagline and may not represent its true nature!
-- * - May have bugs and subject to change and may be a tagline and may not represent its true nature!
+- Indicator of "*" - May have bugs and subject to change and may be a tagline and may not represent its true nature!
 
 All references to brand names and trademarks are for educational and research purposes only.
